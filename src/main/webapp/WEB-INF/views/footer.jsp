@@ -3,33 +3,18 @@
 	request.setCharacterEncoding("UTF-8");
 	String cp=request.getContextPath();	
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-
-<link rel="stylesheet" type="text/css" href="/dailychan/resources/css/oasis_shop.css" />
-
-
-</head>
-<body>
 
 <div class="footerArea" style="border-top:0px">
-		
-		
-		
 		<div class="footerWrap">
 			<ul class="footerList">
-				<li><a href="/company/introduce/info">데일리찬 소개</a></li>
-				<li><a href="/company/introduce/store">매장 안내</a></li>
-				<li><a href="/help/terms">약관 및 정책</a></li>
-				<li><a href="/help/faqMain?keyword=&amp;page=1&amp;categoryNo=17">고객센터</a></li>
+				<li><a href="/dailychan/introduce/info.action">데일리찬 소개</a></li>
+				<li><a href="/dailychan/help/terms.action">약관 및 정책</a></li>
+				<li><a href="/dailychan/help/helpmain.action">고객센터</a></li>
 				
-				<li><a href="/contactUs/contact">입점 문의</a></li>
-				<li><a href="/contactUs/recruit">인재 채용</a></li>
+				<li><a href="/dailychan/company/contactUs.action">입점 문의</a></li>
 			</ul>
 		</div>
 		<div class="contents">
@@ -38,10 +23,10 @@
 			    
 			        <div class="snsList">
 						<img src="/dailychan/resources/images/common/w_footer_sns.png?dummy=0.01">
-						<a href="/join/social/kakao"><img src="/dailychan/resources/images/common/w_footer_sns1.png"></a>
+						<a href="${url }"><img src="/dailychan/resources/images/common/w_footer_sns1.png"></a>
 						<a href="/join/social/facebook"><img src="/dailychan/resources/images/common/w_footer_sns2.png"></a>
 						<a href="/join/social/google"><img src="/dailychan/resources/images/common/w_footer_sns3.png"></a>
-						<a href="/join/social/naver"><img src="/dailychan/resources/images/common/w_footer_sns4.png"></a>
+						 <a href="/dailychan/join/naverlogin.action"><img src="/dailychan/resources/images/common/w_footer_sns4.png"></a>
 					</div>
 			    
 			</div>
@@ -54,6 +39,3 @@
 		</div>
 	</div>
 
-
-</body>
-</html>

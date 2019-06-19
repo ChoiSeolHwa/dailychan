@@ -8,20 +8,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
-    <title>오아시스마켓::믿을 수 있는 먹거리</title>
+    <title>데일리찬::믿을 수 있는 먹거리</title>
     
+<jsp:include page="/WEB-INF/views/top.jsp"/>
 
-
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="title" content="오아시스마켓::믿을 수 있는 먹거리" />
-<meta name="description" content="세상에는 없는 가격! 오아시스에는 있습니다! 업계 최초 24시간 배송서비스!" />
-
-<meta property="og:title" content="오아시스마켓::믿을 수 있는 먹거리" />
-<meta property="og:type" content="website" />
-<meta property="og:description" content="세상에는 없는 가격! 오아시스에는 있습니다! 업계 최초 24시간 배송서비스!" />
-<meta property="og:url" content="www.oasis.co.kr" />
 <meta property="og:image" content="/dailychan/resources/images/etc/oasis_kakao.jpg"/>
 <meta name="naver-site-verification" content="3899c51fb285431259219d5399363f4ef440e1b6"/>
 
@@ -138,9 +128,9 @@ wcs_do(_nasa);
             })
             
             $("input[name='receiverInfo']").click(function() { // 새로운 주소 선택
-            	$("#deliveryType1").prop("checked", false).parent().hide().next().hide();
+            	$("#deliveryType1").prop("checked", false).hide();
                 $("#deliveryType2").prop("checked", false);
-                $("#deliveryType3").prop("checked", false).parent().hide().next().hide();
+                $("#deliveryType3").prop("checked", false).hide();
                 $("#deliveryType").text("").next().text("");
                 $("#oasisDeliveryType").hide();
                 $("#daybreakDelivery").hide();
@@ -156,51 +146,13 @@ wcs_do(_nasa);
                     $("#address2").val("");
                     $("#oldAddress1").val("");
                     $("#tel").val("");
-                    $("#latitude").val("");
-                    $("#longitude").val("");
-                    $("#deliveryTime").val("");
-                    $("#oasisDeliveryTimeDescImg").hide();
+                    $("#deliveryTypeSelect").hide();
                 } else if ( $(this).val() == "old" ) { 
-                    $("#userName").val($("#userName").data("user"));
-                    $("#zoneCode").val($("#zoneCode").data("user"));
-                    $("#postCode").val($("#postCode").data("user"));
-                    $("#address1").val($("#address1").data("user"));
-                    $("#address2").val($("#address2").data("user"));
-                    $("#oldAddress1").val($("#oldAddress1").data("user"));
-                    $("#tel").val($("#tel").data("user"));
-                    $("#deliveryTime").val('DT4');
-                    
-                        
-                        
-                            $("#oasisDeliveryTimeDescImg").hide();
-                        
-                    
-                    
-                    checkDeliveryTimeStatus($("#address1").val(), $("#oldAddress1").val());
-                } else {
-                	$("#userName").val($(this).data("receiver"));
-                	$("#zoneCode").val($(this).data("zonecode"));
-                	$("#postCode").val($(this).data("postcode"));
-                	$("#address1").val($(this).data("address1"));
-                	$("#address2").val($(this).data("address2"));
-                	$("#oldAddress1").val($(this).data("oldaddress1"));
-                	$("#tel").val($(this).data("tel"));
-                	$("#deliveryTime").val("");
-                	
-                	checkDeliveryTimeStatus($("#address1").val(), $("#oldAddress1").val());
+                    $("#userName").val($("#orderUserName").val());
+                    $("#tel").val($("#orderUserTel").val());
                 }
             });            
-            
-            $("#oasisDeliveryTime").show();
-            $("#deliveryTime").val('DT4');
-            
-                
-                
-                    $("#oasisDeliveryTimeDescImg").hide();
-                
-            
-            
-            checkDeliveryTimeStatus('', '');
+
         });
         
         function checkDeliveryTimeStatus(address, oldAddress) { // 입력한 주소지가 매장, 새벽배송 권역인지 체크
@@ -301,33 +253,11 @@ wcs_do(_nasa);
                 return;
             }
             
-            //매장 불가 상품 안내
-            if ($("#deliveryType1").is(":checked") && false) {
-            	$("#storeOrderPop").show();
-                $(".popDim").show();
-                return;
-            }
-            
-            //택배 불가 상품 안내
-            if ($("#deliveryType2").is(":checked") && false) {
-                $("#orderPop").show();
-                $(".popDim").show();
-                return;
-            }
-            //새벽배송 불가상품 안내
-            if ($("#deliveryType3").is(":checked") && false) {
-                $("#daybreakOrderPop").show();
-                $(".popDim").show();
-                return;
-            }
-                        
-            
-            if ( (9320 ) < 10000) {
+            if ( ("${dto.product_totalPrice}" ) < 10000) {
                 alert('상품 주문은 배송비를 제외한 실 결제금액 10,000원 이상부터 가능합니다.');
                 return;
             }
             
-
             var doorKey = "";
             var smsNoticeCode;
 
@@ -667,6 +597,165 @@ wcs_do(_nasa);
 
         }
     </script>
+   
+    
+<!-- 현우가 만든 스크립트 -->
+<script type="text/javascript">
+
+var oldVal;
+
+setInterval(function() {
+	
+	var juso = $("#address1").val();
+
+    if(juso == oldVal) {
+        return;
+    }
+    	
+    var url = "/dailychan/order/checkjuso.action";
+       
+       $.post(url,{juso:juso},function(data){
+   	
+       	var message;
+       	
+       	if(data=="0"){
+
+       		message = "<span class='order_deliveryBg'>택배 배송</span>이 가능한 지역입니다.";
+       		$('#deliveryTypeSelect').show();
+       		$('#deliveryTypeA').hide();
+       		$('#deliveryTypeB').hide();
+       		$('#deliveryTypeC').show();
+       		
+       	}else if(data=="1"){
+
+       		message = "<span class='order_daybreakBg'>새벽 배송</span> <span class='order_deliveryBg'>택배 배송</span>이 가능한 지역입니다.";
+       		$('#deliveryTypeSelect').show();
+       		$('#deliveryTypeA').show();
+       		$('#deliveryTypeB').hide();
+       		$('#deliveryTypeC').show();
+       		
+       	}else if(data=="2"){
+       		
+       		message = "<span class='order_shopBg'>매장 배송</span> <span class='order_deliveryBg'>택배 배송</span>이 가능한 지역입니다.";
+       		$('#deliveryTypeSelect').show();
+       		$('#deliveryTypeA').hide();
+       		$('#deliveryTypeB').show();
+       		$('#deliveryTypeC').show();
+       		
+       	}else if(data=="3"){
+       		
+       		message = "<span class='order_daybreakBg'>새벽 배송</span> <span class='order_shopBg'>매장 배송</span>이 가능한 지역입니다.";
+       		$('#deliveryTypeSelect').show();
+       		$('#deliveryTypeA').show();
+       		$('#deliveryTypeB').show();
+       		$('#deliveryTypeC').show();
+       		
+       	}else{
+       		
+       		message = "주소를 선택해 주십시오.";
+       		
+       	}
+       	
+       	$("#deliveryType").html(message);
+
+   	});
+
+    oldVal = juso;
+
+}, 100);
+/* 
+function checkJuso(){
+	
+    var juso = $("#address1").val();
+    var url = "/dailychan/order/checkjuso.action";
+    
+    $.post(url,{juso:juso},function(data){
+	
+    	var message;
+    	
+    	if(data=="0"){
+
+    		
+    		message = "<span class='order_deliveryBg'>택배 배송</span>이 가능한 지역입니다.";
+    		$('#deliveryTypeSelect').show();
+    		$('#deliveryTypeA').hide();
+    		$('#deliveryTypeB').hide();
+    		$('#deliveryTypeC').show();
+    		
+    	}else if(data=="1"){
+
+    		message = "<span class='order_daybreakBg'>새벽 배송</span> <span class='order_deliveryBg'>택배 배송</span>이 가능한 지역입니다.";
+    		$('#deliveryTypeSelect').show();
+    		$('#deliveryTypeA').show();
+    		$('#deliveryTypeB').hide();
+    		$('#deliveryTypeC').show();
+    		
+    	}else if(data=="2"){
+    		
+    		message = "<span class='order_shopBg'>매장 배송</span> <span class='order_deliveryBg'>택배 배송</span>이 가능한 지역입니다.";
+    		$('#deliveryTypeSelect').show();
+    		$('#deliveryTypeA').hide();
+    		$('#deliveryTypeB').show();
+    		$('#deliveryTypeC').show();
+    		
+    	}else if(data=="3"){
+    		
+    		message = "<span class='order_daybreakBg'>새벽 배송</span> <span class='order_shopBg'>매장 배송</span>이 가능한 지역입니다.";
+    		$('#deliveryTypeSelect').show();
+    		$('#deliveryTypeA').show();
+    		$('#deliveryTypeB').show();
+    		$('#deliveryTypeC').show();
+    		
+    	}else{
+    		
+    		message = "주소를 선택해 주십시오.";
+    		
+    	}
+    	
+    	$("#deliveryType").html(message);
+
+	});
+    
+}
+*/
+function orderComfirm() {
+	
+	var f = document.order;
+	
+	if (!($("#deliveryType1").is(":checked") || $("#deliveryType2").is(":checked") || $("#deliveryType3").is(":checked"))) {
+        alert("배송 방법을 선택해주세요.");
+        $("input[name='deliveryType']").focus();
+        return;
+    }
+	
+	if ($("#deliveryType1").is(":checked") && $("#deliveryStoreId option:selected").val()==""){
+		
+		alert("매장을 선택해주세요.");
+		return;
+		
+	}
+    
+    if (("${dto.product_totalPrice}" ) < 10000) {
+        alert('상품 주문은 배송비를 제외한 실 결제금액 10,000원 이상부터 가능합니다.');
+        return;
+    }
+    
+    if(!($("#recycleN").is(":checked") || $("#recycleY").is(":checked"))){
+    	
+    	alert("재활용 포장재 여부를 체크해주세요.");
+    	return;
+    	
+    }
+    
+    f.action = "/dailychan/order/payment.action";
+	f.submit();
+	
+}
+
+</script>
+
+<!-- //현우가 만든 스크립트 -->
+
 </head>
 
 <body>
@@ -718,6 +807,8 @@ wcs_do(_nasa);
 	<!-- // header -->
     <!-- // header -->
     
+    <form action="" method="post" name="order">
+    
     <!-- 컨텐츠 -->
     <div class="contentsArea" id="sec_order_pay">
         <div class="contentsWrap">
@@ -744,11 +835,9 @@ wcs_do(_nasa);
                             <tbody>
                                 <tr>
                                     <th scope="row"><span class="starBg">보내시는 분</span></th>
-                                    <td><input type="text" id="orderUserName" class="inputWd260" value="" maxlength="10" /></td>
+                                    <td><input type="text" id="orderUserName" name="orderList_sendName" class="inputWd260" value="${dto.join_name }" maxlength="10" /></td>
                                     <th scope="row"><span class="starBg">휴대전화</span></th>
-                                    <td>
-                                        <input type="text" id="orderUserTel" class="inputWd260" value="" maxlength="11" />
-                                    </td>
+                                    <td><input type="text" id="orderUserTel" name="orderList_sendPhone" class="inputWd260" value="${dto.join_phone }" maxlength="11" /></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -785,9 +874,9 @@ wcs_do(_nasa);
                             <tbody>
                                     <tr><span style="height:10px;"></span>
                                             <th scope="row"><span class="starBg">받으시는 분</span></th>
-                                            <td><input type="text" id="userName" class="inputWd260" value="" maxlength="10" data-user="" /></td>
+                                            <td id="userName1"><input type="text" id="userName" name="orderList_reciveName" class="inputWd260" value="${dto.join_name }" maxlength="10" data-user="" /></td>
                                             <th scope="row"><span class="starBg">휴대전화</span></th>
-                                            <td><input type="text" id="tel" class="inputWd260" value="" maxlength="11" data-user="" /></td>
+                                            <td id="tel1"><input type="text" id="tel" name="orderList_recivePhone" class="inputWd260" value="${dto.join_phone }" maxlength="11" data-user="" /></td>
                                         </tr>
                             </tbody>
                         </table>
@@ -801,10 +890,10 @@ wcs_do(_nasa);
                                     <th scope="row"><span class="starBg">주소</span></th>
                                     <td style="position:relative">
                                         <div class="addBox1">
-                                            <input type="text" id="zoneCode" class="inbox3" style="width:60px;" value="" readonly data-user="" />
+                                            <input type="text" id="zoneCode" name="orderList_reciveAddrNum" class="inbox3" style="width:60px;" value="${dto.join_addrNum }" readonly data-user="" />
                                             <a href="#" class="findBtn_ad" onClick="findPostCode(false); return false;">우편번호 찾기</a>
                                             <span class="checks">
-                                                <input type="checkbox" checked='checked' id="saveAddress"/>
+                                                <input type="checkbox" name="saveAddress" value="save" checked='checked' id="saveAddress"/>
                                                 <label for="saveAddress"></label>
                                             </span>
                                             <label for="saveAddress">
@@ -814,8 +903,9 @@ wcs_do(_nasa);
                                             <input type="hidden" id="longitude" name="longitude" />
                                         </div>
                                         <div class="addBox2">
-                                            <input type="text" id="address1" class="inputGrayBg inputWd370" value="" readonly data-user="" />
-                                            <input type="text" id="address2" class="inputWd370" value="" maxlength="50" data-user="" />
+                                            <input type="text" id="address1" name="orderList_reciveAddr1" class="inputGrayBg inputWd330" value="${dto.join_addr1 }" onchange="bgcolor_yellow(this);" data-user="" />
+                                            <input type="text" id="address2" name="orderList_reciveAddr2" class="inputWd330" value="${dto.join_addr2 }" maxlength="50" data-user="" />
+                                            <!-- <input type="button" value="배송확인" style="width: 80px;" id="addressCheck" class="" onclick="checkJuso();"> -->
                                             <input type="hidden" id="oldAddress1" value="" data-user="" />
                                             <input type="hidden" id="postCode" value="" />
                                         </div>
@@ -837,14 +927,14 @@ wcs_do(_nasa);
                                 <col width="" />
                             </colgroup>
                             <tbody>
-                                      <tr id="oasisDeliveryType" style="display:none">
+                                      <tr id="deliveryTypeSelect" style="display: none;">
                                       <th scope="row"><span class="starBg">배송 선택</span></th>
                                             <td>
                                         <div>
                                         <ul>
-                                            <div style="margin:10px 0">
+                                            <div id="deliveryTypeA" style="margin:10px 0">
 	                                            <span class="radios">
-	                                                <input type="radio" id="deliveryType3" name="deliveryType" value="daybreak" onClick="descOasisDeliveryType('daybreak');"/>
+	                                                <input type="radio" id="deliveryType3" name="orderList_delivery" value="daybreak" onClick="descOasisDeliveryType('daybreak');"/>
 	                                                <label for="deliveryType3" />
 	                                            </span>
 	                                            <label for="deliveryType3">
@@ -854,11 +944,11 @@ wcs_do(_nasa);
 	                                            </label>
                                             </div>
                                             <div id="daybreakDescription" class="daybreakDescription">
-                                                
-                                            </div>
-                                            <div style="margin:10px 0">
+                                            </div i>
+                                            
+                                            <div id="deliveryTypeB" style="margin:10px 0">
 	                                            <span class="radios">
-	                                                <input type="radio" id="deliveryType1" name="deliveryType" value="store" onClick="descOasisDeliveryType('store');"/>
+	                                                <input type="radio" id="deliveryType1" name="orderList_delivery" value="store" onClick="descOasisDeliveryType('store');"/>
 	                                                <label for="deliveryType1" />
 	                                            </span>
 	                                            <label for="deliveryType1" >
@@ -867,9 +957,10 @@ wcs_do(_nasa);
 	                                                </span>
 	                                            </label>
 	                                        </div>
-	                                        <div style="margin:10px 0">
+	                                        
+	                                        <div id="deliveryTypeC" style="margin:10px 0">
 	                                            <span class="radios">
-	                                                <input type="radio" id="deliveryType2" name="deliveryType" value="delivery" onClick="descOasisDeliveryType('delivery');"/>
+	                                                <input type="radio" id="deliveryType2" name="orderList_delivery" value="delivery" onClick="descOasisDeliveryType('delivery');"/>
 	                                                <label for="deliveryType2" />
 	                                            </span>
 	                                            <label for="deliveryType2"  >
@@ -881,6 +972,7 @@ wcs_do(_nasa);
                                         </ul>
                                         </div>
                                     </td>
+                                    </tr>
                                   <tr id="selectDelivery" style=" display:none">
                                     <th scope="row"><span class="starBg">배송 안내</span></th>
                                     <td>
@@ -902,72 +994,16 @@ wcs_do(_nasa);
                                             <div class="daybreakDelivery" >
                                                 <ul>
                                                     <li style="line-height:24px; padding:4px 0px 20px 0px;">
-                                                        ▶ <span id="daybreakDeliveryMessage" style="font-weight:normal;"></span><br/>
+                                                        ▶ <span style="font-weight:normal;">한번 선택한 배송은 <font color="red">변경 불가</font>하오니 신중하게 선택하여 주십시오.</span><br/>
                                                         ▶ 오아시스 새벽 배송은 서울 전지역,경기,인천 지역은 <font color="red">오후 8시</font> 이전까지 주문하시면 다음날 새벽 배송됩니다.</br>
                                                         ▶ 서울시 강남구/서초구/송파구/강동구/광진구, 용인시 수지구, 성남시 분당구 전체 지역은 새벽배송 주문마감 시간이 <font color="red">오후 11시</font>로 연장되었습니다. </br>
                                                         ▶ <font color="red">4월 17일부터 서울시 강동구/광진구</font>의 새벽배송 주문마감 시간이 오후 11시로 연장되었습니다. </br>
                                                         ▶ 새벽배송 지역과 시간은 점차 확대 될 예정입니다. </br>
-                                                        ▶ 새벽배송 선택 후 공동현관 출입방법 및 연락방법 필수정보입니다. 미입력시 새벽배송 불가 </br>
-                                                        </li>
-                                                        <li style="font-weight:bold; color:#333333;">* 공동현관 출입방법</li>
-                                                        <li> 
-                                                          <span class="radios">
-                                                              <input type="radio" id="entPassCode" name="entranceMethod" value="entPassCode" checked="checked">
-                                                              <label for="entPassCode">
-                                                              </label>
-                                                          </span>
-                                                          <label for="entPassCode">
-                                                              <p style="cursor:pointer; padding-right: 10px;">비밀번호</p>
-                                                          </label>
-                                                          <span class="radios">
-                                                              <input type="radio" id="entFree" name="entranceMethod" value="entFree" >
-                                                              <label for="entFree">
-                                                              </label>
-                                                          </span>
-                                                          <label for="entFree">
-                                                              <p style="cursor:pointer; padding-right: 10px;">자유출입</p>
-                                                          </label>
-                                                          <span class="radios">
-                                                              <input type="radio" id="entEtc" name="entranceMethod" value="entEtc" >
-                                                              <label for="entEtc">
-                                                              </label>
-                                                          </span>
-                                                          <label for="entEtc">
-                                                              <p style="cursor:pointer; padding-right: 10px; ">기타</p>
-                                                          </label>
-                                                          <input type="text" id="entranceMethodValue" class="inputWd260" maxlength="30" placeholder="현관비밀번호(예.201#1234#),기타방법" 
-                                                          		value="">
-                                                        </li>
-                                                        <li style="font-weight:bold; color:#333333;padding-top:10px;">* 새벽배송 문자알림</li>
-                                                        <li style="padding-bottom:20px;">
-                                                          <span class="radios">
-                                                              <input type="radio" id="S1" name="callMethodAtDaybreak" value="S1" >
-                                                              <label for="S1">
-                                                              </label>
-                                                          </span>
-                                                          <label for="S1">
-                                                              <p style="cursor:pointer; padding-right: 10px;">오전 7시 발송</p>
-                                                          </label>
-                                                          <span class="radios">
-                                                              <input type="radio" id="S2" name="callMethodAtDaybreak" value="S2" >
-                                                              <label for="S2">
-                                                              </label>
-                                                          </span>
-                                                          <label for="S2">
-                                                              <p style="cursor:pointer; padding-right: 10px;">배송완료 후 즉시</p>
-                                                          </label>
-                                                          <span class="radios">
-                                                              <input type="radio" id="S3" name="callMethodAtDaybreak" value="S3" >
-                                                              <label for="S3">
-                                                              </label>
-                                                          </span>
-                                                          <label for="S3">
-                                                              <p style="cursor:pointer; padding-right: 10px;">수신거부</p>
-                                                          </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>  
-                                            </div>
+                                                        
+                                                    </li>
+                                                </ul>
+                                            </div>  
+                                        </div>
                                             
                                           <div id="deliveryInfo" style="display:none">
                                             <ul>
@@ -988,7 +1024,7 @@ wcs_do(_nasa);
                                     <th scope="row"><span>포장재 회수요청</span></th>
                                     <td>
                                         <span class="checks" id="recoveryWrapper">
-                                            <input type="checkbox" id="recoveryWrapperYn" value="Y"/>
+                                            <input type="checkbox" id="recoveryWrapperYn" name="orderList_retrieve" value="Y"/>
                                             <label for="recoveryWrapperYn"> 전에 받았던 포장재(택배박스/아이스팩)를 회수해 주세요.</label>
                                         </span>
                                         <p style="color:#E53433; font-weight:bold; display:none">택배의 경우 택배사 사정으로 인하여 포장재를 회수하지 않습니다.</p>
@@ -998,54 +1034,32 @@ wcs_do(_nasa);
                                     <th scope="row"><span class="starBg">매장선택</span></th>
                                     <td>
                                         <p style="font-weight:bold; display:none">배송받기를 원하시는 매장을 선택해주세요.</p>
-                                         <select id="deliveryStoreId" style="height:30px; width:250px">
+                                         <select id="deliveryStoreId" name="orderList_store" style="height:30px; width:250px">
                                             <option value="">매장을 선택해주세요</option>
                                             
-                                                <option value="4" >강남구 대치2호점</option>
+                                                <option value="광진구 화양동" >광진구 화양동</option>
                                             
-                                                <option value="5" >강남구 대치점(래미안대치팰리스)</option>
+                                                <option value="경기도 구리시" >경기도 구리시</option>
                                             
-                                                <option value="6" >강동구 암사역점</option>
+                                                <option value="동대문구 휘경동" >동대문구 휘경동</option>
                                             
-                                                <option value="7" >강동구 암사캐슬점(캐슬아파트내)</option>
+                                                <option value="은평구 불광동" >은평구 불광동</option>
                                             
-                                                <option value="1" >경기위례본점</option>
+                                                <option value="은평구 구산동" >은평구 구산동</option>
                                             
-                                                <option value="2" >경기위례신도시1호점(에이플타워)</option>
+                                                <option value="사하구 괴정동" >사하구 괴정동</option>
                                             
-                                                <option value="26" >광진구 광장점</option>
+                                                <option value="관악구 신림동" >관악구 신림동</option>
                                             
-                                                <option value="12" >분당 서현점</option>
+                                                <option value="마포구 도화동" >마포구 도화동</option>
                                             
-                                                <option value="13" >분당 수내점</option>
+                                                <option value="송파구 신천동" >송파구 신천동</option>
                                             
-                                                <option value="11" >분당 정자점</option>
+                                                <option value="동작구 흑석동" >동작구 흑석동</option>
                                             
-                                                <option value="14" >분당미금점(하우스토리)</option>
+                                                <option value="도봉구 쌍문동" >도봉구 쌍문동</option>
                                             
-                                                <option value="39" >서초구 서초점</option>
-                                            
-                                                <option value="36" >송파구 문정점</option>
-                                            
-                                                <option value="40" >송파구 석촌호수점</option>
-                                            
-                                                <option value="8" >송파구 잠실2호점(장미아파트)</option>
-                                            
-                                                <option value="10" >송파구 잠실3호점 (파크리오)</option>
-                                            
-                                                <option value="3" >송파구 잠실점(신천동 새마을시장)</option>
-                                            
-                                                <option value="25" >용인 구갈점</option>
-                                            
-                                                <option value="16" >용인 상현점</option>
-                                            
-                                                <option value="17" >용인 성복점</option>
-                                            
-                                                <option value="18" >용인 수지동천점</option>
-                                            
-                                                <option value="15" >용인 신봉점</option>
-                                            
-                                                <option value="20" >용인수지동천</option>
+                                                <option value="경기도 수원시" >경기도 수원시</option>
                                             
                                         </select>
                                     </td>
@@ -1054,7 +1068,7 @@ wcs_do(_nasa);
                             </tbody>
                         </table>
                     </div>
-  <!--                  <div class="orderWrap2">
+  <!-- <div class="orderWrap2">
 
                     </div>-->
                         
@@ -1077,7 +1091,7 @@ wcs_do(_nasa);
                                         <div class="payment">
                                             <div style="margin:5px 0">
 	                                            <span class="radios">
-	                                                <input type="radio" id="P1" name="packing" value="P1" />
+	                                                <input type="radio" id="P1" name="orderList_naturePackage" value="naturePackage1" />
 	                                                <label for="P1" />
 	                                            </span>
 	                                            <label for="P1" >
@@ -1086,7 +1100,7 @@ wcs_do(_nasa);
                                             </div>
                                             <div style="margin:5px 0">
 	                                            <span class="radios">
-	                                                <input type="radio" id="P2" name="packing" value="P2" checked="checked"/>
+	                                                <input type="radio" id="P2" name="orderList_naturePackage" value="naturePackage2" checked="checked"/>
 	                                                <label for="P2" />
 	                                            </span>
 	                                            <label for="P2" >
@@ -1095,7 +1109,7 @@ wcs_do(_nasa);
                                             </div>
                                             <div style="margin:5px 0">
 	                                            <span class="radios">
-	                                                <input type="radio" id="P3" name="packing" value="P3" />
+	                                                <input type="radio" id="P3" name="orderList_naturePackage" value="naturePackage3" />
 	                                                <label for="P3" />
 	                                            </span>
 	                                            <label for="P3" >
@@ -1125,7 +1139,7 @@ wcs_do(_nasa);
                                         <div class="payment">
                                             <div style="margin:5px 0">
                                                 <span class="radios">
-                                                    <input type="radio" id="recycleY" name=recycle value="recycleY"/>
+                                                    <input type="radio" id="recycleY" name="orderList_recyclePackage" value="Y"/>
                                                     <label for="recycleY" />
                                                 </span>
                                                 <label for="recycleY" >
@@ -1134,7 +1148,7 @@ wcs_do(_nasa);
                                             </div>
                                             <div style="margin:5px 0">
                                                 <span class="radios">
-                                                    <input type="radio" id="recycleN" name="recycle" value="recycleN"/>
+                                                    <input type="radio" id="recycleN" name="orderList_recyclePackage" value="N"/>
                                                     <label for="recycleN" />
                                                 </span>
                                                 <label for="recycleN" >
@@ -1163,19 +1177,18 @@ wcs_do(_nasa);
                                         <tr>
                                     <th scope="row"><span>배송 메시지</span></th>
                                     <td>
-                                        <select class="inputWd790" style="height:30px; padding:5px; margin-bottom:5px; width:761px;" id="selDeliveryMessage">
+                                        <select class="inputWd790" name="orderList_message" style="height:30px; padding:5px; margin-bottom:5px; width:761px;" id="selDeliveryMessage">
                                             <option value="" style="width:761px">배송 메시지 (선택사항)</option>
                                             
-                                            
-                                                <option value="배송 전, 연락바랍니다." style="width:761px">배송 전, 연락바랍니다.</option>
-                                            
-                                                <option value="부재시, 전화 또는 문자 주세요." style="width:761px">부재시, 전화 또는 문자 주세요.</option>
-                                            
-                                                <option value="부재시, 경비실에 맡겨주세요." style="width:761px">부재시, 경비실에 맡겨주세요.</option>
-                                            
+                                            <option value="배송 전, 연락바랍니다." style="width:761px">배송 전, 연락바랍니다.</option>
+                                        
+                                            <option value="부재시, 전화 또는 문자 주세요." style="width:761px">부재시, 전화 또는 문자 주세요.</option>
+                                        
+                                            <option value="부재시, 경비실에 맡겨주세요." style="width:761px">부재시, 경비실에 맡겨주세요.</option>
+                                        
                                             <option value="direct">직접입력</option>
                                         </select>
-                                        <input type="text" class="inputWd790" id="deliveryMessage" maxlength="100" style="display:none; padding: 5px 10px;"/><br />
+                                        <input type="text" class="inputWd790" id="deliveryMessage" name="directWrite" maxlength="100" style="display:none; padding: 5px 10px;"/><br />
                                         
                                     </td>
                                 </tr>
@@ -1185,10 +1198,9 @@ wcs_do(_nasa);
                             </div>
                         </div>
                         <div class="orderBtnWrap_green" style="padding-top:20px">
-                        <a href="#" class="orderBtngreen" onclick="nextStep(); return false;"> 주문서 작성</a>                       
+                        <input type="button" class="orderBtngreen" onclick="orderComfirm(); return false;" value=" 주문서 작성 "/>
                     </div>
-                    
-                    <input type="hidden" id="userId" value="anews0927"/>
+
                     
                 </div>
                 <!-- //내용 입니다 -->
@@ -1203,108 +1215,7 @@ wcs_do(_nasa);
         <iframe name="txnIdGetterFrame" id="txnIdGetterFrame" style="height:0; width:0;display:none"></iframe>
     </div>
     <!-- //컨텐츠 -->
-    
-    
-    <!-- 택배불가상품 -->
-    <div id="orderPop" class="oasisLayerPop" style="height:584px;">
-            <div class="oasisLayerPop_in">
-                <div class="oasisLPtit" style="position:relatvive">
-                    <strong class="comLayerTit">택배불가상품</strong>
-                    <div style="position:absolute; width: 27px;height: 27px;top: 27px;right: 26px;">
-                        <a href="#" onclick="closeQuestionDialog(); return false;" class="popOasisDeliveryClose"></a>
-                    </div>
-                </div>
-        
-                <div class="oasisLPconWrap" style="text-align:center">
-                    <!-- 이 안에 팝업 내용 넣기 -->
-                    <div class="comLayerCon">
-                        <div class="popCartList">
-                            <div class="popCartInfo">
-                                <span style="font-size:16px; font-weight:600; display:block; text-align:center">아래 상품이 택배 배송이 불가한 상품이기 때문에 주문하실 수 없습니다.</span>
-                            </div>
-                            <div class="popProductList">
-                                <ul class="popProdInfo">
-                                    
-                                        
-                                           
-                                           
-                                           
-                                           
-                                               
-                                               
-                                                  <input type="hidden" class="deliveryProduct" value="3653412" data-cart="3653412"/>
-                                               
-                                           
-                                        
-                                        
-                                    
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="popCartPageWrap">
-                    </div>
-                    
-                    <div class="popCartBtnWrap oasisLPcon3">
-                        <a href="/cart/list" style="height:48px; font-size:15px; margin-top:30px; line-height:48px;">장바구니로 이동</a>
-                        <a href="#" onclick="order('delivery'); return false;" style="height:46px; font-size:15px; color:#6ca435; border:1px solid #6ca435; background:white; line-height:46px">해당상품 제외하기</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- // 택배불가상품 -->
-        
-        <!-- 새벽불가상품 -->
-        <div id="daybreakOrderPop" class="oasisLayerPop" style="height:584px;">
-            <div class="oasisLayerPop_in">
-                <div class="oasisLPtit" style="position:relatvive">
-                    <strong class="comLayerTit">새벽불가상품</strong>
-                    <div style="position:absolute; width: 27px;height: 27px;top: 27px;right: 26px;">
-                        <a href="#" onclick="closeQuestionDialog(); return false;" class="popOasisDeliveryClose"></a>
-                    </div>
-                </div>
-        
-                <div class="oasisLPconWrap" style="text-align:center">
-                    <!-- 이 안에 팝업 내용 넣기 -->
-                    <div class="comLayerCon">
-                        <div class="popCartList">
-                            <div class="popCartInfo">
-                                <span style="font-size:16px; font-weight:600; display:block; text-align:center">아래 상품이 새벽 배송이 불가한 상품이기 때문에 주문하실 수 없습니다.</span>
-                            </div>
-                            <div class="popProductList">
-                                <ul class="popProdInfo">
-                                    
-                                        
-                                           
-                                           
-                                               
-                                               
-                                                  <input type="hidden" class="daybreakDeliveryProduct" value="3653412" data-cart="3653412"/>
-                                               
-                                           
-                                        
-                                        
-                                    
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="popCartPageWrap">
-                    </div>
-                    
-                    <div class="popCartBtnWrap oasisLPcon3">
-                        <a href="/cart/list" style="height:48px; font-size:15px; margin-top:30px; line-height:48px;">장바구니로 이동</a>
-                        <a href="#" onclick="order('daybreak'); return false;" style="height:46px; font-size:15px; color:#6ca435; border:1px solid #6ca435; background:white; line-height:46px">해당상품 제외하기</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- // 새벽불가상품 -->
-        
+
         <!-- 매장불가상품 -->
         <div id="storeOrderPop" class="oasisLayerPop" style="height:584px;">
             <div class="oasisLayerPop_in">
@@ -1324,19 +1235,9 @@ wcs_do(_nasa);
                             </div>
                             <div class="popProductList">
                                 <ul class="popProdInfo">
-                                    
-                                        
-                                           
-                                           
-                                               
-                                               
+          
                                                   <input type="hidden" class="storeDeliveryProduct" value="3653412" data-cart="3653412"/>
-                                               
-                                           
-                                        
-                                        
-                                    
-                                    
+    
                                 </ul>
                             </div>
                         </div>
@@ -1397,78 +1298,16 @@ wcs_do(_nasa);
                 </div>
             </div>
         </div>
-        <!-- 
-        <div id="deliveryInfoPop" class="storeDeliveryNoticePopup" style="display:none;height: 210px;background: white; top:70%">
-                <div class="popLpCon">
-                    <span style="color: #000000; font-size: 30px;">
-                    설 연휴 택배 배송 안내</span><br><br><br>
-                        <span style="font-size: 15px;line-height: 26px;">본 주문은 설 연휴 기간으로 인하여 <br>
-                            <font color="red" style="font-size: 18px;">2019년 2월 7일</font>부터 순차적으로 발송됩니다.
-                        </span>
-                        <div class="closeBtn">
-                            <a href="#;" onclick="javascript:closeDeliveryInfoPop(); return false;">
-                                <img src="/images/common/layerPopClose2.png" alt="닫기">
-                            </a>
-                        </div>
-                        <div class="popBtn">
-                            <a href="#;" onclick="closeDeliveryInfoPop();return false;" class="greenBtn puCloseBtn" style="width:100%">확인</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="storeDeliveryInfoPop" class="storeDeliveryNoticePopup" style="display:none;height: 210px;background: white; top:70%">
-                <div class="popLpCon">
-                    <span style="color: #000000; font-size: 30px;">
-                    설 연휴 매장 배송 안내</span><br><br><br>
-                        <span style="font-size: 15px;line-height: 26px;">본 주문은 설 연휴 기간으로 인하여 <br>
-                            <font color="red" style="font-size: 18px;">2019년 2월 7일</font>부터 순차적으로 발송됩니다.
-                        </span>
-                        <div class="closeBtn">
-                            <a href="#;" onclick="javascript:closeStoreDeliveryInfoPop(); return false;">
-                                <img src="/images/common/layerPopClose2.png" alt="닫기">
-                            </a>
-                        </div>
-                        <div class="popBtn">
-                            <a href="#;" onclick="closeStoreDeliveryInfoPop();return false;" class="greenBtn puCloseBtn" style="width:100%">확인</a>
-                        </div>
-                    </div>
-                </div>
-         -->
-        <form id="deliveryInfoForm" action="/order/prepare/payment" method="post" style="display: none;">
-            <input type="hidden" name="buyerName" id="hBuyerName" value=""/>
-            <input type="hidden" name="buyerTel" id="hBuyerTel" value=""/>
-            <input type="hidden" name="receiver" id="hReceiver" value=""/>
-            <input type="hidden" name="zoneCode" id="hZoneCode" value=""/>
-            <input type="hidden" name="postCode" id="hPostCode" value=""/>
-            <input type="hidden" name="address1" id="hAddress1" value=""/>
-            <input type="hidden" name="address2" id="hAddress2" value=""/>
-            <input type="hidden" name="oldAddress1" id="hOldAddress1" value=""/>
-            <input type="hidden" name="tel" id="hTel" value=""/>
-            <input type="hidden" name="orderRequestMsg" id="hOrderRequestMsg" value=""/>
-            <input type="hidden" name="oasisYn" id="hOasisYn" value=""/>
-            <input type="hidden" name="deliveryTimeCode" id="hDeliveryTimeCode" value=""/>
-            <input type="hidden" name="saveAddress" id="hSaveAddress" value=""/>
-            <input type="hidden" name="latitude" id="hLatitude" value=""/>
-            <input type="hidden" name="longitude" id="hLongitude" value=""/>
-            <input type="hidden" name="daybreakDeliveryYn" id="hDaybreakDeliveryYn" value=""/>
-            <input type="hidden" name="smsNoticeCode" id="hSmsNoticeCode" value=""/>
-            <input type="hidden" name="doorKey" id="hDoorKey" value=""/>
-            <input type="hidden" name="recoveryWrapperYn" id="hRecoveryWrapperYn" value=""/>
-            <input type="hidden" name="deliveryStoreId" id="hDeliveryStoreId" value=""/>
-            <input type="hidden" name="packingType" id="hPackingType" value=""/>
-            <input type="hidden" name="recycleYn" id="hRecycleYn" value=""/>
-            <input type="hidden" name="eventProductId" value=""/>
-            <div id="cartIds">
-                     
-                    <input type="hidden" name="cartId" value="3653412" />
-                
-            </div>
-        </form>
-    
-    <!-- footer -->
- 
-    <!-- // footer -->
+        
+	<input type="hidden" name="product_price" value="${dto.product_price}"/>
+	<input type="hidden" name="join_id" value="${dto.join_id}"/>
+	<input type="hidden" name="product_id" value="${dto.product_id} "/>
+	<input type="hidden" name="selectedCartIds" value="${selectedCartIds}"/>
+	<input type="hidden" name="join_point" value="${dto.join_point }"/>
+        
+	</form>
 </div>
+<jsp:include page="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>
  

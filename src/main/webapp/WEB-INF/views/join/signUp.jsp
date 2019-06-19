@@ -1,4 +1,11 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.net.URL" %>
+<%@ page import="java.net.HttpURLConnection" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.InputStreamReader" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
@@ -14,8 +21,8 @@
 <link rel="apple-touch-icon-precomposed" href="/dailychan/resources/images/webicon/Icon-Small-72@2x.png" sizes="144x144" />
 <link rel="apple-touch-icon-precomposed" href="/dailychan/resources/images/webicon/Icon-Small-60@3x.png" sizes="192x192" />
 <link rel="stylesheet" type="text/css" href="/dailychan/resources/css/notosanskr.css" />
-<link rel="stylesheet" type="text/css" href="/dailychan/resources/css/oasis_shop.css?dummy=5.99" />
-<link rel="stylesheet" type="text/css" href="/dailychan/resources/css/flick/jquery-ui.min.css" />
+
+<link rel="stylesheet" type="text/css" href="/dailychan/resources/css/oasis_shop.css?dummy=5.99" /><link rel="stylesheet" type="text/css" href="/dailychan/resources/css/flick/jquery-ui.min.css" />
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery-ui.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery.cookie.js"></script>
@@ -24,145 +31,279 @@
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/placeholders.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/clipboard.min.js"></script>
 <script type="text/javascript" src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-var contextPath = "";
-var imgUrl = "http://www.oasis.co.kr:8580";
-(function($) {
-    $.ajaxSetup({
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("AJAX", "true");
-        },
-        error: function(xhr, status, err) {
-            if (xhr.status == 403) {
-                location.href = contextPath + "/login?redirect=true";
-            }
-            else {
-                console.log("error: " + xhr.status);
-            }
-        }
-    });
+<script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_shop.js"></script>
+<script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_common.js?dummy=0.9"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script language="javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    function signUp() {
+		
+   
+		var f = document.myForm
+		var join_id = $("#join_id").val();
+		var join_password = $("#join_password").val();
+		var password2 = $("#password2").val();
+		var join_name = $("#join_name").val();
+		var join_email = $("#join_email").val();
+		var join_phone = $("#join_phone").val();
+		var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,15}$/;
+		var reg1 = /^(?=.*?[0-9]).{6,15}$/;
+		var regExp = /[a-z0-9]{2,}@[a-z0-9-]{2,}.[a-z0-9]{2,}/i;// --이메일 체크
+		var regPhone = /^\d{3}-\d{3,4}-\d{4}$/;	//휴대번호 체크
+
+
+		if(join_id.length < 1 ){
+			
+			alert ("아이디를 입력해주시기 바랍니다.");
+			f.join_id.focus();
+			return;
+		}
+		
+		if(false==reg1.test(join_id)){
+			alert("아이디는 6자이상 15자이하며, 아이디에는 숫자가 포함되어야 합니다.")
+			return;
+		}
+		
+		
+		if(join_password.length <1){
+			alert("비밀번호를 입력해주시기 바랍니다.");
+			return;
+		}
+		if(false==reg.test(join_password)){
+			
+			alert("비밀번호는 6자이상 15자이하이며, 숫자,대문자,소문자 모두 포함해야 합니다.")
+			return;
+		}
+	
+		if(password2.length <1 || join_password!= password2){
+	
+			alert("비밀번호 확인을 입력해 주시기 바랍니다.");
+			return;		
+		}
+
+		if(join_name.length<1){
+			alert("이름을 입력해주시기 바랍니다.");
+			return;
+		}
+		if(join_phone.length<1 ){
+			alert("휴대폰번호를 입력해주시기 바랍니다.");
+			return;
+		}
+		if(false==regPhone.test(join_phone)){
+			alert("휴대폰 형식에 맞게 입력해주시기 바랍니다.");
+			return;
+		}
+	
+		if(join_email.length<1 ){
+			alert("이메일을 입력해주시기 바랍니다.");
+			return;
+		}
+		if(false==regExp.test(join_email)){
+			alert("이메일 형식에 맞게 입력해주세요");
+			return;
+		}
+
+		
+		
+		f.action = "<%=cp%>/join/complete.action";
+		f.submit();
+		
+	}    
     
-    $(document).ajaxStart(function() {
-        $("#isolationField").show();
-        
-    }).ajaxStop(function() {
-        $("#isolationField").hide();
-    });
-})(jQuery);
-//]]>
-</script>
-<script type="text/javascript" charset="utf-8" src="/dailychan/js/oasis_shop.js"></script>
-<script type="text/javascript" charset="utf-8" src="dailychan/js/oasis_common.js?dummy=0.9"></script>
 
+	//아이디 중복
+	function checkUserId() {
+		
+		var join_id = $("#join_id").val();
+		var getCheck= RegExp(/^(?=.*?[0-9]).{6,15}$/);
+		
+		if(join_id.length < 1){
+			
+			alert("아이디를 입력해주시기 바랍니다.");
+		
+		}else if(!getCheck.test($("#join_id").val())){
+	        alert("아이디는 6자이상 15자이하며, 아이디에는 숫자가 포함되어야 합니다.");
+	        $("#join_id").val("");
+	        $("#join_id").focus();
+	        return false;
+	      
+		}else{
+			
+			var url = "<%=cp%>/join/checkUserId.action";
+			
+			$.post(url,{join_id:join_id},function(args){
+				
+				var checkId = decodeURIComponent(args).replace(/\+/g, ' ');
+				
+				/* $("#checkIdOk").html(checkId);
+				$("#checkIdOk").show(); */
+				alert(checkId);
+				
+			});
+			
+		}
+	};
+	
+	//추천인
+	function checkRecommendId() {
+		
+    	var join_recommender = $("#join_recommender").val();
+   
+		var url = "<%=cp%>/join/checkRecommendId.action";
+		
+		$.post(url,{join_id:join_recommender},function(args){
+			
+			var checkrecommender = decodeURIComponent(args).replace(/\+/g, ' ');
+			
+			$("#checkRecommendIdOk").html(checkrecommender);
+			$("#checkRecommendIdOk").show();
+			
+			
+		});
+	
+		
+	}
 
+	
+  //휴대폰중복
+  
+    function checkTelAlreadyExists() {
+		
+    	var join_phone = $("#join_phone").val();
+    	var regPhone = /^\d{3}-\d{3,4}-\d{4}$/;	//휴대번호 체크
+    	
+    	
+		if(join_phone.length < 1){
+			
+			alert("휴대폰을 입력해주시기 바랍니다.");
+		}else if(!regPhone.test($("#join_phone").val())){
+	        alert("휴대폰 형식에 맞게 입력해주시기 바랍니다.");
+	        $("#join_phone").val("");
+	        $("#join_phone").focus();
+	        return false;
+	
+		}else{
+			
+			var url = "<%=cp%>/join/checkTelAlreadyExists.action";
+			
+			$.post(url,{join_phone:join_phone},function(args){
+				
+				var checkPhone = decodeURIComponent(args).replace(/\+/g, ' ');
+				
+				/* $("#checkIdOk").html(checkId);
+				$("#checkIdOk").show(); */
+				alert(checkPhone);
+				
+				
+			});
+			
+		}
+
+	}
+
+</script>	
+
+</head>
+<body>
+<div class="allWrap">
 	<!-- header -->
+		<jsp:include page="/WEB-INF/views/top.jsp">
+			<jsp:param value="${sort }" name="sort"/>
+		</jsp:include>
+	
 	<div id="header">
-
 		<!--top banner-->
-		<div class="topPmBanner" style="background:#F0F4E6">
-			<div class="tpb_in">
-				<a href="/event/openPromotion/1">
-					<img src="/dailychan/resources/images/common/top_openevent_banner.png" alt="">
-				</a>
-				<a href="#" class="tpbClose">
-					<img src="/dailychan/resources/images/common/top_close.png" alt="상단 프로모션 닫기">
-				</a>
-			</div>
-		</div>
+		
 		<!-- //top banner-->
 
-		<!-- 상단 헤더 영역 -->
-
-		
-		
-		<!-- //popup : 개인정보 입력 -->
-		<!------------------------ //배송관련 레이어팝업 / 전 페이지 공통 ------------------------>
-	
-        <!------------------------ // 장바구니 레이어 팝업 ------------------------>
-        
-        <div class="popDim"></div>
-		
 	</div>
-	<!-- // header -->
-    <!-- // header -->
-    
-    <!-- 컨텐츠 -->
-    <div class="contentsArea loginJoinBg" id="sec_join">
-        <div class="contentsWrap">
-           <div class="list_top_banner img_join">
-				<div class="contents">
-					<p>
-						&nbsp;
-					</p>
-				</div>
-			</div>
-       		<!-- 오른쪽 영역 -->
-            <div class="content oasisLoginHt">
-                <!-- 내용 입니다 -->
-                
-                <div class="oasisLoginWrap oasisJoinWrap">
+	<!-- header -->
+	<!-- 컨텐츠 -->
+		    <div class="contentsArea loginJoinBg" id="sec_join">
+		        <div class="contentsWrap">
+		            <div class="list_top_banner img_join" > 
+		            	
+						<div class="contents">
+							<p>
+								&nbsp;
+							</p>
+						</div>
+					</div>
+		       		<!-- 오른쪽 영역 -->
+		          <!-- 내용 입니다 -->
+           	<div class="oasisLoginWrap oasisJoinWrap">
                 	
                 	<!-- 2018-06-12 -->  
-                    <div class="newJoinTitle">Daily Chan 회원 가입</div>           
+                    <div class="newJoinTitle">Daily 회원 가입</div>           
                     <div class="newJoinSubTitle">
                     	세상을 바꾸겠다는 거창한 철학보다는 한 사람의 작은 바람을 담은 소비가 가족을 행복하게 하고,<br>
 						행복한 가족이 모여 행복한 사회를 만들 수 있다는 단순하고 소박한 가치를 실천합니다.
                     </div>       
                     <!-- 2018-06-12 -->  
-                    
+
                     <ul class="oasisLoginInputLi oasisJoinInputLi">
+                    
                         <li>
-                            <div class="oasisJoinInput_in">
-                                <input type="text" placeholder="아이디" id="userId" name="userId" maxlength="15" onkeydown="fnNotInputHan(this);" />
-                                <input type="hidden" id="tmpUserId"/>
-                                <strong style="display:none" id="checkIdOk">사용가능한 아이디입니다.</strong>
-                                <a href="#" onclick="checkUserId(); return false;">중복체크</a>
+                        	<!-- <form action="" method="POST" novalidate="" name="myForm"> -->
+                        	<form action="" method="post" name="myForm">
+                            <div class="oasisJoinInput_in">            
+                          
+                              <%-- <c:set var="join_id" value="아이디"/> --%>
+                         			<c:choose>
+	                          			<c:when test="${naver_id ne null || naver_id != null}">	
+	                          				<input type="hidden" id="join_id" name="join_id" value="${naver_id}"/><!-- onkeydown="fnNotInputHan(this);" -->
+				                        	 <input type="text" placeholder="소셜:naver" id="join_id" name="join_id" readonly="readonly" />	
+				                        	 	<input type="hidden" name="naver_id" value="${naver_id}"/>
+				                        </c:when>
+				                        	<c:when test="${kakao_id ne null || kakao_id != null}">	
+	                          				<input type="hidden" id="join_id" name="join_id" value="${kakao_id}"/><!-- onkeydown="fnNotInputHan(this);" -->
+				                        	 <input type="text" placeholder="소셜:Kakao" id="join_id" name="join_id" readonly="readonly" />	
+				                        	 	<input type="hidden" name="id" value="${kakao_id}"/>
+				                        </c:when>
+				                        
+				                        
+	                          			<c:otherwise>
+	                          				<input type="text" placeholder="아이디 (숫자 포함 조합 6~15자 입력)" id="join_id" name="join_id"  maxlength="15" />
+				                          	 <a href="#" onclick="checkUserId(); return false;">중복확인</a>
+	                          			</c:otherwise>
+	                          		</c:choose>
                             </div>
-                            <!--오류메시지-->
-                            <p class="messageBox">사용중인 아이디입니다. </p>
-                            <!--//오류메시지-->
+                          	
                         </li>
                         <li>
-                            <input type="password" placeholder="비밀번호 (영문 또는 영문, 숫자 조합 6~15자 입력)" maxlength="15" id="password" name="password"/>
-                            <!--오류메시지-->
-                            <p class="messageBox">비밀번호는 영문, 숫자 조합 6~15자 입력하셔야 합니다. </p>
-                            <!--//오류메시지-->
+                            <input type="password" placeholder="비밀번호 (영문소문자,대문자, 숫자 조합 6~15자 입력)" maxlength="15"   id="join_password" name="join_password"/>
+                       
                             
-                            <input type="password" placeholder="비밀번호확인" class="oasisJoinInputPW" maxlength="15" id="password2" name="password2"/>
-                            <!--오류메시지-->
-                            <p class="messageBox">비밀번호가 일치하지 않습니다.</p>
-                            <!--//오류메시지-->
+                          <input type="password" placeholder="비밀번호확인"  maxlength="15" id="password2" name="password2"/>
+                            
                         </li>
                         <li>
-                            <input type="text" placeholder="이름"  id="userNm" name="userNm" maxlength="40"/>
-                            <!--오류메시지-->
-                            <p class="messageBox">이름을 입력하세요. </p>
-                            <!--//오류메시지-->
+                            <input type="text" placeholder="이름"  id="join_name" name="join_name" value="${join_name}" maxlength="40"/>
+                           <%-- 	<input type="text" id="join_name" name="join_name" value="${join_name}" readonly="readonly"/> --%>
+                           	
                         </li>
 						
 						<!-- 2018-06-12 -->  
 						<li>
                             <div class="oasisJoinInput_in">
-                                <input type="text" placeholder="휴대폰번호" id="tel" name="tel" /><!-- readonly="readonly" -->
-                             <!--    <a href="#" onclick="checkPlusSafe(); return false;" id="btnOtp">본인인증</a> -->
+                                <input type="text" placeholder="휴대폰번호 (010-xxxx-xxxx)" id="join_phone" name="join_phone"/>
+                                 <a href="#" onclick="checkTelAlreadyExists(); return false;">중복확인</a> <!-- checkIdOk -->
                             </div>
-                            <!--오류메시지-->
-                            <p class="messageBox">휴대폰번호를 입력하세요. </p> 
-                            <!--//오류메시지-->
+                            
                         </li>
                         <!-- 2018-06-12 -->  
                         
                         <li>
                             <div class="oasisJoinInput_in">
-                                <input type="text" placeholder="이메일" id="email" name="email"/>
+                                <input type="text" placeholder="이메일 (abc1234@naver.com)" id="join_email" name="join_email" value="${join_email}"/>
                             </div>
-                            <!--오류메시지-->
-                            <p class="messageBox">잘못된 이메일 형식입니다.</p>
-                            <!--//오류메시지-->
+                            
                         </li>
-                        
-                        <li class="btn_select_branch">
+                       
+                       <li class="btn_select_branch">
                             <div>
 								<p>
 									SMS, E-mail 수신동의 고객에 한하여 할인쿠폰을 받으실 수 있습니다.<br/>
@@ -170,22 +311,22 @@ var imgUrl = "http://www.oasis.co.kr:8580";
 								</p>
 								
 								<span class="radios">
-									<input type="radio" name="receiveSms" id="sms_y" value="Y" checked="checked">
+									<input type="radio" name="join_snsAgree" id="sms_y" value="Y" checked="checked">
 									<label for="sms_y"></label>
 								</span>
 								<label for="sms_y">SMS 동의</label>
 								<span class="radios">
-									<input type="radio" name="receiveSms" id="sms_n" value="N">
+									<input type="radio" name="join_snsAgree" id="sms_n" value="N">
 									<label for="sms_n"></label>
 								</span>
 								<label for="sms_n">SMS 동의안함</label>
 								<span class="radios">
-									<input type="radio" name="receiveEmail" id="email_y" value="Y" checked="checked">
+									<input type="radio" name="join_emailAgree" id="email_y" value="Y" checked="checked">
 									<label for="email_y"></label>
 								</span>
 								<label for="email_y">E-mail 동의</label>
 								<span class="radios">
-									<input type="radio" name="receiveEmail" id="email_n" value="N">
+									<input type="radio" name="join_emailAgree" id="email_n" value="N">
 									<label for="email_n"></label>
 								</span>
 								<label for="email_n">E-mail 동의안함</label>
@@ -194,669 +335,49 @@ var imgUrl = "http://www.oasis.co.kr:8580";
                         
                         <li>
                             <div class="oasisJoinInput_in">
-                                <input type="text" placeholder="추천인 아이디" id="recommendId" name="recommendId" maxlength="40" value=""/>
-                                <input type="hidden" id="recommendNo" name="recommendNo"/>
-                                <strong style="display:none" id="checkRecommendIdOk">추천인 아이디가 확인되었습니다.</strong>
+                                <input type="text" placeholder="추천인 아이디" id="join_recommender" name="join_recommender" maxlength="40" value="${join_recommender }"/>
+                      
+                              <!--   <input type="hidden" id="recommendNo" name="recommendNo"/> -->
+                               <strong style="display:none" id="checkRecommendIdOk">추천인 아이디가 확인되었습니다.</strong>
                                 <a href="#" onclick="checkRecommendId(); return false;">ID 확인</a>
                             </div>
-                            <!--오류메시지-->
-                            <p class="messageBox">추천인 아이디를 입력하세요.</p>
-                            <!--//오류메시지-->
+                         
                         </li>
-                        
-                       
-                        
+								
                         <li>
                            <img src="/dailychan/resources/images/loginJoin/join_info.png"> <!-- 2018-06-12 -->
                         </li>
-                        
+                        </form>
                         <li class="btn_select_branch">
 							<div id="infoMembership">
 								
 							</div>
                         </li>
+                    <div class="oasisLoginBtn2">
+                        <a href="#" onclick="signUp(); return false;">가입하기</a> <!-- 2018-06-12 -->
+                    </div>
                     </ul>
-                    <div class="oasisLoginBtn2">	<!-- 가입하기를 눌렀을때 가는 거 확인하기 -->
-                       <!--  <a href="#" onclick="signUp(); return false;">가입하기</a> --> <!-- 2018-06-12 -->
-                       <button onclick="location.href='/dailychan/join/complete' ">회원가입</button>
                     </div>
                     
-                    <p class="oasisJoinTxt">본인은 만 14세 이상이며  
-                    	<a href="#" class="oasisTermsBtn joinTerms1" onclick="return false;">DailyChan 장보기 회원약관</a>
-                    	&nbsp;<a href="#" class="oasisTermsBtn joinTerms2" onclick="return false;">DailyChan 개인정보보호 정책</a><br/>
-                    	<a href="#" class="oasisTermsBtn joinTerms3" onclick="return false;">DailyChan 전자금융거래약관</a>의 내용을 확인하였으며, 
-                    	<strong>동의합니다.</strong> 
-                    </p>
-                
+                    </div>
+                    
+        
+
                 </div>
                 <!-- //내용 입니다 -->
-            </div>
-            <!-- //오른쪽 영역 -->
-            <input type="hidden" id="reqNum" name="reqNum" />
-            <input type="hidden" id="resNum" name="resNum" />
-            <form name="formCheckPlusSafe" method="post">
-            	<input type="hidden" name="m" value="checkplusSerivce" />
-            	<input type="hidden" name="EncodeData" id="niceEncodeData" />
-            </form>
-		</div>
-    </div>
-    <!-- //컨텐츠 -->
-    
-    <!---- 레이어팝업 (이용약관) ---->
-    <div class="oasisLayerPop2">
-        <div class="oasisLayerPop_in">
-            <div class="oasisLPtit2 oasisTermsPtit">
-                <strong class="oasisTermsPop1">오아시스 장보기 회원약관</strong>
-                <strong class="oasisTermsPop2">오아시스 개인정보보호정책</strong>
-                <strong class="oasisTermsPop3">오아시스 전자금융거래약관</strong>
-            </div>
-            
-            <div class="oasisLPconWrap oasisLPcon_terms">
-                
-                <!--개인정보보호 정책-->
-                <div class="clsTab mgB5">
-                        <ul>
-                            <li class="terms1Btn">
-                                <a href="#" class="joinTerms1" onclick="return false;">이용약관</a>
-                            </li>
-                            <li class="terms2Btn">
-                                <a href="#" class="joinTerms2" onclick="return false;">개인정보취급방침</a>
-                            </li>
-                            <li class="terms3Btn">
-                                <a href="#" class="joinTerms3" onclick="return false;">전자금융거래약관</a>
-                            </li>
-                        </ul>
-                    </div>
-                <div class="oasisTermsPopBox oasisTermsPop1">
-                    <strong>1. 총칙</strong>
-                    <br>
-                    <br>① 개인정보란 생존하는 개인에 관한 정보로서 당해 정보에 포함되어 있는 성명, 주민등록번호 등의 사항에 의하여 당해 개인을 식별할 수 있는 정보 (당해정보만으로는 특정 개인을 식별할 수 없더라도 다른 정보와 용이하게 결합하여 식별할 수 있는 것을 포함합니다)를 말합니다.<br>
-                    <br>② 오아시스는 귀하의 개인정보보호를 매우 중요시하며, 『정보통신망이용촉진및정보보호에관한법률』상의 개인정보보 호규정 및 정보통신부가 제정한 『개인정보보호지침』을 준수하고 있습니다. 오아시스는 개인정보보호정책을 통하여 귀하께서 제공하시는 개인정보가 어떠한 용도와 방식으로 이용되고 있으며 개인정보보호를 위해 어떠한 조치가 취해지고 있는지 알려드립니다.&nbsp;<br>
-                    <br>③ 오아시스 개인정보보호정책을 홈페이지 첫 화면에 공개함으로써 귀하께서 언제나 용이하게 보실 수 있도록 조치하고 있습니다.&nbsp;<br>
-                    <br>④ 오아시스는 개인정보보호정책의 지속적인 개선을 위하여 개인정보보호정책을 개정하는데 필요한 절차를 정하고 있습니다. 그리고 개인정보보호정책을개정하는 경우 버전번호 등을 부여하여 개정된 사항을 귀하께서 쉽게 알아볼 수 있도록 하고 있습니다.&nbsp;<br>
-                    <br>
-                    <strong>2. 개인정보의 수집범위</strong>
-                    <br>
-                    <br>오아시스는 회원님의 구매계약 이행을 위해 필요한 정보만을 수집합니다.&nbsp;<br>
-                    &nbsp;- 성명, 주민등록번호, 아이디, 비밀번호 : 서비스 이용에 따른 본인 식별 절차에 이용&nbsp;<br>
-                    &nbsp;- 이메일주소, 전화번호 : 고지사항 전달, 본인 의사 확인, 불만 처리 등 원활한 의사소통 경로의 확보, 새로운 서비스 / 신상품이나 이벤트 정보의 안내<br>
-                    &nbsp;- 주소, 전화번호 : 청구서, 경품과 쇼핑 물품 배송에 대한 정확한 배송지의 확보<br>
-                    <br>
-                    <strong>3. 개인정보 수집에 대한 동의</strong>
-                    <br>
-                    <br>오아시스는 귀하께서 오아시스의 개인정보보호방침 또는 이용약관의 내용에 대해 「동의함」버튼 또는 「동의안함」버튼을 클릭할 수 있는 절차를 &nbsp;마련하여, 「동의함」버튼을 클릭하면 개인정보 수집에 대해 동의한 것으로 봅니다.&nbsp;<br>
-                    <br>
-                    <strong>4. 개인정보의 수집목적 및 이용목적</strong>
-                    <br>
-                    <br>① 오아시스는 다음과 같은 목적을 위하여 개인정보를 수집하고 있습니다.<br>
-                    &nbsp;- 성명, 아이디, 비밀번호 : 서비스 이용에 따른 본인 식별 절차에 이용<br>
-                    &nbsp;- 이메일주소, 전화번호 : 고지사항 전달, 본인 의사 확인, 불만 처리 등 원활한 의사소통 경로의 확보, 새로운 서비스/신상품이나 이벤트 정보의 안내<br>
-                    &nbsp;- 주소, 전화번호 : 청구서, 경품과 쇼핑 물품 배송에 대한 정확한 배송지의 확보<br>
-                    &nbsp;- 주민등록번호, 주소 : 인구통계학적 분석 자료(이용장의 연령별, 성별, 지역별 통계분석)<br>
-                    &nbsp;- 그 외 선택항목 : 개인맞춤 서비스를 제공하기 위한 자료&nbsp;<br>
-                    <br>② 단, 이용자의 기본적 인권 침해의 우려가 있는 민감한 개인정보(인종 및 민족, 사상 및 신조, 출신지 및 본적지, 정치적성향 및 범죄기록, 건강상태 및 성생활 등)는 수집하지 않습니다.<br>
-                    <br>
-                    <strong>5. 쿠키에 의한 개인정보 수집</strong>
-                    <br>
-                    <br>① 쿠키(cookie)란? 오아시스는 귀하에 대한 정보를 저장하고 수시로 찾아내는 '쿠키(cookie)'를 사용합니다. 쿠키는웹사이트가 귀하의 컴퓨터 브라우저(넷스케이프, 인터넷 익스플로러 등)로 전송하는 소량의 정보입니다. 귀하께서 웹사이트에 접속하면 ○○의 컴퓨터는 귀하의 브라우저에 있는 쿠키의 내용을 읽고, 귀하의 추가정보를 귀하의 컴퓨터에서 찾아 접속에 따른 성명 등의 추가 입력 없이 서비스를 제공할 수 있습니다. 쿠키는 귀하의 컴퓨터는 식별하지만귀하를 개인적으로 식별하지는 않습니다. 또한 귀하는 쿠키에 대한 선택권이 있습니다. 웹브라우저 상단의 도구 인터넷옵션 탭(option tab)에서 모든 쿠키를 다 받아들이거나, 쿠키가 설치될 때 통지를 보내도록 하거나, 아니면 모든 쿠키를 거부할 수 있는 선택권을 가질 수 있습니다.<br>
-                    <br>② 오아시스의 쿠키(cookie) 운용 오아시스는 이용자의 편의를 위하여 쿠키를 운영합니다. 오아시스가 쿠키를 통해 수집하는 정보는 오아시스이용시 필요한 기본정보에 한하며, 그 외의 다른 정보는 수집하지 않습니다. 오아시스가 쿠키(cookie)를 통해 수집한 회원 ID는 다음의 목적을 위해 사용됩니다.<br>
-                    &nbsp;- 개인의 관심 분야에 따라 차별화된 정보를제공<br>
-                    &nbsp;- 회원과 비회원의 접속빈도 또는 머문시간 등을 분석하여 이용자의 취향과 관심분야를 파악하여 타겟(target) 마케팅에 활용<br>
-                    &nbsp;- 쇼핑한 품목들에 대한 정보와 관심있게 둘러본 품목들에 대한 자취를 추적하여 다음번 쇼핑 때 개인 맞춤 서비스를 제공<br>
-                    &nbsp;- 회원들의 습관을 분석하여 서비스 개편 등의 척도<br>
-                    &nbsp;- 게시판 글 등록 쿠키는 브라우저의 종료시나 로그아웃시 만료됩니다.<br>
-                    <br>
-                    <strong>6. 목적외 사용 및 제3자에 대한 제공 및 공유</strong>
-                    <br>
-                    <br>① 오아시스는 귀하의 개인정보를 「개인정보의 수집목적 및 이용목적」에서 고지한 범위내에서 사용하며, 동 범위를 초과하여 이용하거나 타인 또는 타기업기관에 제공하지 않습니다. 특히 다음의 경우는 주의를 기울여 개인정보를 이용 및 제공할 것입니다.<br>
-                    &nbsp;- 제휴관계 : 보다 나은 서비스 제공을 위하여 귀하의 개인정보를 제휴사에게 제공하거나 또는 제휴사와 공유할 수 있습니다. 개인정보를 제공하거나 공유할 경우에는 사전에 귀하께 제휴사가 누구인지, 제공 또는 공유되는 개인정보항목이 무엇인지, 왜 그러한 개인정보가 제공되거나 공유되어야 하는지, 그리고언제까지 어떻게 보호, 관리되는지에 대해 개별적으로 전자우편 및 서면을 통해 고지하여 동의를 구하는 절차를 거치게 되며, 귀하께서 동의 하지 않는 경우에는 제휴사에게 제공하거나 제휴사와 공유하지 않습니다. 제휴관계에 변화가 있거나 제휴관계가 종결될 때도 같은 절차에 의하여 고지 하거나 동의를 구합니다.<br>
-                    &nbsp;- 위탁 처리 : 원활한 업무 처리를 위해 이용자의 개인정보를 위탁 처리할 경우 반드시 사전에 위탁처리 업체명과 위탁 처리되는 개인정보의 범위, 업무위탁목적, 위탁 처리되는 과정, 위탁관계 유지기간 등에 대해 상세하게 고지합니다.<br>
-                    &nbsp;- 매각 인수합병 등 : 서비스제공자의 권리와 의무가 완전 승계 이전되는 경우 반드시 사전에 정당한 사유와 절차에 대해 상세하게 고지할 것이며 이용자의 개인정보에 대한 동의 철회의 선택권을 부여합니다.<br>
-                    <br>② 고지 및 동의방법은 온라인 홈페이지 초기화면의 공지사항을 통해 최소 10일 이전부터 고지함과 동시에 이메일 등을 이용하여 1회 이상 개별적으로 고지하고 매각/인수합병에 대해서는 반드시 적극적인 동의 방법(개인정보의 제 3자 제공 및 공유에 대한 의사를 직접 밝힘)에 의해서만 절차 진행합니다.<br>
-                    <br>③ 다음은 예외로 합니다.<br>
-                    &nbsp;- 관계법령에 의하여 수사상의 목적으로 관계기관으로부터의 요구가 있을 경우<br>
-                    &nbsp;- 통계작성 학술연구나 시장조사를 위하여 특정 개인을 식별할 수 없는 형태로 광고주, 협력사나 연구단체 등에 제공하는 경우<br>
-                    &nbsp;- 기타 관계법령에서 정한 절차에 따른 요청이 있는 경우<br>
-                    &nbsp;- 그러나 예외 사항에서도 관계법령에 의하거나 수사기관의 요청에 의해 정보를 제공한 경우에는 이를 당사자에게 고지하는 것을 원칙으로 운영하고 있습니다. 법률상의 근거에 의해 부득이하게 고지를 하지 못할 수도 있습니다. 본래의 수집목적 및 이용목적에 반하여 무분별하게 정보가 제공되지 않도록 최대한 노력하겠습니다.<br>
-                    <br>
-                    <strong>7. 개인정보의 열람 · 정정</strong>
-                    <br>
-                    <br>① 귀하는 언제든지 등록되어 있는 귀하의 개인정보를 열람하거나 정정하실 수 있습니다. 개인정보 열람 및 정정을 하고자 할 경우에는 『회원정보변경』을 클릭하여 직접 열람 또는 정정하거나 , 개인정보관리책임자 및 담당자에게 서면 , 전화 또는 E-mail 로 연락하시면 지체없이 조치하겠습니다.<br>
-                    <br>② 귀하가 개인정보의 오류에 대한 정정을 요청한 경우 , 정정을 완료하기 전까지 당해 개인 정보를 이용 또는 제공하지 않습니다.<br>
-                    <br>③ 잘못된 개인정보를 제 3 자에게 이미 제공한 경우에는 정정 처리결과를 제 3 자에게 지체없이 통지하여 정정하도록 조치하겠습니다.<br>
-                    <br>
-                    <strong>8. 개인정보 수집, 이용, 제공에 대한 동의철회</strong>
-                    <br>
-                    <br>① 회원가입 등을 통해 개인정보의 수집, 이용, 제공에 대해 귀하께서 동의하신 내용을 귀하는 언제든지 철회하실 수 있습니다. 동의철회는 "회원탈퇴"를 하거나개인정보관리책임자에게 서면, 전화, E-mail등으로 연락하시면 즉시 개인정보의 삭제 등 필요한 조치를 하겠습니다. 동의 철회를 하고 개인정보를 파기하는 등의 조치를 취한 경우에는 그 사실을 귀하께 지체없이 통지하도록 하겠습니다.<br>
-                    <br>② 오아시스는 개인정보의 수집에 대한 동의철회(회원탈퇴)를 개인정보를 수집하는 방법보다 쉽게 할 수 있도록 필요한 조치를 취하겠습니다.<br>
-                    <br>
-                    <strong>9. 개인정보의 보유기간 및 이용기간</strong>
-                    <br>
-                    <br>① 귀하의 개인정보는 다음과 같이 개인정보의 수집목적 또는 제공받은 목적이 달성되면 파기됩니다.<br>
-                    단, 상법 등 관련법령의 규정에 의하여 다음과 같이 거래 관련 권리 의무 관계의 확인 등을 이유로 일정기간 보유하여야 할 필요가 있을 경우에는 일정기간 보유합니다.<br>
-                    &nbsp;- 회원가입정보의 경우, 회원가입을 탈퇴하거나 회원에서 제명된 경우 등 일정한 사전에 보유목적, 기간 및 보유하는 개인정보 항목을 명시하여 동의를 구합니다.<br>
-                    &nbsp;- 계약 또는 청약철회 등에 관한 기록 : 5년<br>
-                    &nbsp;- 대금결제 및 재화등의 공급에 관한 기록 : 5년<br>
-                    &nbsp;- 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년<br>
-                    <br>② 귀하의 동의를 받아 보유하고 있는 거래정보 등을 귀하께서 열람을 요구하는 경우 오아시스는 지체없이 그 열람, 확인 할 수 있도록 조치합니다.<br>
-                    <br>
-                    <strong>10. 개인정보보호를 위한 기술 및 관리적 대책</strong>
-                    <br>
-                    <br>① 기술적 대책<br>
-                    오아시스는 귀하의 개인정보를 취급함에 있어 개인정보가 분실, 도난, 누출, 변조 또는 훼손되지 않도록 안전성 확보를 위하여 다음과 같은 기술적 대책을 강구하고 있습니다.<br>
-                    &nbsp;- 귀하의 개인정보는 비밀번호에 의해 보호되며 파일 및 전송데이터를 암호화하거나 파일 잠금기능(Lock)을 사용하여 중요한 데이터는 별도의 보안기능을 통해 보호되고 있습니다.<br>
-                    &nbsp;- 오아시스는 백신프로그램을 이용하여 컴퓨터바이러스에 의한 피해를 방지하기 위한 조치를 취하고 있습니다. 백신프로그램은 주기적으로 업데이트 되며 갑작스런 바이러스가 출현할 경우 백신이 나오는 즉시 이를 제공함으로써 개인정보가 침해되는 것을 방지하고 있습니다.<br>
-                    &nbsp;- 오아시스는 암호알고리즘을 이용하여 네트워크 상의 개인정보를 안전하게 전송할 수 있는 보안장치(SSL 또는 SET)를 채택하고 있습니다.<br>
-                    &nbsp;- 해킹 등 외부침입에 대비하여 각 서버마다 침입차단시스템 및 취약점 분석시스템 등을 이용하여 보안에 만전을 기하고 있습니다.<br>
-                    <br>② 관리적 대책<br>
-                    오아시스는 귀하의 개인정보에 대한 접근권한을 최소한의 인원으로 제한하고 있습니다. 그 최소한의 인원에 해당하는 자는 다음과 같습니다.<br>
-                    &nbsp;▶ 이용자를 직접 상대로 하여 마케팅 업무를 수행하는 자<br>
-                    &nbsp;▶ 개인정보관리책임자 및 담당자 등 개인정보관리업무를 수행하는 자<br>
-                    &nbsp;▶ 기타 업무상 개인정보의 취급이 불가피한 자<br>
-                    &nbsp; - 개인정보를 취급하는 직원을 대상으로 새로운 보안 기술 습득 및 개인정보 보호 의무 등에 관해 정기적인 사내 교육 및 외부 위탁교육을 실시하고있습니다.<br>
-                    &nbsp; - 입사시 전 직원의 보안서약서를 통하여 사람에 의한 정보유출을 사전에 방지하고 개인정보보호정책에 대한 이행사항 및 직원의 준수여부를 감사하기 위한 내부절차를 마련하고 있습니다.<br>
-                    &nbsp; - 개인정보 관련 취급자의 업무 인수인계는 보안이 유지된 상태에서 철저하게 이뤄지고 있으며 입사 및 퇴사 후 개인정보 사고에 대한 책임을 명확화하고 있습니다.<br>
-                    &nbsp; - 오아시스는 이용자 개인의 실수나 기본적인 인터넷의 위험성 때문에 일어나는 일들에 대해 책임을 지지 않습니다. 회원 개개인이 본인의 개인정보를 보호하기 위해서 자신의 ID 와 비밀번호를 적절하게 관리하고 여기에 대한 책임을 져야 합니다.<br>
-                    &nbsp; - 그 외 내부 관리자의 실수나 기술관리 상의 사고로 인해 개인정보의 상실, 유출, 변조, 훼손이 유발될 경우 오아시스는 즉각 귀하께 사실을 알리고 적절한 대책과 보상을 강구할 것입니다.<br>
-                    <br>
-                    <strong>11. 링크사이트</strong>
-                    <br>
-                    <br>오아시스는 귀하께 다른 회사의 웹사이트 또는 자료에 대한 링크를 제공할 수 있습니다. 오아시스가 경우 오아시스는 외부사이트 및 자료에 대한 아무런 통제권이없으므로 그로부터 제공받는 서비스나 자료의 유용성에 대해 책임질 수 없으며 보증할 수 없습니다.
-                    <br>
-                    오아시스가 포함하고 있는 링크를 클릭(click)하여 타 사이트(site)의 페이지로 옮겨갈 경우 해당 사이트의 개인정보보호정책은 오아시스와 무관하므로 새로 방문한 사이트의 정책을 검토해 보시기 바랍니다.<br>
-                    <br>
-                    <strong>12. 게시물</strong>
-                    <br>
-                    <br>① 오아시스는 귀하의 게시물을 소중하게 생각하며 변조, 훼손, 삭제되지 않도록 최선을 다하여 보호합니다. 그러나 다음의 경우는 그렇지 아니합니다.<br>
-                    &nbsp;- 스팸(spam)성 게시물 (예 : 행운의 편지, 8억 메일, 특정사이트 광고 등)<br>
-                    &nbsp;- 타인을 비방할 목적으로 허위 사실을 유포하여 타인의 명예를 훼손하는 글<br>
-                    &nbsp;- 동의 없는 타인의 신상공개 오아시스의 저작권, 제 3자의 저작권 등 권리를 침해하는 내용, 기타 게시판 주제와 다른 내용의 게시물<br>
-                    &nbsp;- 오아시스는 바람직한 게시판 문화를 활성화하기 위하여 동의 없는 타인의 신상 공개시 특정부분을 삭제하거나 기호 등으로 수정하여 게시할 수 있습니다.<br>
-                    &nbsp;- 다른 주제의 게시판으로 이동 가능한 내용일 경우 해당 게시물에 이동 경로를 밝혀 오해가 없도록 하고 있습니다.<br>
-                    &nbsp;- 그 외의 경우 명시적 또는 개별적인 경고 후 삭제 조치할 수 있습니다.<br>
-                    <br>② 근본적으로 게시물에 관련된 제반 권리와 책임은 작성자 개인에게 있습니다. 또 게시물을 통해 자발적으로 공개된 정보는 보호받기 어려우므로 정보 공개 전에 심사숙고하시기 바랍니다.<br>
-                    <br>
-                    <strong>13. 개인정보의 위탁처리</strong>
-                    <br>
-                    <br>오아시스는 서비스 향상을 위해서 귀하의 개인정보를 외부에 수집, 취급, 관리등을 위탁하여 처리할 수 있습니다.<br>
-                    &nbsp;- 개인정보의 처리를 위탁하는 경우에는 수탁자, 위탁기간, 서비스제공자와 수탁자와의 관계 및 책임범위등에 관한 사항을 서면, 전자우편, 전화 또는 홈페이지를 통해 미리 귀하에게 고지하겠습니다.<br>
-                    &nbsp;- 개인정보의 처리를 위탁하는 경우에는 위탁계약 등을 통하여 서비스제공자의 개인정보보호 관련 지시엄수, 개인정보에 관한 비밀유지, 제3자 제공의금지 및 사고시의 책임부담, 위탁기간, 처리 종료후의 개인정보의 반환 또는 파기 등을 명확히 규정하고 당해 계약내용을 서면 또는 전자적으로 보관하겠습니다.<br>
-                    <br>
-                    <strong>14. 이용자의 권리와 의무</strong>
-                    <br>
-                    <br>① 귀하의 개인정보를 최신의 상태로 정확하게 입력하여 불의의 사고를 예방해 주시기 바랍니다. 이용자가 입력한 부정확한 정보로 인해 발생하는 사고의 책임은 이용자 자신에게 있으며 타인 정보의 도용 등 허위정보를 입력할 경우 회원자격이 상실될 수 있습니다.<br>
-                    <br>② 귀하는 개인정보를 보호받을 권리와 함께 스스로를 보호하고 타인의 정보를 침해하지 않을 의무도 가지고 있습니다. 비밀번호를 포함한 귀하의 개인정보가 유출되지 않도록 조심하시고 게시물을 포함한 타인의 개인정보를 훼손하지 않도록 유의해 주십시오. 만약 이 같은 책임을 다하지 못하고 타인의 정보 및 존엄성을 훼손할 시에는 『정보통신망이용촉진및정보보호등에관한법률』등에 의해 처벌받을 수 있습니다.<br>
-                    <br>
-                    <strong>15. 의견수렴 및 불만처리</strong>
-                    <br>
-                    <br>
-                    ① 당사는 귀하의 의견을 소중하게 생각하며 , 귀하는 의문사항으로부터 언제나 성실한 답변을 받을 권리가 있습니다.<br><br>
-                    ② 당사는 귀하와의 원활한 의사소통을 위해 고객센터를 운영하고 있습니다. 오아시스 고객센터의 연락처는 다음과 같습니다.<br><br>
-                    【 고객센터 】<br>
-                    <!-- &nbsp;- 전자우편 : customer@wooricoop.com<br>
-                    &nbsp;(내용을 보내실 때 연락 가능한 전화, 휴대폰 번호를 적어 주시면 감사하겠습니다.)<br> -->
-                    &nbsp;- 전화번호 : 1577-0098 (09:00~18:00)<br>
-                    &nbsp;- 팩스번호 : 02-2155-5202<br>
-                    &nbsp;- 주 소 : &nbsp;서울시 서초구 강남대로 327 대륭서초타워 13층<br><br>
-                    ③ 전화상담은 업무시간에 한해 언제나 가능합니다.<br><br>
-                    ④ 전자우편이나 팩스 및 우편을 이용한 상담은 접수 후 24 시간 내에 성실하게 답변 드리겠습니다. 다만, 근무시간 이후 또는 주말 및 공휴일에는 익일 처리하는 것을 원칙으로 합니다.
-                    <br>
-                    <br>
-                    <strong>16. 개인정보관리책임자 및 담당자</strong>
-                    <br>
-                    <br>오아시스는 귀하가 좋은 정보를 안전하게 이용할 수 있도록 최선을 다하고 있습니다.&nbsp;<br>
-                    개인정보를 보호하는데 있어 귀하께 고지한 사항들에 반하는 사고가 발생할 시에 개인정보관리책임자가 모든 책임을 집니다. 그러나 기술적인 보완조치를 했음에도 불구하고 , 해킹 등 기본적인 네트워크상의 위험성에 의 해 발생하는 예기치 못한 사고로 인한 정보의 훼손 및 방문자가 작성한 게시물에 의한 각종 분쟁에 관해서는 책임이 없습니다. 귀하의 개인정보를 취급하는 책임자 및 담당자는 다음과 같으며 개인정보 관련 문의사항에 신속하고 성실하게 답변해드리고 있습니다.<br>
-                    <br>&nbsp;◑ 개인정보관리책임자<br>
-                    &nbsp; - 성 &nbsp; &nbsp; &nbsp;명 : 최우식<br>
-                    &nbsp; - 소속부서 : 기술담당<br>
-                    &nbsp; - 전자우편 : lskyjk@hanmail.net<br><br>
-                    &nbsp;◑ 개인정보관리담당자<br>
-                    &nbsp; - 성 &nbsp; &nbsp; &nbsp;명 : 최우식<br>
-                    &nbsp; - 소속부서 : 기술담당<br>
-                    &nbsp; - 전자우편 : lskyjk@hanmail.net<br>
-                    <br>
-                    <strong>17. 아동의 개인정보보호</strong>
-                    <br>
-                    <br>오아시스는 법정 대리인의 동의가 필요한 만 14 세 미만 아동의 회원 가입은 받고 있지 않습니다.<br>
-                    <br>
-                    <strong>18. 광고성 정보 전송</strong>
-                    <br>
-                    <br>① 오아시스는 귀하의 명시적인 수신거부의사에 반하여 영리목적의 광고성 정보를 전송하지 않습니다.<br>
-                    <br>② &nbsp;오아시스는 귀하가 뉴스레터 등 전자우편 전송에 대한 동의를 한 경우 전자우편의 제목란 및 본문란에 다음 사항과 같이 귀하가 쉽게 알아 볼 수 있도록 조치합니다.<br>
-                    &nbsp;- 전자우편의 제목란 : ( 광고 ) 라는 문구를 제목란에 표시하지 않을 수 있으며 전자우편 본문란의 주요 내용을 표시합니다.<br>
-                    &nbsp;- 전자우편의 본문란 : 귀하가 수신거부의 의사표시를 할 수 있는 전송자의 명칭, 전자우편주소, 전화번호 및 주소를 명시합니다 . 귀하가 수신 거부의 의사를 쉽게 표시할 수 있는 방법을 한글 및 영문으로 각 각 명시합니다.<br>
-                    <br>③ 팩스·휴대폰 문자전송 등 전자우편이외의 문자전송을 통해 영리목적의 광고성 정보를 전송하는 경우에는 전송내용 처음에 "( 광고 )" 라는 문구를 표기하고 전송내용 중에 전송자의 연락처를 명시하도록 조치합니다.<br>
-                    <br>
-                    <strong>19. 고지의 의무</strong>
-                    <br>
-                    <br>현 개인정보보호정책은 2004 년 6 월 1 일에 제정되었으며 정부의 정책 또는 보안기술의 변경에 따라 내용의 추가·삭제 및 수정이 있을 시에는 개정 최소10 일 전부터 홈페이지의 ' 공지 ' 란을 통해 고지할 것입니다.
-                </div>
-                <!--//개인정보보호 정책-->
-                
-                
-                
-                <!--회원약관-->
-                <div class="oasisTermsPopBox oasisTermsPop2">
-                    <strong>제1장 총칙</strong>
-                    <br><br>
-                    <em>제1조(목적)</em>
-                    <br>
-                    이 약관은 오아시스(이하 '회사'라 합니다)가 제공하는 서비스(이하 '서비스'라 합니다)를 이용함에 있어 '회사'와 회원 간의 서비스 이용조건, 절차, 방법 및 기타 필요한 사항을 규정함을 목적으로 합니다.<br>
-                    <br>
-                    <em>제2조(용어의 정의)</em>
-                    <br>
-                    ① '회원' : '회사'와 서비스 이용에 관한 계약을 체결한 &nbsp;이용자로서 '회사'가 서비스 이용을 승낙하여 회원ID를 발급받은 자를 말합니다.<br>
-                    ② 아이디(ID) : '회원' 식별과 '회원'의 서비스 이용을 위하여 '회원'이 선정하고 '회사'가 승인하는 영문자와 숫자의 조합을 말합니다.<br>
-                    ③ 비밀번호 : '회원'이 자신의 &nbsp;아이디(ID)에 대한 통신상의 자신의 &nbsp;비밀을 보호하고 배타적 &nbsp;이용을 위하여, '회원'이 선정하고 '회사'가 승인하는 영문자와 숫자의 조합을 말합니다.<br>
-                    <br>
-                    <em>제3조(약관의 효력 및 변경)</em>
-                    <br>
-                    ① 이 약관은 전기통신사업법에 따라 홈페이지 서비스 메뉴에 &nbsp;공지하거나 전자우편, 기타의 방법으로 이용자에게 알림으로써 효력을 발생합니다.<br>
-                    ② '회사'는 필요할 경우 약관의 규제 &nbsp;등에 관한 법률, 전자통신기본법, 전자통신사업법 &nbsp;등 관련법 을 위배하지 않는 범위에서 약관을 개정할 &nbsp;수 있으며, 변경된 약관은 제1항과 같은 방법으로 공지 또는 알림으로써 효력을 발생합니다.<br>
-                    <br>
-                    <em>제4조 (약관 외 준칙)</em>
-                    <br>
-                    이 약관에 명시되지 아니한 사항에 대하여는 전기통신기본법, 전기통신사업법, 기타 관계 법령 및 관습에 따릅니다.<br>
-                    <br>
-                    <strong>제2장 서비스 이용계약</strong>
-                    <br>
-                    <br>
-                    <em>제5조 (회원등록)</em>
-                    <br>
-                    ① "이용약관에 동의하십니까"라는 이용 신청시의 물음에 이용자가 '동의' 버튼을 클릭하면 이 약관에 동의하는 것으로 간주합니다.<br>
-                    ② 이용자는 '회원'으로 등록함으로써 회원용 서비스의 이용계약이 성립합니다.<br>
-                    ③ 회원등록은 회원용 서비스의 이용을 희망하는 자가 본 이용약관에 동의한 후, 회원등록 신청양식에 따른 기재를 하여 신청하고, 이에 대하여 '회사'가 승낙함으로써 성립합니다.<br>
-                    ④ '회원'으로 등록하고자 하는 자는 반드시 실명으로 이용신청을 해야 하며, 본인의 주민등록번호를 사용해야 합니다.<br>
-                    ⑤ 회원등록 신청양식에 기재하는 모든 회원 정보는 모두 실제 데이터인 것으로 간주됩니다. 실명이나 실제정보를 입력하지 않은 이용자는 법적인 보호를 받을 수 없으며 서비스의 제한을 받을 수 있습니다.<br>
-                    <br>
-                    <em>제6조 (회원등록의 제한)</em>
-                    <br>
-                    '회사'는 제16조의 각 항에 위배되는 경우와 다음 각 항에 해당하는 회원등록 신청에 대하여는 이를 승낙하지 아니할 수 있고, 그 사유가 해소될 때까지 승낙을 유보할 수 있습니다.<br>
-                    ① 본인의 주민등록번호가 아닌 경우<br>
-                    ② 다른 사람의 명의, 또는 가명을 사용하여 신청한 경우<br>
-                    ③ 회원등록 신청서의 필요 내용을 허위로 기재한 경우<br>
-                    ④ 사회 안녕질서 또는 미풍양속을 저해할 목적으로 신청한 경우<br>
-                    ⑤ '회사' 가 정한 회원등록신청 요건을 충족하지 못한 경우<br>
-                    ⑥ 서비스관련 설비의 여유가 없는 경우<br>
-                    ⑦ 시스템 장애, 서비스 이용의 폭주 등으로 인해 서비스 이용에 지장이 있는 경우<br>
-                    ⑧ 만 14세 미만의 아동이 부모 등 법정대리인의 동의를 얻지 않은 경우<br>
-                    ⑨ 기타 '회사'가 필요하다고 인정되는 경우<br>
-                    <br>
-                    <strong>제3장 서비스 제공 및 이용</strong>
-                    <br>
-                    <br>
-                    <em>제7조 (서비스 제공)</em>
-                    <br>
-                    ① '회사'가 제공하는 서비스의 내용은 다음 각 호와 같습니다.<br>
-                    ㉮ 신문기사 서비스 : 지면상의 기사를 온라인상에서 좀더 빠른 서비스를 제공합니다.<br>
-                    ㉯ DB 서비스 : 기사DB, 오아시스 인물DB, 사진 DB<br>
-                    ㉰ 다양한 컨텐츠<br>
-                    ② '회사'는 필요한 경우에 서비스의 내용을 추가 또는 변경할 수 있습니다. 이 경우 '회사'는 그 내용을 '회원'에게 공지합니다.<br>
-                    ③ '회사'가 제공하기로 이용자와 계약을 체결한 서비스의 내용을 기술적 사양의 변경 등을 사유로 변경할 경우에는 '회사'는 이로 인해 이용자가 입은 손해를 배상하지 아니합니다.<br>
-                    <br>
-                    <em>제8조 (서비스 이용)</em>
-                    <br>
-                    ① 서비스는 제5조에 따라 회원등록을 완료한 때로부터 즉시 이용할 수 있습니다.<br>
-                    ② 서비스는 '회사'의 업무상 또는 기술상 장애, 기타 특별한 사유가 &nbsp;없는 한 연중무휴, 1일 24시간 제공을 원칙으로 합니다. 다만, 설비의 점검 등 '회사'가 필요한 경우 또는 시스템 장애, 서비스 이용의 폭주 등 불가항력으로 인하여 서비스 이용에 지장이 있는 때에는 예외적으로 서비스 이용의 전부 또는 일부를 제한할 수 있습니다.<br>
-                    ③ '회사'는 제공하는 서비스 중 일부에 대하여 이용시간을 별도로 정할 수 있으며, 이 경우 그 이용시간을 회원에게 공지합니다.<br>
-                    <br>
-                    <strong>제4장 회원정보의 관리</strong>
-                    <br>
-                    <br>
-                    <em>제9조 (회원정보의 수집 및 이용 목적)</em>
-                    <br>
-                    ① '회사'는 '회원'에게 서비스를 제공하기 위한 최소한의 필수정보로 성명, 주민등록번호, 전자우편, 직업, 전화번호, 직업, 거주지역, 희망ID(회원의 경우), 비밀번호(회원의 경우)를 수집하기로 합니다. 그외 사항은 선택사항으로 합니다.<br>
-                    ② '회사'가 이용자의 개인정보를 수집하는 경우에는 당해 &nbsp;이용자의 동의를 받아야 합니다. 다만, &nbsp;다음 각호에 해당하는 경우에는 예외로 합니다.<br>
-                    ㉮ 정보통신망 이용촉진 등에 관한 법률 또는 다른 법률에 특별한 규정이 있는 경우<br>
-                    ㉯ 서비스 이용계약의 이행을 위하여 필요한 경우<br>
-                    ㉰ 서비스 제공에 따른 요금정산을 위하여 필요한 경우<br>
-                    ③ 제2항에 의한 동의는 당해 이용자의 서명날인 또는 전자서명, 전자우편, 동의란에 대한 표시 등의 방법에 의합니다.<br>
-                    <br>
-                    <em>제10조 (회원정보의 보호)</em>
-                    <br>
-                    ① '회사'는 수집된 '회원'정보가 분실 도난·누출·변조 또는 훼손되지 아니하도록 보안 및 안전성 확보에 필요한 기술적 조치 등을 취해야 합니다.<br>
-                    ② '회사'는 서비스와 관련하여 가지고 있는 '회원'의 개인정보를 본인의 &nbsp;사전 승낙 없이 타인에게 누설, 공개 또는 배포할 수 없으며, 서비스 관련 업무 이외의 상업적 목적으로 사용할 수 없습니다. 다만, 다음 각 호에 해당하는 경우에는 그러하지 아니합니다.<br>
-                    ㉮ 금융실명거래법 및 비밀보장에 관한 법률, 신용정보의 이용 및 보호에 관한 법률, 전기통신기본법, 전기통신사업법, 지방세법, 소비자보호법, 한국은행법, 형사소송법 등 법령에 특별한 규정이 있는 경우<br>
-                    ㉯ 관계법령에 의하여 수사상의 목적으로 관계기관으로부터 요구받은 경우<br>
-                    ㉰ 정보통신윤리위원회의 요청이 있는 경우<br>
-                    ㉱ 서비스 제공에 따른 요금정산을 위하여 필요한 경우<br>
-                    ㉲ 통계작성·학술연구 또는 시장조사를 위하여 필요한 경우로서 특정 개인을 식별할 수 없는 형태로 제공하는 경우<br>
-                    ㉳ 이벤트 참여 및 보다 나은 서비스 제공을 위하여 이벤트 주최 및 후원하는 비즈니스 파트너 및 &nbsp;제휴사와 회원의 일부 정보를 공유하는 경우<br>
-                    ㉴ 기타 관계법령에 의한 경우<br>
-                    ③ 제2항의 범위 내에서 '회사'는 광고업무와 &nbsp;관련하여 '회원' 전체 또는 일부의 &nbsp;개인정보에 관한 통계자료를 작성하여 이를 사용할 수 &nbsp;있고, 서비스를 통하여 '회원'의 &nbsp;컴퓨터에 쿠키를 전송할 수 &nbsp;있습니다. 이 경우 '회원'은 쿠키의 수신을 거부하거나 &nbsp;쿠키의 수신에 대하여 경고하도록 컴퓨터 브라우저의 설정을 변경할 수 있습니다.<br>
-                    ④ '회사'는 '회원'이 방문하거나 회원ID 등을 이용하여 동의를 철회하는 경우에는 본인 여부를 확인하고 지체없이 필요한 조치를 취해야 합니다.<br>
-                    <br>
-                    <em>제11조 (회원정보의 열람 및 정정)</em>
-                    <br>
-                    '회원'은 언제든지 '회사'의 홈페이지에서 본인의 정보를 열람 및 정정할 수 있습니다. 또한 '회원'은 '회사'에 대하여 방문하거나 전화 또는 전자우편으로 정정을 요구할 수 있으며, '회원'이 열람 및 정정을 요구할 때 &nbsp;'회사'는 본인 확인절차를 거친 후에 '회원'의 정보를 즉시 정정해야 합니다.<br>
-                    <br>
-                    <em>제12조 (회원정보의 보유기간)</em>
-                    <br>
-                    ① '회사'는 '회원'이 제공한 회원정보를 서비스이용 계약기간 동안 보유합니다.<br>
-                    ② '회원'탈퇴의 경우 '회사'는 회원정보를 관련법규의 규정에 따라 보존의무가 없는 한 즉시 폐기합니다. &nbsp;단, 유료회원의 회원정보는 요금정산 등을 위하여 필요하다고 &nbsp;인정되는 경우에 한하여 일정기간 회원정보를 보유할 수 있습니다.<br>
-                    <br>
-                    <em>제13조 (회원정보 관리책임자)</em>
-                    <br>
-                    '회사'는 회원정보를 안전하고 효율적으로 관리하기 위하여 관리책임자를 두어야 합니다.<br>
-                    <br>
-                    <strong>제5장 책임</strong>
-                    <br>
-                    <br>
-                    <em>제14조 ('회사'의 의무)</em>
-                    <br>
-                    ① '회사'는 제8조 2항에서 정한 경우를 제외하고 이 약관 및 관계법령이 정하는 바에 따라 계속적, &nbsp;안정적으로 서비스를 제공할 수 있도록 최선의 노력을 해야 합니다.<br>
-                    ② '회사'는 서비스에 관련된 설비를 상시 운용가능한 상태로 &nbsp;유지·보수하고, 장애가 발생하는 경우 지체없이 이를 수리·복구할 수 있도록 최선의 노력을 해야 합니다.<br>
-                    ③ '회사'는 서비스와 관련되어 '회원'으로부터 제기되는 의견이나 불만이 정당하다고 인정할 경우에는 적절한 절차를 거쳐 신속히 처리해야 하며, 즉시 처리가 &nbsp;곤란한 경우 그 사유와 처리일정을 공지 또는 전자우편을 통하여 동 '회원'에게 통지해야 합니다.<br>
-                    ④ '회사'는 제11조에서 정한 바에 따라 '회원'의 개인정보를 보호해야 합니다.<br>
-                    ⑤ '회사'는 서비스 이용계약의 체결, 계약사항의 변경 및 해지 등 &nbsp;이용자의 계약관련 절차 및 내용 등에 있어 이용자의 편의를 제공하도록 노력해야 합니다.<br>
-                    <br>
-                    <em>제15조 ('회원'의 의무)</em>
-                    <br>
-                    ① '회원'은 관계법령, 이 약관의 규정, 이용안내 및 주의사항 &nbsp;등 '회사'가 공지 또는 통지하는 사항을 준수해야 하며, 기타 '회사'의 업무에 방해되는 행위를 할 수 없습니다.<br>
-                    ② '회원'은 '회사'의 사전 승낙 없이 서비스를 이용하여 어떠한 영리행위도 할 수 없습니다.<br>
-                    ③ '회원'은 서비스를 이용하여 얻은 정보를 '회사'의 사전 승낙 없이 &nbsp;복사, 복제, 변경, 번역, 출판, 방송 및 기타의 방법으로 사용하거나 이를 타인에게 제공할 수 없습니다.<br>
-                    ④ '회원'은 회원등록정보의 기재내용 중 변경된 내용이 있을 경우 지체없이 그 내용을 직접 수정하거나 '회사'에 통지해야 합니다.<br>
-                    ⑤ '회원'은 자신의 아이디(ID)와 비밀번호의 관리에 대하여 각별한 주의를 해야 합니다.<br>
-                    ⑥ '회원'은 자신의 아이디(ID)가 부정하게 사용된 것을 발견한 즉시, '회사'에 그 사실을 통보해야 합니다.<br>
-                    ⑦ '회원'은 서비스 이용과 관련하여 다음 각 호의 행위를 할 수 없습니다.<br>
-                    ㉮ 부당한 방법으로 정보통신망에 의하여 처리·보관·전송되는 타인의 &nbsp;정보를 훼손하거나 타인의 비밀을 침해·도용 또는 누설하는 행위<br>
-                    ㉯ 다른 '회원'의 아이디(ID)를 부정 사용하는 행위<br>
-                    ㉰ 범죄행위를 목적으로 이용하거나 기타 범죄행위와 관련된 행위<br>
-                    ㉱ 선량한 풍속 기타 사회질서에 반하는 행위<br>
-                    ㉲ 타인의 명예를 훼손하거나 모욕하는 행위<br>
-                    ㉳ 타인의 지적재산권 등의 권리를 침해하는 행위<br>
-                    ㉴ 해킹 또는 컴퓨터바이러스를 유포하는 행위<br>
-                    ㉵ 광고 또는 광고성 정보를 전송하거나 기타 영업을 위한 행위<br>
-                    ㉶ 서비스의 안정적인 운영에 지장을 주거나 줄 우려가 있는 일체의 행위<br>
-                    ㉷ 기타 관계법령에 위배되는 행위<br>
-                    ⑧ '회원'은 사진을 포함한 이미지 사용시 피사체에 대한 초상권, 상표권, 특허권 및 기타 권리를 자신이 취득해야 하며 만일 이들 권리에 대한 분쟁이 발생할 경우 회원이 모든 책임을 부담해야 합니다.<br>
-                    ⑨ '회원'은 기사와 이미지(사진, 그래픽, 캐리커처) 사용시, 사용한 &nbsp;제작물내 눈에 띄는 장소에 '기사제공=오아시스'사진 제공=오아시스'와 같은 형태로 저작권 표시를 해야 합니다.<br>
-                    <br>
-                    <strong>제6장 서비스 이용계약의 해지 및 서비스 이용 제한</strong>
-                    <br>
-                    <br>
-                    <em>제16조 (서비스 이용계약의 해지)</em>
-                    <br>
-                    ① '회원'이 서비스 이용계약을 해지하고자 할 때에는 방문이나 전자우편, 또는 전화를 통하여 회원정보 관리책임자에게 회원탈퇴 신청을 해야 합니다.<br>
-                    ② 전자우편을 통하여 회원탈퇴를 신청한 경우에는 본인을 확인할 수 있는 이름, 주민등록번호, 아이디(ID), 비밀번호, 연락처 및 해지사유를 통보해야 하며, 이 경우 '회사'는 '회원'등록정보와 대조하여 본인 &nbsp;여부를 확인한 후 지체없이 필요한 조치를 취해야 합니다.<br>
-                    ③ '회원' 탈퇴신청의 처리여부는 탈퇴신청회원의 아이디(ID)와 비밀번호로 '회사'의 홈페이지에서 로그인 되지않는 것으로 확인할 수 있으며, '회사'는 처리 후 그 사실을 당해 이용자에게 통보해야 합니다.<br>
-                    ④ '회사'는 '회원'이 제16조 및 기타 이 약관의 규정을 위반하고, '회사'가 정한 소정의 기간 내에 이를 해소하지 아니하는 경우에 서비스 이용계약을 사전 통지나 동의 없이 제한하거나 해지할 수 있습니다.<br>
-                    ⑤ '회사'는 제4항에 의하여 해지된 '회원'이 다시 서비스 이용신청을 하는 경우 그 승낙을 거절할 수 있습니다.<br>
-                    ⑥ '회사'가 '회원'의 자격을 상실키로 결정한 경우에는 회원등록을 말소합니다. 이 경우 당해 '회원'에게 회원 등록 말소 전에 이를 통지하고, 소명할 기회를 부여할 수 있습니다.<br>
-                    <br>
-                    <em>제18조 ('회원'의 게시물 또는 내용물의 관리)</em>
-                    <br>
-                    '회사'는 '회원'이 게시하거나 등록한 내용물이 제16조를 위반하거나 '회사'가 정한 게시기간을 초과하는 경우 사전 통지나 동의 없이 이를 삭제할 수 있습니다.<br>
-                    <br>
-                    <strong>제7장 기타</strong>
-                    <br>
-                    <br>
-                    <em>제19조 (양도금지)</em>
-                    <br>
-                    '회원'이 서비스의 이용권한, 기타 이용계약상 지위를 타인에게 양도하거나 담보로 제공할 수 없습니다.<br>
-                    <br>
-                    <em>제20조(지적재산권)</em>
-                    <br>
-                    서비스 내에 등록된 자료에 대한 지적재산권은 '회사'에 있습니다.<br>
-                    <br>
-                    <em>제21조(손해배상)</em>
-                    <br>
-                    '회사'가 제공하는 서비스와 관련하여 '회원'에게 어떠한 손해가 발생한 경우 '회사'는 고의 또는 중과실이 없는 한 &nbsp;이에 대하여 책임지지 않습니다.<br>
-                    <br>
-                    <em>제22조(면책·배상)</em>
-                    <br>
-                    ① '회사'는 '회원'이 게재한 정보, 자료 및 그에 대한 사실의 정확성, 신뢰성 등에 관하여는 어떠한 책임도 지지 않으며, 서비스를 이용하여 게시 또는 전송한 &nbsp;자료, 자료의 취사선택, 기타 서비스 이용과 관련하여 '회원'에게 어떠한 손해 또는 불이익이 발생하더라도 이에 대한 모든 책임은 '회원'에게 있습니다.<br>
-                    ② '회사'는 제19조 규정을 위반하여 '회원'간 또는 '회원'과 제3자간에 '회사'의 서비스를 매개로 하여 물품거래 등의 행위에 대하여 어떠한 책임도 지지 않습니다.<br>
-                    ③ '회원' 아이디(ID)와 비밀번호의 관리 및 이용상의 부주의로 인하여 발생되는 손해 또는 제3자에 의한 부정사용 등에 대한 책임은 모두 '회원'에게 있습니다.<br>
-                    ④ '회원'이 제16조 및 기타 이 약관의 규정을 위반함으로 인하여 '회사'가 다른 '회원' 또는 제3자에 대하여 책임을 부담하게 되고, 이로써 '회사'가 손해를 입게 되는 경우, '회원'은 '회사'에게 모든 손해를 배상해야 합니다.<br>
-                    <br>
-                    <em>제23조(분쟁의 해결 및 관할)</em>
-                    <br>
-                    ① '회사'와 '회원'은 서비스와 관련하여 발생한 분쟁을 원만하게 해결하기 위하여 필요한 모든 노력을 해야 합니다.<br>
-                    ② 제1항의 규정에도 불구하고, 동 분쟁으로 인하여 소송이 제기될 경우에는 '회사'의 소재지를 관할하는 법원을 관할법원으로 합니다.<br>
-                    ③ '회사'와 이용자간에 제기된 전자거래 소송에는 한국법을 적용합니다.<br>
-                    <br>
-                    <strong>[부칙](시행일)</strong>
-                    <br>
-                </div>
-                <!--//회원약관-->
-                
-                <!--전자금융거래약관-->
-                <div class="oasisTermsPopBox oasisTermsPop3">
-                    <strong>제1장 총칙</strong>
-                    <br><br>
-                    <em>제1조(목적)</em>
-                    <br>
-                    본 약관은 주식회사 오아시스(이하 “회사”라 함)가 운영하는 다음 각 호의 인터넷사이트(이하 “인터넷사이트”라 함)를 통하여 제공하는 전자지급결제대행서비스, 결제대금예치서비스 및 선불전자지급수단의 발행 및 관리서비스(이하 통칭하여 ”전자금융거래서비스”라 함)를 이용자가 이용함에 있어, 회사와 이용자간 전자금융거래의 법률관계를 정하는 데에 그 목적이 있습니다.<br/>
-                    * http://www.oasis.co.kr<br/>
-                    * 추후 "회사"에서 공지하고 제공하는 기타 웹사이트<br/>
-                    <br>
-                    <em>제2조(용어의 정의)</em>
-                    <br>
-                    ① 본 약관에서 정하는 용어의 정의는 다음 각 호와 같습니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. “전자금융거래”라 함은 회사가 전자적 장치를 통하여 전자금융서비스를 제공(이하 ‘전자금융업무’라고 함)하고, 이용자가 회사의 종사자와 직접 대면하거나 의사 소통을 하지 아니하고, 자동화된 방식으로 이를 이용하는 거래를 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. “전자지급수단”이라 함은 전자자금이체, 직불전자지급수단, 선불전자지급수단, 전자화폐, 신용카드, 전자채권 그 밖에 전자적 방법에 따른 지급수단을 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;3. “전자지급거래”라 함은 자금을 주는 자(이하 ‘지급인’이라 합니다)가 회사로 하여금 전자지급수단을 이용하여 자금을 받는 자(이하 ‘수취인’이라 합니다)에게 자금을 이동하게 하는 전자금융거래를 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;4. “전자적 장치”라 함은 전자금융거래정보를 전자적 방법으로 전송하거나 처리하는데 이용되는 장치로서 현금자동지급기, 자동입출금기, 지급용 단말기, 컴퓨터, 전화기, 그 밖에 전자적 방법으로 정보를 전송하거나 처리하는 장치를 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;5. “전자문서"라 함은 「전자문서 및 전자거래 기본법」 제2조제1호에 따른 작성, 송신ㆍ수신 또는 저장된 정보를 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;6. “접근매체”라 함은 전자금융거래에 있어서 이용자가 거래지시를 하거나 또는 이용자 및 거래내용의 진실성과 정확성을 확보하기 위하여 사용되는 다음 각 목의 어느 하나에 해당하는 수단 또는 정보를 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;전자식 카드 및 이에 준하는 전자적 정보(신용카드번호를 포함)<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;「전자서명법」 제2조제4호에 따른 전자서명생성정보 및 같은 조 제7호에 따른 인증서<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;회사에 등록된 이용자번호<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;이용자의 생체정보<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;가목 또는 나목의 수단이나 정보를 사용하는 데 필요한 비밀번호<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;7. “이용자”라 함은 본 약관에 동의하고, 본 약관에 따라 회사의 전자금융거래서비스를 이용하는 회원을 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;8. “이용자번호”라 함은 이용자의 동일성 식별과 서비스 이용을 위하여, 이용자가 설정하고 회사가 승인한 숫자와 문자의 조합을 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;9. “비밀번호”라 함은 이용자의 동일성 식별과 회원정보의 보호를 위하여, 이용자가 설정하고 회사가 승인한 숫자와 문자의 조합을 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;10. “거래지시”라 함은 이용자가 전자금융거래계약에 따라 금융기관 또는 전자금융업자에게 전자금융거래의 처리를 지시하는 것을 말합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;11. “오류”라 함은 이용자의 고의 또는 과실 없이 전자금융거래가 전자금융거래계약 또는 이용자의 거래지시에 따라 이행되지 아니한 경우를 말합니다.<br/>
-                    ② 본 약관에서 별도로 정하지 아니한 용어의 정의는 「전자금융거래법」 등 관련 법령에서 정하는 바에 따릅니다.<br/>
-                    <br>
-                    <em>제3조 (약관의 명시 및 변경)</em>
-                    <br>
-                    ① 회사는 이용자가 전자금융거래를 하기 전에 본 약관을 회사가 운영ㆍ제공하는 “인터넷사이트” 에 게시하고, 이용자가 본 약관의 중요한 내용을 확인할 수 있도록 합니다.<br/>
-                    ② 회사는 이용자가 요청하면 전자문서를 전송(전자우편을 이용한 전송을 포함합니다)하는 방식으로 본 약관의 사본을 이용자에게 교부합니다.<br/>
-                    ③ 회사는 본 약관을 변경하는 때에는 그 시행일 1월 전에 변경되는 약관을 인터넷사이트 등에 게시하여 이용자에게 고지합니다. 다만, 법령의 개정으로 인하여 긴급하게 약관을 변경한 때에는 그 변경된 약관을 인터넷사이트 등에 1개월 이상 게시하고 이용자에게 전자우편 등을 통하여 즉시 통지합니다.<br/>
-                    ④ 이용자는 제3항에 따라 본 약관의 변경 내용이 게시되거나 통지된 후부터 변경되는 약관의 시행일 전의 영업일까지 계약해지의 의사를 표시할 수 있습니다. 단, 회사는 이용자가 해당 기간 동안 약관의 변경내용에 대하여 이의를 제기하지 아니하는 경우에는 약관의 변경을 승인한 것으로 봅니다.<br/>
-                    <br>
-                    <em>제4조 (전자금융거래서비스의 구성 및 내용)</em>
-                    <br>
-                    ① 전자금융거래서비스는 다음 각 호의 서비스로 구성되며, 필요한 경우에는 본 약관의 각 장에서 해당 서비스에 대한 자세한 내용을 게시합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. 전자지급결제대행서비스<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. 결제대금예치서비스<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;3. 선불전자지급수단의 발행 및 관리 서비스<br/>
-                    ② 회사는 필요 시 이용자에게 그 내용을 사전 고지하고 해당 전자금융거래서비스를 추가하거나 변경할 수 있습니다.<br/>
-                    <br>
-                    <em>제5조 (이용시간 등)</em>
-                    <br>
-                    ① 회사는 이용자에게 연중무휴 1일 24시간 전자금융거래 서비스를 제공함을 원칙으로 합니다. 단, 금융회사 및 그 밖의 결제수단 발행업자 사정에 따라 달리 정할 수 있습니다.<br/>
-                    ② 회사는 정보통신설비의 보수, 점검 및 그 밖의 기술상 필요나 금융회사 및 그 밖의 결제수단 발행업자 사정에 따라 전자금융거래 서비스 중단이 불가피한 경우에는 해당 서비스 중단 3일 전까지 게시 가능한 전자적 수단을 통하여 해당 서비스 중단 사실을 게시한 후 해당 서비스를 일시 중단할 수 있습니다. 다만, 시스템 장애복구, 긴급한 프로그램 보수, 외부요인 등 불가피한 경우에는 사전 게시 없이 전자금융거래 서비스를 중단할 수 있습니다.<br/>
-                    <br>
-                    <em>제6조 (접근매체의 관리)</em>
-                    <br>
-                    ① 회사는 전자금융거래서비스 제공 시 접근매체를 선정하여 이용자의 신원, 권한 및 거래지시의 내용 등을 확인합니다.<br/>
-                    ② 이용자는 접근매체를 사용함에 있어서 다른 법률에 특별한 규정이 있는 경우를 제외하고는 다음 각 호의 어느 하나에 해당하는 행위를 하여서는 아니 됩니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. 접근매체를 양도하거나 양수하는 행위<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. 접근매체를 대여하거나 사용을 위임하는 행위<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;3. 접근매체를 질권 및 그 밖의 담보 목적으로 하는 행위<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;4. 제1호부터 제3호까지의 행위를 알선하는 행위<br/>
-                    ③ 이용자는 자신의 접근매체를 제3자에게 누설 또는 노출하거나 방치하여서는 안되며, 접근매체의 도용이나 위조 또는 변조를 방지하기 위하여 충분한 주의를 기울여야 합니다.<br/>
-                    ④ 회사는 이용자로부터 접근매체의 분실이나 도난 등의 통지를 받은 때에는 그 때부터 제3자가 그 접근매체를 사용함으로 인하여 이용자에게 발생한 손해를 배상할 책임이 있습니다.<br/>
-                    <br>
-                    <em>제7조 (거래내용의 확인)</em>
-                    <br>
-                    ① 회사는 “인터넷사이트”의 해당 서비스 조회 화면을 통하여 이용자가 자신의 거래내용(이용자의 ‘오류정정 요구사실 및 처리결과에 관한 사항’을 포함합니다)을 확인할 수 있도록 하며, 이용자의 거래내용 서면교부 요청이 있는 경우에는 요청을 받은 날로부터 2주 이내에 모사전송, 우편 또는 직접 교부의 방법으로 거래내용에 관한 서면을 교부합니다.<br/>
-                    ② 회사는 제1항에 따른 이용자의 거래내용 서면교부 요청을 받은 경우 전자적 장치의 운영장애, 그 밖의 사유로 거래내용을 제공할 수 없는 때에는 즉시 이용자에게 전자문서 전송(전자우편을 이용한 전송을 포함합니다)의 방법으로 그러한 사유를 알려야 하며, 전자적 장치의 운영장애 등의 사유로 거래내용을 제공할 수 없는 기간은 제1항의 거래내용에 관한 서면의 교부기간에 산입하지 아니합니다.<br/>
-                    ③ 회사가 제1항에 따라 제공하는 거래내용 중 대상기간이 5년인 것은 다음 각 호와 같습니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. 거래계좌의 명칭 또는 번호<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. 거래의 종류 및 금액<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;3. 거래의 상대방을 나타내는 정보<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;4. 거래 일시<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;5. 전자적 장치의 종류 및 전자적 장치를 식별할 수 있는 정보<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;6. 해당 전자금융거래와 관련한 전자적 장치의 접속 기록<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;7. 회사가 전자금융거래의 대가로 받은 수수료<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;8. 이용자의 출금 동의에 관한 사항<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;9. 전자금융거래의 신청 및 조건의 변경에 관한 사항<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;10. 건당 거래금액이 1만원을 초과하는 전자금융거래에 관한 기록<br/>
-                    ④ 회사가 제1항에 따라 제공하는 거래내용 중 대상기간이 1년인 것은 다음 각 호와 같습니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. 건당 거래금액이 1만원 이하인 소액 전자금융거래에 관한 기록<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. 전자지급수단 이용과 관련된 거래승인에 관한 기록<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;3. 이용자의 오류정정 요구사실 및 처리결과에 관한 사항<br/>
-                    ⑤ 이용자는 제1항에서 정한 서면교부를 다음의 주소와 전화번호로 요청할 수 있습니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. 주소 : 서울시 서초구 서초중앙로8길 117 지어소프트빌딩 6층 오아시스<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. 전화번호 : 1577-0098<br/>
-                    <br>
-                    <em>제8조 (오류의 정정 등)</em>
-                    <br>
-                    ① 이용자는 전자금융거래서비스를 이용함에 있어 오류가 있음을 안 때에는 회사에 대하여 그 정정을 요구할 수 있습니다.<br/>
-                    ② 회사는 전항에 따른 오류의 정정 요구를 받은 때 또는 스스로 전자금융거래에 오류가 있음을 안 때에는 이를 즉시 조사하여 처리한 후 정정요구를 받은 날 또는 오류가 있음을 안 날로부터 2주 이내에 오류의 원인과 처리 결과를 문서, 전화 또는 전자우편으로 해당 이용자에게 알립니다.<br/>
-                    <br>
-                    <em>제9조 (전자금융거래 기록의 생성 및 보존)</em>
-                    <br>
-                    ① 회사는 이용자가 이용한 전자금융거래의 내용을 추적, 검색하거나 그 내용에 오류가 발생한 경우에 이를 확인하거나 정정할 수 있는 기록을 생성하여 보존합니다.<br/>
-                    ② 전항의 규정에 따라 회사가 보존하여야 하는 기록의 종류 및 보존기간은 본 약관 제7조 제3항 및 제4항에서 정한 바에 따릅니다.<br/>
-                    <br>
-                    <em>제10조 (거래지시의 철회)</em>
-                    <br>
-                    ① 이용자가 전자금융거래를 이용한 경우 이용자는 전자금융거래별로 본 약관 제18조 제1항, 제21조 제1항, 제24조 제1항에서 정한 지급효력이 발생하기 전까지 본 약관 제7조 제5항에 기재된 고객센터의 연락처 또는 인터넷사이트 등의 문의기능을 통하여 전자문서를 전송(전자우편을 이용한 전송을 포함합니다)하는 방법으로 거래지시를 철회할 수 있습니다.<br/>
-                    ② 이용자는 전자지급의 효력이 발생한 경우에 전자상거래 등에서의 소비자보호에 관한 법률 등 관련 법령 상 청약철회의 방법에 따라 해당 결제대금을 반환 받을 수 있습니다<br/>
-                    <br>
-                    <em>제11조 (이용자정보에 대한 비밀보장)</em>
-                    <br>
-                    회사는 전자금융업무를 수행함에 있어서 취득한 이용자의 인적사항, 이용자의 계좌, 접근매체 및 전자금융거래의 내용과 실적에 관한 정보 또는 자료를 관련 법령에서 정한 경우를 제외하고는 해당 이용자의 동의를 얻지 아니하고 제3자에게 제공하거나 업무상 목적 외에 사용하지 아니합니다.<br/>
-                    <br>
-                    <em>제12조 (회사의 책임)</em>
-                    <br>
-                    ① 회사는 다음 각 호의 어느 하나에 해당하는 사고로 인하여 이용자에게 손해가 발생한 경우에는 그 손해를 배상할 책임을 부담합니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. 접근매체의 위조나 변조로 발생한 사고(단, 회사가 접근매체의 발급주체이거나 사용ㆍ관리주체인 경우)<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. 계약체결 또는 거래지시의 전자적 전송이나 처리과정에서 발행한 사고<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;3. 전자금융거래를 위한 전자적 장치 또는 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」 제2조 제1항 제1호에 따른 정보통신망에 침입하여 거짓이나 그 밖의 부정한 방법으로 획득한 접근매체의 이용으로 발생한 사고<br/>
-                    ② 회사는 제1항에도 불구하고 다음 각 호의 어느 하나에 해당하는 사유로 인하여 이용자에게 발생한 손해의 전부 또는 일부를 그 이용자가 부담하게 할 수 있습니다.<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;1. 이용자가 접근매체를 제3자에게 대여하거나 그 사용을 위임한 경우 또는 양도나 담보의 목적으로 제공하거나, 제3자가 권한 없이 이용자의 접근매체를 이용하여 전자금융거래를 할 수 있음을 알았거나 쉽게 알 수 있었음에도 불구하고 접근매체를 누설하거나 노출 또는 방치한 경우<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;2. 금융회사 또는 전자금융업자가 「전자금융거래법」 제6조제1항에 따른 확인 외에 보안강화를 위하여 전자금융거래 시 요구하는 추가적인 보안조치를 이용자가 정당한 사유 없이 거부하여 전항 제3호에 따른 사고가 발생한 경우<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;3. 이용자가 제2호에 따른 추가적인 보안조치에 사용되는 매체ㆍ수단 또는 정보에 대하여 누설ㆍ노출 또는 방치하거나 이를 제3자에게 대여ㆍ사용위임ㆍ양도 또는 담보의 목적으로 제공하여 전항 제3호에 따른 사고가 발생한 경우<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;4. 법인(「중소기업기본법」 제2조제2항에 따른 소기업을 제외합니다)인 이용자에게 손해가 발생한 경우로서 회사가 사고를 방지하기 위하여 보안절차를 수립하고 이를 철저히 준수하는 등 합리적으로 요구되는 충분한 주의의무를 다한 경우<br/>
-                    ③ 회사는 이용자로부터의 거래지시가 있음에도 불구하고 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신의 두절 등의 사유가 발생한 경우에는 전자금융서비스의 제공을 일시적으로 중단할 수 있으며, 이로 인하여 이용자에게 손해가 발생한 경우에는 그 손해를 배상할 책임을 집니다.<br/>
-                    ④ 회사는 컴퓨터 등 정보통신설비의 보수점검, 교체의 사유 등이 발생한 경우에는 전자금융거래서비스의 제공을 일시적으로 중단할 수 있습니다. 이 경우 회사는 인터넷사이트 등을 통하여 이용자에게 전자금융거래서비스 제공의 중단일정 및 중단사유를 사전에 공지합니다.<br/>
-                    <br>
-                    <em>제13조 (분쟁처리 및 분쟁조정)</em>
-                    <br>
-                    ① 이용자는 인터넷사이트 등의 초기화면에 게시된 분쟁처리 담당자 연락처를 통하여 전자금융거래와 관련한 의견 제출 및 손해배상의 청구 등의 분쟁처리신청 등을 할 수 있습니다.<br/>
-                    ② 회사는 이용자로부터 제1항에 따른 분쟁처리신청을 받은 경우에는 그 신청 받은 날로부터 15일 이내에 이에 대한 조사 또는 처리 결과를 이용자에게 알립니다.<br/>
-                    ③ 이용자는 제2항에 따른 회사의 분쟁처리결과에 대하여 이의가 있을 경우에는 「금융위원회의 설치 등에 관한 법률」에 따른 금융감독원의 금융분쟁조정위원회나 「소비자기본법」에 따른 한국소비자원의 소비자분쟁조정위원회에 회사의 전자금융거래서비스의 이용과 관련한 분쟁 조정을 신청할 수 있습니다.<br/>
-                    <br>
-                    <em>제14조 (회사의 안전성 확보 의무)</em>
-                    <br>
-                    회사는 전자금융거래가 안전하게 처리될 수 있도록 선량한 관리자로서의 주의를 다하며, 전자금융거래의 안전성과 신뢰성을 확보할 수 있도록 전자금융거래의 종류별로 전자적 전송이나 처리를 위한 인력, 시설, 전자적 장치 등의 정보기술부문 및 전자금융업무에 관하여 금융위원회가 정하는 기준을 준수합니다.<br/>
-                    <br>
-                    <em>제15조 (약관 적용의 우선순위)</em>
-                    <br>
-                    ① 회사와 이용자 사이에 개별적으로 합의한 사항이 본 약관에 정한 사항과 다를 때에는 그 합의사항을 본 약관에 우선하여 적용합니다.<br/>
-                    ② 전자금융거래에 관해서는 본 약관을 우선 적용하며, 본 약관에서 정하지 않은 사항은 개별약관 및 「전자금융거래법」 등 관련 법령이 정하는 바에 따릅니다.<br/>
-                    <br>
-                    <em>제16조 (관할)</em>
-                    <br>
-                    회사와 이용자간에 발생한 분쟁에 관한 관할은 「민사소송법」에 정한 바에 따릅니다.<br/>
-                    <br>
-                    <strong>제2장 전자지급결제대행서비스</strong>
-                    <br>
-                    <br>
-                    <em>제17조 (정의)</em>
-                    <br>
-                    본 장에서 정하는 용어의 정의는 다음과 같습니다.<br/>
-                    ① ‘전자지급결제대행 서비스’란 전자적 방법으로 재화 또는 용역(이하 ‘재화 등’)을 구매하는 것과 관련하여 지급결제정보를 송신하거나 수신하는 것 또는 그 대가의 정산을 대행하거나 매개하는 서비스를 말합니다.<br/>
-                    ② ‘이용자’란 본 약관에 동의하고 회사가 제공하는 전자지급결제대행 서비스를 이용하는 자를 말합니다.<br/>
-                    <br>
-                    <em>제18조 (거래지시의 철회)</em>
-                    <br>
-                    ① 전자지급결제대행 서비스를 이용하는 이용자는 수취인의 계좌가 개설된 금융기관 또는 회사 계좌의 원장에 입금이 기록되거나 전자적 장치에 입력이 끝날 때까지 거래지시 된 금액의 정보에 대하여 거래지시를 철회할 수 있습니다.<br/>
-                    ② 회사는 이용자가 거래지시를 철회하여 지급거래가 이루어지지 않으면 수령한 자금을 이용자에게 반환해야 합니다.<br/>
-                    <br>
-                    <strong>제3장 결제대금예치서비스</strong>
-                    <br>
-                    <br>
-                    <em>제19조 (정의)</em>
-                    <br>
-                    본 장에서 정하는 용어의 정의는 다음과 같습니다.<br/>
-                    ① “결제대금예치서비스”라 함은 인터넷사이트 등에서 이루어지는 선지급식 통신판매에 있어서, 회사가 소비자가 지급하는 결제대금을 예치하고 배송이 완료된 후 재화 등의 대금을 판매자에게 지급하는 제도를 말합니다.<br/>
-                    ② “선지급식 통신판매”라 함은 소비자가 재화 등을 공급받기 전에 미리 대금의 전부 또는 일부를 지급하는 대금 지급 방식의 통신판매를 말합니다.<br/>
-                    ③ “판매자”라 함은 본 약관에 동의하고 인터넷사이트 등에 입점한 자로서, 통신판매를 하는 자를 말합니다.<br/>
-                    ④ “소비자”라 함은 본 약관에 동의하고 인터넷사이트 등에 입점한 판매자로부터 재화 등을 구매하는 자로서 「전자상거래 등에서의 소비자보호에 관한 법률」 제2조 제5호의 요건에 해당하는 자를 말합니다.<br/>
-                    ⑤ “이용자”라 함은 “판매자”와 “소비자”를 말합니다.<br/>
-                    <br>
-                    <em>제20조 (예치된 결제대금의 지급방법)</em>
-                    <br>
-                    ① 소비자(그 소비자의 동의를 얻은 경우에는 재화 등을 공급받을 자를 포함합니다. 이하 제2항 내지 제3항에서 같습니다)는 재화 등을 공급받은 사실을 재화 등을 공급받은 날로부터 3영업일 이내에 회사에 통보하여야 합니다.<br/>
-                    ② 회사는 제1항에 따라 소비자로부터 재화 등을 공급받은 사실을 통보받은 경우에는 회사가 정한 기일 내에 판매자에게 결제대금을 지급합니다.<br/>
-                    ③ 회사는 소비자가 재화 등을 공급받은 날부터 3영업일이 지나도록 정당한 사유의 제시 없이 그 공급받은 사실을 회사에 통보하지 아니하는 경우에는 소비자의 동의 없이 해당 판매자에게 결제대금을 지급할 수 있습니다.<br/>
-                    ④ 회사는 판매자에게 결제대금을 지급하기 전에 소비자가 그 결제대금을 환급받을 사유가 발생한 경우에는 그 결제대금을 소비자에게 환급합니다.<br/>
-                    <br>
-                    <em>제21조 (거래지시의 철회)</em>
-                    <br>
-                    ① 이용자가 결제대금예치서비스를 이용한 경우, 이용자는 거래지시된 금액의 정보가 수취인이 지정한 전자적 장치에 도달한 때까지 거래지시를 철회할 수 있습니다.<br/>
-                    ② 회사는 이용자의 거래지시의 철회에 따라 지급거래가 이루어지지 않은 경우 수령한 자금을 이용자에게 반환하여야 합니다.<br/>
-                    <br>
-                    
-                    <strong>제4장 선불전자지급수단</strong>
-                    <br>
-                    <br>
-                    <em>제22조 (정의)</em>
-                    <br>
-                    본 장에서 정하는 용어의 정의는 다음과 같습니다.<br/>
-                    ① “선불전자지급수단”이라 함은 인터넷사이트 등에서 이용되는 오아시스포인트 등 회사가 발행 당시 미리 이용자에게 공지한 전자금융거래법상 선불전자지급수단을 말합니다. 회사가 발행한 선불전자지급수단의 상세 내용은 인터넷사이트 등의 서비스화면을 통하여 확인할 수 있습니다.<br/>
-                    ② “오아시스포인트”라 함은 이용자가 인터넷사이트 등에 입점한 판매자로부터 재화 등을 구매하고 그 대가를 지급하는데 사용하기 위하여 회사가 발행ㆍ관리하는 선불전자지급수단을 말합니다.<br/>
-                    ③ “판매자”라 함은 이용자에게 재화 등을 판매하고 선불전자지급수단을 결제수단으로 하여 그 대가를 지급받는 자를 말합니다.<br/>
-                    ④ “이용자”라 함은 본 약관에 동의하고 판매자로부터 재화 등을 구매하고 선불전자지급수단을 결제수단으로 하여 그 대가를 지급하는 자를 말합니다.<br/>
-                    <br>
-                    <em>제23조 (유효기간)</em>
-                    <br>
-                    ① 회사는 이용자가 이벤트, 미사용쿠폰 등에 대한 환불 등을 통하여 회사로부터 무상으로 제공받는 선불전자지급수단에 대하여 유효기간을 설정할 수 있으며, 이용자는 회사가 정한 유효기간 내에서만 무상으로 지급받은 선불전자지급수단을 사용할 수 있습니다.<br/>
-                    ② 회사는 해당 이벤트 등에 관한 인터넷사이트 등의 관련 화면 등을 통하여 유효기간 설정 여부 및 그 기간을 사전에 고지합니다.<br/>
-                    <br>
-                    <em>제24조 (거래지시의 철회)</em>
-                    <br>
-                    ① 이용자가 선불전자지급수단 을 이용한 경우, 이용자는 거래지시된 금액의 정보가 수취인이 지정한 전자적 장치에 도달한 때까지 거래지시를 철회할 수 있습니다.<br/>
-                    ② 회사는 이용자의 거래지시의 철회에 따라 지급거래가 이루어지지 않은 경우 수령한 자금을 이용자에게 반환하여야 합니다.<br/>
-                    <br>
-                    <em>제25조 (환급)</em>
-                    <br>
-                    ① 환급의 대상이 되는 선불전자지급수단은 이용자가 회사로부터 구매하여 보유하고 있는 것에 한정되며, 이용자가 이벤트, 미사용쿠폰 등에 대한 환불 등을 통하여 회사로부터 무상 제공받은 것은 포함되지 않습니다.<br/>
-                        ② 회사는 다음 각 호의 어느 하나에 해당하는 경우에는 이용자에게 그 이용자가 보유 중인 선불전자지급수단에 기록된 잔액의 전부를 별도의 추가비용 없이 지급합니다.<br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;1. 천재지변 등의 사유로 인하여 회사 또는 판매자의 재화 또는 용역제공이 불가능한 경우<br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;2. 이용자가 선불전자지급수단의 결함으로 회사 또는 판매자로부터 재화 또는 용역을 제공받지 못하는 경우<br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;3. 이용자가 회사로부터 구매하여 보유 중인 선불전자지급수단의 최종 충전시점에 기재된 금액의 60%이상(1만원 이하는 80%) 사용시, 그 잔액에 대하여 환급을 요청하는 경우<br/>
-                    <br>
-                    <em>제26조 (환수)</em>
-                    <br>
-                    회사는 이용자가 보유중인 선불전자지급수단이 다음 각 호의 어느 하나에 해당하는 경우에는 이를 환수할 수 있습니다.<br/>
-                    1. 선불전자지급수단의 제공원인 사유가 취소된 경우<br/>
-                    2. 이용자가 거짓이나 그 밖의 부정한 방법으로 선불전자지급수단을 보유한 경우<br/>
-                    <br>
-                    <em>부칙</em>
-                    <br>
-                    이 약관은 2017년 9월 12일부터 시행됩니다.
-                    <br>
-                </div>
-                <!--//전자금융거래약관-->
-             </div>
-                
-            <div class="comWriteClose">
-                <a href="#" class="oasisMapClose2" onclick="return false;"><span>닫기</span></a>
-            </div>
-        </div>
-    </div>
-    <div class="oasisDim"></div>
-    <!----// 레이어팝업 (이용약관) ---->
-    
-    <!-- footer -->
 
-    <!-- // footer -->
-</div>
-<div id="layerNiceIfrForm" style="z-index:9999999; display:none; position:absolute;left:50%;margin-left:-200px;width:408px;height:652px;">
-<div class="comWriteClose">
-	<a href="#" onclick="closeCheckPlusSafe(); return false;"><span>닫기</span></a>
-</div>
-<iframe name="niceIfrForm" id="niceIfrForm" src="" style="width:100%; height:100%" frameborder="0" scrolling="no"></iframe>
-</div>
+			
+			   
+    <!-- //컨텐츠 -->
+ 
+    	<!-- footer -->
+ 		<jsp:include page="/WEB-INF/views/footer.jsp">
+			<jsp:param value="${sort }" name="sort"/>
+		</jsp:include>
+		<!-- // footer -->
+
 </body>
+
 </html>
+
+

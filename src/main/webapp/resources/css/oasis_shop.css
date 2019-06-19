@@ -12,6 +12,81 @@
 .inputWd710{width:700px}
 .inputWd790{width:739px}
 
+/*상품리스트 고객추천 상단 */
+.prodList .recommend01 {border: solid 1px #ddd;margin-top: 40px;height: 345px;}
+.prodList .recommend01 .boxarea {padding: 11px;width: 488px; border-right: 1px solid #ddd;float:left}
+
+/* radio */
+.radios input[type="radio"]:checked + label:before{background:url('/dailychan/resources/images/common/new_radioBg_on.png') no-repeat 0 0;}
+.radios input[type="radio"] + label:before{background:url('/dailychan/resources/images/common/new_radioBg_off.png') no-repeat 0 0;}
+.faqSelectList li{width:80px; padding:0 0 10px 0;}
+
+/* by 추가 css */
+.star-input>.input,
+.star-input>.input>label:hover,
+.star-input>.input>input:focus+label,
+.star-input>.input>input:checked+label{display: inline-block;vertical-align:top;background:url('/dailychan/resources/images/shop/grade_img.png')no-repeat;}
+.star-input{display:inline-block; white-space:nowrap;width:225px;padding:25px;line-height:30px;}
+.star-input>.input{display:inline-block;width:150px;background-size:150px;height:28px;white-space:nowrap;overflow:hidden;position: relative;}
+.star-input>.input>input{position:absolute;width:1px;height:1px;opacity:0;}
+star-input>.input.focus{outline:1px dotted #ddd;}
+.star-input>.input>label{width:30px;height:0;padding:28px 0 0 0;overflow: hidden;float:left;cursor: pointer;position: absolute;top: 0;left: 0;}
+.star-input>.input>label:hover,
+.star-input>.input>input:focus+label,
+.star-input>.input>input:checked+label{background-size: 150px;background-position: 0 bottom;}
+.star-input>.input>label:hover~label{background-image: none;}
+.star-input>.input>label[for="p1"]{width:30px;z-index:5;}
+.star-input>.input>label[for="p2"]{width:60px;z-index:4;}
+.star-input>.input>label[for="p3"]{width:90px;z-index:3;}
+.star-input>.input>label[for="p4"]{width:120px;z-index:2;}
+.star-input>.input>label[for="p5"]{width:150px;z-index:1;}
+
+/* instagram 인스타그램*/
+#instaPics {  
+ max-width: 1100px;  
+ overflow: hidden;  
+} 
+.imageth {width:200px;height:200px}
+.insta-box {  
+ position: relative;  
+ width: 200px;  
+ height: 200px;  
+ float: left;  
+ margin: 2px;  
+ border: none;  
+
+}  
+.image-layer {  
+ overflow: hidden;  
+ width: 100%;  
+ height: 100%;  
+}  
+.image-layer img {  
+ max-width: 100%;  
+}  
+.caption-layer {  
+ display: none;  
+ position: absolute;  
+ top: 0;  
+ background: rgba(255,255,255,0.8);  
+ height: 140%;  
+ width: 100%;  
+ padding: 10px;  
+ box-sizing: border-box;  
+ font-size: 12pt;  
+ font-family: 맑은 고딕;
+ text-decoration: none;
+ color: #333;  
+  opacity: 0.8;
+}  
+.insta-likes {  
+
+ float: right;  
+ margin-top: 100px;
+}  
+
+/* 인스타그램 끝*/
+
 /* 2018-05-31 입점문의 팝업 클래스 */
 .oasisLayerPop.new-layerpop{width:700px;margin-left:-350px;height:712px;margin-top:-370px}
 .oasisLayerPop.new-layerpop .oasisLPtit{position:relative;height:auto;text-align:center;border-bottom:0px;}
@@ -32,7 +107,7 @@
 .oasisLayerPop.new-layerpop.pop-question .oasisLPtit strong{color:#fff;padding-top:22px;}
 .oasisLayerPop.new-layerpop.pop-question .radios input[type="radio"]:checked + label:before{background:url('../images/common/new_radioBg_on.png') no-repeat 0 0;}
 .oasisLayerPop.new-layerpop.pop-question .radios input[type="radio"] + label:before{background:url('../images/common/new_radioBg_off.png') no-repeat 0 0;}
-.oasisLayerPop.new-layerpop.pop-question .faqSelectList li{width:160px; padding:0 0 10px 0;}
+.oasisLayerPop.new-layerpop.pop-question .faqSelectList li{width:80px; padding:0 0 10px 0;}
 .oasisLayerPop.new-layerpop.pop-question .tableComWrite{padding-bottom:10px;}
 /* // 2018-05-31 1:1상담신청 팝업 클래스 */
 
@@ -1136,9 +1211,10 @@ a.orderBtnGray{background:#bbbbbb; border:1px solid #bbbbbb; color:#fff !importa
 .orderBtnWrap_green {position:relative; text-align:center;}
 .orderBtnWrap_green > a{display:inline-block; width:210px; height:43px; line-height:43px; margin-left:6px; border:1px solid #bbbbbb; text-align:center; font-size:20px; color:#666666; text-decoration:none; font-weight:500; letter-spacing:-0.5px}
 .orderBtnWrap_green > a.orderBtngreen{width:420px; background:#6ca435; border:1px solid #6ca435; color:#fff}
+.orderBtnWrap_green > input.orderBtngreen{width:420px; height:50px; font-weight: bold; font-size:17pt; background:#6ca435; border:1px solid #6ca435; color:#fff}
 .orderBtnWrap_green > button{display:inline-block; width:210px; height:43px; line-height:43px; margin-left:6px; border:1px solid #bbbbbb; text-align:center; font-size:20px; color:#666666; text-decoration:none; font-weight:500; letter-spacing:-0.5px}
 .orderBtnWrap_green > button.orderBtnRed{width:265px; background:#e53433; border:1px solid #e53433; color:#fff}
-
+.orderBtnWrap_green > button.orderBtngreen{width:420px; background:#6ca435; border:1px solid #6ca435; color:#fff}
 
 
 /* 일시품절일때 */
@@ -1228,7 +1304,8 @@ tr div.moreCheap .link{text-decoration: underline !important;}
 .orderTbl2 table tbody td{padding:15px 0; line-height:30px; border-bottom:1px solid #ddd; font-size:14px; color:#666666; font-weight:300; text-align:left; padding-left:20px}
 .orderTbl2 table tbody th span{display:inline-block; padding-left:33px; font-size:14px; color:#333333; font-weight:bold}
 .orderTbl2 table tbody th span.starBg{background:url('../images/order/orderIcon6.png') no-repeat 20px 50%;}
-.orderTbl2 table tbody td input{height:18px; line-height:18px; padding:5px; margin-right:3px; border:1px solid #bbbbbb}
+
+.orderTbl2 table tbody td input{line-height:18px; padding:5px; margin-right:3px; border:1px solid #bbbbbb}
 .orderTbl2 table tbody td .checks{position:relative; top:-2px}
 .orderTbl2 table tbody td p{display:inline-block; color:#666666; font-size: 14px; line-height:18px;}
 .orderTbl2 table tbody td .findBtn_ad{display:inline-block; height:26px; line-height:20px; padding:4px 12px 0; margin:0 5px 0 -1px; background:#bbbbbb; font-size:14px; text-align:center; color:#f6f6f6; text-decoration:none}
@@ -1290,7 +1367,7 @@ tr div.moreCheap .link{text-decoration: underline !important;}
 .orderTbl3 table tbody td, .orderTbl3 table tbody td span.valp{font-size:20px; font-weight:700; text-align:right}
 .orderTbl3 table tbody td span.valp {color:#333;}
 .orderTbl3 table tbody td span{display:inline-block; padding-left:3px; font-size:16px; font-weight:300; color:#666666}
-.orderTbl3 table tbody td em{font-size:30px; font-weight:600; color:#e53433}
+.orderTbl3 table tbody td b.paymentPrice{font-size:30px; font-weight:600; color:#e53433}
 .orderTbl3 table tbody tr:first-child th,
 .orderTbl3 table tbody tr:first-child td{border-top:none}
 
@@ -1399,7 +1476,10 @@ tr div.moreCheap .link{text-decoration: underline !important;}
 
 
 /*faq*/ 
-.qnaList li{border-bottom:1px solid #e5e5e5;}
+
+
+.qnaList li{border-bottom:1px solid #e5e5e5; display: none; }
+.qnaList.on li{ display: inherit;}
 .question a{position:relative; display:block; padding:12px 65px 12px 45px; background:url('../images/customer/qnaArrow_open.png') no-repeat 746px 50%; line-height:25px; font-size:15px; color:#333; text-decoration:none; font-weight:500;}
 .question a .question_q{position:absolute; top:12px; left:10px} /*0527, 수정*/
 .question a .question_q img{width:25px; height:auto} /*1211추가*/
@@ -1407,7 +1487,7 @@ tr div.moreCheap .link{text-decoration: underline !important;}
 .answer .answer_a{position:absolute; top:15px; left:45px}
 .answer em{line-height:25px; font-size:14px; color:#e53433}
 .q_on .question a{background:url('../images/customer/qnaArrow_close.png') no-repeat 980px 50%; }
-.q_on .answer{display:block}
+.q_on .answer{display:block} 
 .qnaSubTit{font-size:20px; font-weight:700; color:#333; margin-bottom:30px;}
 
 .qnaTab{width:100%; height:51px; background:url('../images/customer/tabBg.gif') repeat-x left bottom}
@@ -1684,6 +1764,11 @@ span.bg_gray{display:block; position:absolute; top:0px; left:0px; width:100%; he
 
 /*0527, 추가*/
 .btn_green{padding:30px 0 0 0;}
+.btn_blue{padding:30px 0 0 0;}
+.btn_blue a{display:inline-block; height:36px; line-height:36px; color:#fafafa; background:#017BBA; padding:0 47px; font-size:14px; font-weight:500; border:1px solid #bbbbbb;}
+.btn_green button{display:inline-block; height:36px; line-height:36px; color:#fafafa; background:#6ca435; padding:0 47px; font-size:14px; font-weight:500; border:1px solid #bbbbbb;}
+.btn_green a{display:inline-block; height:36px; line-height:36px; color:#fafafa; background:#6ca435; padding:0 47px; font-size:14px; font-weight:500; border:1px solid #bbbbbb;}
+.btn_green input{display:inline-block; height:36px; line-height:36px; color:#fafafa; background:#6ca435; padding:0 47px; font-size:14px; font-weight:500; border:1px solid #bbbbbb;}
 .btn_green a span{display:inline-block; height:36px; line-height:36px; color:#fafafa; background:#6ca435; padding:0 47px; font-size:14px; font-weight:500; border:1px solid #bbbbbb;}
 
 
@@ -1800,15 +1885,13 @@ span.bg_gray{display:block; position:absolute; top:0px; left:0px; width:100%; he
 
 
 
-.bestCategoryTab{height:40px; margin-bottom:26px;}
-.bestCategoryTab li{display:block; float:left; width:14.28%}
+.bestCategoryTab{height:40px; margin-bottom:26px; border:1px solid #EAEAEA;}
+.bestCategoryTab li{display:block; float:left; width:24.9%; border-left:1px solid #EAEAEA}
 .bestCategoryTab li a{display:block; height:35px; padding-top:4px; line-height:30px; border-top:1px solid #F7F7F7; border-right:1px solid #F7F7F7; background:#ffffff; text-align:center; font-size:16px; font-weight:700; color:#676767; text-decoration:none}
 
-.bestCategoryTab li:first-child{width:14.28%;}
+.bestCategoryTab li:first-child{width:24.9%;}
 .bestCategoryTab li:first-child a{border-left:1px solid #ffffff}
-.bestCategoryTab li.on a{height:35px; border:1px solid #F7F7F7; border-left:0; border-bottom:1px solid #F7F7F7; background:#6FA942; color:#ffffff}
-
-.bestCategoryTab li:first-child.on a{border-left:1px solid #F7F7F7;}
+.bestCategoryTab li.on a{height:35px; border:1px solid #F7F7F7; border-left:0; background:#6FA942; color:#ffffff}
 
 .bg_gray {background-color:#F7F7F7; width:100%;}
 
@@ -1937,7 +2020,6 @@ span.bg_gray{display:block; position:absolute; top:0px; left:0px; width:100%; he
 .img_new50{height:265px; background:url('../images/shopBanner/img_top_oh_new0320.jpg') no-repeat center top;}
 .img_side_dish{height:360px; background:url('../images/shopBanner/img_top_chan.jpg') no-repeat center top;}
 .img_join{height:360px; background:url('../images/loginJoin/join_img2.jpg') no-repeat center top;}
-
 
 .contentsWrap .intro_content{width:1360px; margin:0 auto; padding-bottom:50px}
 .img_intro{height:580px; background:url('../images/common/oasis_info_01.jpg') no-repeat center top;}
@@ -3215,7 +3297,7 @@ span.bg_gray{display:block; position:absolute; top:0px; left:0px; width:100%; he
 
 
 /* 2018-06-20 */
-.cook_book{position:relative;width:100%;height:584px;background:#f7f7f7;}
+.cook_book{position:relative;width:100%;height:484px;}
 .cook_book .cook_book_area{position:relative;width:1026px;height:100%;margin:0 auto;}
 .cook_book .cook_book_area .cook_large_area{position:relative;float:left;width:498px;margin-right:30px;float:left;background-color:#fff}
 .cook_book .cook_book_area .cook_large_area_right{position:relative;width:498px;float:left;background-color:#fff;float:left;}
@@ -3358,14 +3440,13 @@ span.bg_gray{display:block; position:absolute; top:0px; left:0px; width:100%; he
 .shareSnsWrap .shareLink {background-image:url(../images/shop/recipe_sns_urlcopy.png); background-size:55px 25px; display:inline-block; width:55px; height:25px; float:left;}
 
 
-
-a.receipe_on {font-size:0; position:absolute; top:0px; right:0px; background:url('../images/common/ico_recipe_zzim_on.png') no-repeat 5px; width:40px;height:37px;background-size: 36px auto}
-a.receipe_off {font-size:0;position:absolute;top:0px;right:0px;background: url('../images/common/ico_recipe_zzim.png') no-repeat 5px;width: 40px;height:37px;background-size: 36px auto}
+a.receipe_on {font-size:0; position:absolute; z-index:1; top:0px; right:0px; background:url('../images/common/ico_recipe_zzim_on.png') no-repeat 5px !important; width:41px;height:37px;background-size: 36px auto}
+a.receipe_off {font-size:0;position:absolute;z-index:0; top:0px;right:0px;background: url('../images/common/ico_recipe_zzim.png') no-repeat 5px;width: 40px;height:37px;background-size: 36px auto}
 a.receipe_view_on {font-size:0;display:inline-block;top:0px;left:0px;float:left;background: url('../images/common/ico_recipe_zzim_view_on.png') no-repeat 0 3px;width: 18px;height: 24px;background-size: 18px auto;}
 a.receipe_view_off {font-size:0; display:inline-block; top:0px; left:0px; float:left; background:url('../images/common/ico_recipe_zzim_view.png') no-repeat 0 3px; width:18px;height:24px;background-size: 18px auto}
 
-.recipe_tab li {width: 120px;float:left;margin-top: 10px;text-align:left;cursor: pointer;padding-left: 10px;}
-.recipe_tab li.on {text-decoration:underline;color:#6ca435;font-weight: bold;padding-left: 10px;}
+.recipe_tab li a{width: 120px;float:left;margin-top: 10px;text-align:left;cursor: pointer;padding-left: 10px; color: #666;}
+.recipe_tab li.on a{text-decoration:underline;color:#6ca435;font-weight: bold;padding-left: 10px; }
 
 .recipe_counter{float: left;border: solid 1px #ddd;height: 25px;border-radius: 3px;font-size: 13px;color: #666; padding:4px 10px 0;}
 
@@ -3378,7 +3459,7 @@ a.receipe_view_off {font-size:0; display:inline-block; top:0px; left:0px; float:
 #recipe_category .category_list .menuon a{color:#fff;}
 
 #recipe_category .category_list li:last-child{border-right: none}
-#recipe_category .category_list li span{display:block; text-align:center;  font-size:14px; padding-top:44px }
+#recipe_category .category_list li a{display:block; text-align:center;  font-size:14px; padding-top:44px }
 
 #recipe_category .ico-menu1{background:url("../images/etc/recipe_ico_01.png") no-repeat; background-position:center 23%; background-size:48px 38px;}
 #recipe_category .ico-menu2{background:url("../images/etc/recipe_ico_02.png") no-repeat; background-position:center 23%; background-size:48px 38px;}
@@ -3447,7 +3528,7 @@ a.receipe_view_off {font-size:0; display:inline-block; top:0px; left:0px; float:
 .faqMenuBlock ul li:nth-child(6n){margin-right:0; border-right:none}
 .faqMenuBlock ul li a{display:block;width:100%;height:100%;color:#4c4c4c;text-align:center;font-size:14px;line-height:130px;}
 
-.faqMenuBlock.faqlist{padding:0;}
+.faqMenuBlock.faqlist{padding:0; cursor:pointer;}
 .faqMenuBlock.faqlist ul li:nth-child(1){background:#f8f8f8 url('../images/etc/faq_box_icon1_off.png') no-repeat center 12px}
 .faqMenuBlock.faqlist ul li:nth-child(2){background:#f8f8f8 url('../images/etc/faq_box_icon2_off.png') no-repeat center 12px}
 .faqMenuBlock.faqlist ul li:nth-child(3){background:#f8f8f8 url('../images/etc/faq_box_icon3_off.png') no-repeat center 12px}

@@ -1,17 +1,21 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String cp=request.getContextPath();	
+	String cp=request.getContextPath();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
 
+<jsp:include page="/WEB-INF/views/top.jsp"/>
+<jsp:include page="/WEB-INF/views/right.jsp"/>
+
 <link rel="stylesheet" type="text/css" href="/dailychan/resources/css/common.css" />
 <link rel="stylesheet" type="text/css" href="/dailychan/resources/css/notosanskr.css" />
 <link rel="stylesheet" type="text/css" href="/dailychan/resources/css/oasis_shop.css" />
 <link rel="stylesheet" type="text/css" href="/dailychan/resources/css/flick/jquery-ui.min.css" />
-
+<link rel="icon" href="/dailychan/resources/images/x-icon.ico" type="/dailychan/resources/images/x-icon.ico" />
 
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery-ui.min.js"></script>
@@ -21,24 +25,113 @@
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/placeholders.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/clipboard.min.js"></script>
 
-
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_shop.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_common.js"></script>
 
-</head>
+<script type="text/javascript">
 
+window.onload = function () {
+
+	quickPage('1');
+
+}
+
+$('.quickMenu').css("top",450);
+
+function pageChange(str) {
+
+	var firstSelect = "${firstSelect}";
+	var secondSelect = "${secondSelect}";
+	var lastSelect = "${lastSelect}";
+	var categoryId = "${categoryId}";
+	var param;
+		
+	if(lastSelect==null){
+		param = "?firstSelect=" + firstSelect + "&secondSelect=" + secondSelect;
+		param += "&categoryId=" + categoryId + "&page=" + str;
+	}else{
+		param = "?firstSelect=" + firstSelect + "&secondSelect=" + secondSelect;
+		param += "&lastSelect=" + lastSelect + "&categoryId=" + categoryId + "&page=" + str;
+	}
+	
+	location.href = "/dailychan/product/list.action" + param;
+
+	
+}
+
+function addZzim(product_id) {
+	
+	var join_id = "${join_id}";
+	var url = "/dailychan/product/zzim.action";
+
+	if(join_id==""){
+		
+		alert("로그인 후 이용가능한 기능입니다.");
+		location.href = "/dailychan/join/login.action";
+		
+	}else{
+		
+		$.post(url,{product_id:product_id,join_id:join_id},function(data){});
+		alert("찜리스트 추가완료!");
+		
+	}
+	
+}
+
+function addCart(product_id) {
+
+	var join_id = "${join_id}";
+
+	if(join_id==""){
+		
+		alert("로그인후 가능합니다.");
+		location.href="<%=cp%>/join/login.action";
+	}
+	
+	if(join_id!=""){
+		
+		var cart_quantity = 1;
+		var url = "<%=cp%>/cart/addCart.action";
+		
+		$.post(url,{product_id:product_id,cart_quantity:cart_quantity},function(data){
+		
+			var params = "장바구니 추가 완료!"
+			alert(params);
+			
+		});
+	}
+}
+
+function nowBuy(product_id,product_resultPrice) {
+
+	var join_id = "${join_id}";
+	var product_count = 1;
+
+	if(join_id==""){
+		
+		alert("로그인 후 이용가능한 기능입니다.");
+		location.href = "/dailychan/join/login.action";
+		return;
+		
+	}
+	
+	location.href = "/dailychan/order/nowBuy.action?product_count=" + product_count + "&product_id=" + product_id +
+			"&product_price=" + product_resultPrice;
+	
+}
+
+</script>
+
+</head>
 
 <body>
 
-
 <div class="allWrap">
 	<!-- header -->
-	
 
 	<!-- 컨텐츠 -->
 	<div class="contentsArea" id="sec_product_list">
 		<div class="contentsWrap">
-			
 					
 			<div class="list_top_banner"
 				style="background:url('/dailychan/resources/images/shopBanner/img_top_1_1.jpg') no-repeat center top;">
@@ -54,437 +147,109 @@
 				<div class="productList">
 					 
 					<!-- 카테고리선택 -->
-					
-
-
-
-
 
 					<div class="sec_list_area">
 						
 						
 						<span>
-							<a href="/">홈</a>
+							<a href="/dailychan/main.action">홈</a>
 						</span>
 						
-							
-							
-								
-							
-								
+								<c:if test="${lastSelect eq '' }">
+									<span class="sec_arrow"><img src="/dailychan/resources/images/shop/ico_arrow_sec.png" alt="|" /></span>							
+									<span>
+										<strong><a href="/dailychan/product/list.action?firstSelect=${firstSelect }&secondSelect=${secondSelect }&categoryId=1&page=${numPerPage}">${secondSelect }</a></strong>
+									</span>
+								</c:if>
 									
-									
+								<c:if test="${lastSelect ne '' }">
+									<span class="sec_arrow"><img src="/dailychan/resources/images/shop/ico_arrow_sec.png" alt="|" /></span>
+									<span>
+										<a href="/dailychan/product/list.action?firstSelect=${firstSelect }&secondSelect=${secondSelect }&categoryId=0&page=${numPerPage}">${secondSelect }</a>
+									</span>
 									
 									<span class="sec_arrow"><img src="/dailychan/resources/images/shop/ico_arrow_sec.png" alt="|" /></span>
 									<span>
-										<strong>
-										<a href="#" onClick="javascript:categoryProducts(2); return false;">농산물</a>
-										</strong>
+										<strong><a href="/dailychan/product/list.action?firstSelect=${firstSelect }&secondSelect=${secondSelect }&lastSelect=${lastSelect }&categoryId=1&page=${numPerPage}">${lastSelect }</a></strong>
 									</span>
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
-						
-						
-							
-							
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
-								
-							
+								</c:if>
 						
 						<div class="clear"></div>
 					</div>
-					
-					
-					    
-	                    
+			
 		                    <!-- 서브 카테고리 -->
 		                    <div class="prod_list_category">
 		                    	<ul>
-		                    		
-		                        		<li >
-		                        			<a href="#" 
-		                        				onClick="javascript:categoryProducts(9); return false;"><span>주곡/잡곡</span>
+		                    		<c:forEach var="dto" items="${lists3 }">
+		                    			<c:if test="${dto.productTag_lastSelect eq lastSelect }">
+		                        		<li class="on">
+		                        			<a href="/dailychan/product/list.action?firstSelect=${dto.productTag_firstSelect }&secondSelect=${dto.productTag_secondSelect }&lastSelect=${dto.productTag_lastSelect }&categoryId=1&sort=${sort }&direction=${direction }&page=${numPerPage}">
+		                        			<span>${dto.productTag_lastSelect }</span>
 		                        			</a>
 		                        		</li>
-		                        	
-		                        		<li >
-		                        			<a href="#" 
-		                        				onClick="javascript:categoryProducts(12); return false;"><span>과일</span>
+		                        		</c:if>
+		                        		
+		                        		<c:if test="${dto.productTag_lastSelect ne lastSelect }">
+		                        		<li>
+		                        			<a href="/dailychan/product/list.action?firstSelect=${dto.productTag_firstSelect }&secondSelect=${dto.productTag_secondSelect }&lastSelect=${dto.productTag_lastSelect }&categoryId=1&sort=${sort }&direction=${direction }&page=${numPerPage}">
+		                        			<span>${dto.productTag_lastSelect }</span>
 		                        			</a>
 		                        		</li>
-		                        	
-		                        		<li >
-		                        			<a href="#" 
-		                        				onClick="javascript:categoryProducts(11); return false;"><span>채소류</span>
-		                        			</a>
-		                        		</li>
-		                        	
-		                        		<li >
-		                        			<a href="#" 
-		                        				onClick="javascript:categoryProducts(49); return false;"><span>버섯/건나물류</span>
-		                        			</a>
-		                        		</li>
-		                        	
-		                        		<li >
-		                        			<a href="#" 
-		                        				onClick="javascript:categoryProducts(50); return false;"><span>간편샐러드/가루류</span>
-		                        			</a>
-		                        		</li>
-		                        	
-		                        		<li >
-		                        			<a href="#" 
-		                        				onClick="javascript:categoryProducts(13); return false;"><span>견과/병조림</span>
-		                        			</a>
-		                        		</li>
-		                        	
+		                        		</c:if>
+		                        		
+		                        	</c:forEach>
+		                        		
 		                        </ul>
 		                    </div>
 		                	<!--// 서브 카테고리 -->
-	                	
-                	
-                	
-                	
-	                	
 
-
-
-
-					
 						<!-- best 3 area -->
+						<c:if test="${categoryId eq 0 }">
 						<div class="deal_area list_best_3">
 							<dl>
 								<!-- 하단 리스트 -->
+								
 								<dd id="best3SlideList">
 									<ul>
-										
-										
-										
-											
-											
-												
-				                    			
-													
-													
-														
-															
-														
-													
-												
-												<!-- BEST 01 -->
-												<li>
-													<a href="detail/64-8?categoryId=2">
-														<div class="product_list_3">
-															<div class="ico_best_3">
-																<span>BEST</span>
-																<strong>01</strong>
-															</div>
-															<!-- img : 238 * 238 -->
-															<div class="img_best_3">
-																<!-- img : cover -->
-																<span>&nbsp</span>
-																<img src="http://www.oasis.co.kr:8580/product/64/thumb/thumb_6424986511-1be7-422b-8d65-fd5c055c4f12.jpg" alt="상품명1">
-															</div>
-															<!-- img : hover -->
-															<div class="ico_best_3_view">
-																<img src="/dailychan/resources/images/shop/bg_cover_view.png" alt="" />
-															</div>
-															<!-- txt : 상품명 -->
-															<strong>고당도 사과 (1.3kg)</strong>
-															<!-- txt : 할인가 -->
-															<div class="txt_discount_won">
-																<span class="price_before">
-																	<del>12,000원</del>
-																</span>
-																	&nbsp;&nbsp;
-																<span class="price_after">
-																	<strong>7,900원</strong>
-																</span>
-															</div>
-														</div>
-													</a>
-												</li>
-												
-											
-											
-											<!-- //BEST 02 -->
-										
-											
-											
-												
-				                    			
-													
-													
-														
-															
-														
-													
-												
-												<!-- BEST 02 -->
-												<li>
-													<a href="detail/1663-5211?categoryId=2">
-														<div class="product_list_3">
-															<div class="ico_best_3">
-																<span>BEST</span>
-																<strong>02</strong>
-															</div>
-															<!-- img : 238 * 238 -->
-															<div class="img_best_3">
-																<!-- img : cover -->
-																<span>&nbsp</span>
-																<img src="http://www.oasis.co.kr:8580/product/1663/thumb/thumb_1663b2d53ccd-1403-47e7-8ee1-f9f593b5bb4e.jpg" alt="상품명1">
-															</div>
-															<!-- img : hover -->
-															<div class="ico_best_3_view">
-																<img src="/dailychan/resources/images/shop/bg_cover_view.png" alt="" />
-															</div>
-															<!-- txt : 상품명 -->
-															<strong>아삭 빨강 대추방울토마토(750g)</strong>
-															<!-- txt : 할인가 -->
-															<div class="txt_discount_won">
-																<span class="price_before">
-																	<del>6,000원</del>
-																</span>
-																	&nbsp;&nbsp;
-																<span class="price_after">
-																	<strong>4,800원</strong>
-																</span>
-															</div>
-														</div>
-													</a>
-												</li>
-												
-											
-											
-											<!-- //BEST 03 -->
-										
-											
-											
-												
-				                    			
-													
-													
-														
-															
-														
-													
-												
-												<!-- BEST 03 -->
-												<li>
-													<a href="detail/1264-5304?categoryId=2">
-														<div class="product_list_3">
-															<div class="ico_best_3">
-																<span>BEST</span>
-																<strong>03</strong>
-															</div>
-															<!-- img : 238 * 238 -->
-															<div class="img_best_3">
-																<!-- img : cover -->
-																<span>&nbsp</span>
-																<img src="http://www.oasis.co.kr:8580/product/1264/thumb/thumb_1264d41019da-ae7d-435e-bec0-6a33dad0f9a6.jpg" alt="상품명1">
-															</div>
-															<!-- img : hover -->
-															<div class="ico_best_3_view">
-																<img src="/dailychan/resources/images/shop/bg_cover_view.png" alt="" />
-															</div>
-															<!-- txt : 상품명 -->
-															<strong>무농약 시금치 (200g)</strong>
-															<!-- txt : 할인가 -->
-															<div class="txt_discount_won">
-																<span class="price_before">
-																	<del>1,700원</del>
-																</span>
-																	&nbsp;&nbsp;
-																<span class="price_after">
-																	<strong>1,530원</strong>
-																</span>
-															</div>
-														</div>
-													</a>
-												</li>
-												
-											
-											
-											<!-- //BEST 04 -->
-										
-											
-											
-												
-				                    			
-													
-													
-														
-															
-														
-													
-												
-												<!-- BEST 04 -->
-												<li>
-													<a href="detail/1266-5190?categoryId=2">
-														<div class="product_list_3">
-															<div class="ico_best_3">
-																<span>BEST</span>
-																<strong>04</strong>
-															</div>
-															<!-- img : 238 * 238 -->
-															<div class="img_best_3">
-																<!-- img : cover -->
-																<span>&nbsp</span>
-																<img src="http://www.oasis.co.kr:8580/product/1266/thumb/thumb_1266cc5dc690-52d2-428f-9e4d-515c559aa283.png" alt="상품명1">
-															</div>
-															<!-- img : hover -->
-															<div class="ico_best_3_view">
-																<img src="/dailychan/resources/images/shop/bg_cover_view.png" alt="" />
-															</div>
-															<!-- txt : 상품명 -->
-															<strong>무농약 브로컬리 (1통)</strong>
-															<!-- txt : 할인가 -->
-															<div class="txt_discount_won">
-																<span class="price_before">
-																	<del>2,900원</del>
-																</span>
-																	&nbsp;&nbsp;
-																<span class="price_after">
-																	<strong>2,640원</strong>
-																</span>
-															</div>
-														</div>
-													</a>
-												</li>
-												
-											
-											
-											<!-- //BEST 05 -->
-										
-											
-											
-												
-				                    			
-													
-				                    					
-													
-													
-												
-												<!-- BEST 05 -->
-												<li>
-													<a href="detail/1303-4552?categoryId=2">
-														<div class="product_list_3">
-															<div class="ico_best_3">
-																<span>BEST</span>
-																<strong>05</strong>
-															</div>
-															<!-- img : 238 * 238 -->
-															<div class="img_best_3">
-																<!-- img : cover -->
-																<span>&nbsp</span>
-																<img src="http://www.oasis.co.kr:8580/product/1303/thumb/thumb_1303c9f0df8a-bbcb-45f9-98bb-d89eb3eb13c5.jpg" alt="상품명1">
-															</div>
-															<!-- img : hover -->
-															<div class="ico_best_3_view">
-																<img src="/dailychan/resources/images/shop/bg_cover_view.png" alt="" />
-															</div>
-															<!-- txt : 상품명 -->
-															<strong>맑은콩 무농약 콩나물 (300g)</strong>
-															<!-- txt : 할인가 -->
-															<div class="txt_discount_won">
-																<span class="price_before">
-																	<del>1,800원</del>
-																</span>
-																	&nbsp;&nbsp;
-																<span class="price_after">
-																	<strong>500원</strong>
-																</span>
-															</div>
-														</div>
-													</a>
-												</li>
-												
-											
-											
-											<!-- //BEST 06 -->
-										
-											
-											
-												
-				                    			
-													
-													
-														
-															
-														
-													
-												
-												<!-- BEST 06 -->
-												<li>
-													<a href="detail/839-735?categoryId=2">
-														<div class="product_list_3">
-															<div class="ico_best_3">
-																<span>BEST</span>
-																<strong>06</strong>
-															</div>
-															<!-- img : 238 * 238 -->
-															<div class="img_best_3">
-																<!-- img : cover -->
-																<span>&nbsp</span>
-																<img src="http://www.oasis.co.kr:8580/product/839/thumb/thumb_8396dfb6416-088f-4aaa-bdba-d98e7669bf78.jpg" alt="상품명1">
-															</div>
-															<!-- img : hover -->
-															<div class="ico_best_3_view">
-																<img src="/dailychan/resources/images/shop/bg_cover_view.png" alt="" />
-															</div>
-															<!-- txt : 상품명 -->
-															<strong>무농약 파 (300g)</strong>
-															<!-- txt : 할인가 -->
-															<div class="txt_discount_won">
-																<span class="price_before">
-																	<del>1,700원</del>
-																</span>
-																	&nbsp;&nbsp;
-																<span class="price_after">
-																	<strong>1,360원</strong>
-																</span>
-															</div>
-														</div>
-													</a>
-												</li>
-												
-											
-											
-											<!-- //BEST 07 -->
-										
-											
-											
-												
-											
-											
-											<!-- //BEST 010 -->
-										
+									
+									<c:forEach var="dto2" items="${lists2 }">
+										<!-- BEST -->
+										<li>
+											<a href="/dailychan/product/article.action?product_id=${dto2.product_id }&firstSelect=${dto2.product_firstSelect}&secondSelect=${dto2.product_secondSelect}&lastSelect=${dto2.product_lastSelect}">
+												<div class="product_list_3">
+													<div class="ico_best_3">
+														<span>BEST</span>
+														<strong>${dto2.bestNum }</strong>
+													</div>
+													<!-- img : 238 * 238 -->
+													<div class="img_best_3">
+														<!-- img : cover -->
+														<span>&nbsp</span>
+														<img src="/dailychan/resources/images/product/${dto2.product_mainSaveFileName}" alt="상품명1">
+													</div>
+													<!-- img : hover -->
+													<div class="ico_best_3_view">
+														<img src="/dailychan/resources/images/shop/bg_cover_view.png" alt="" />
+													</div>
+													<!-- txt : 상품명 -->
+													<strong>${dto2.product_subject }</strong>
+													<!-- txt : 할인가 -->
+													<div class="txt_discount_won">
+														<span class="price_before">
+															<del>${dto2.price }원</del>
+														</span>
+															&nbsp;&nbsp;
+														<span class="price_after">
+															<strong>${dto2.result_price }원</strong>
+														</span>
+													</div>
+												</div>
+											</a>
+										</li>
+									
+									<!-- //BEST -->
+									</c:forEach>
+									
 									</ul>
 								</dd>
 								<!-- btn : 이전 -->
@@ -502,6 +267,7 @@
 								<!-- //하단 리스트 -->
 							</dl>
 						</div>
+						</c:if>
 						<script type="text/javascript">
 						$(document).ready(function(){
 
@@ -543,32 +309,90 @@
 						<div class="sort_area">
 							
 							<ul>
-								<li class='on'>
-									<a href="#" onclick="searchProductBySort('productListForm', 'priority|desc'); return false;"> 기본</a>
-								</li>
-								<li >
-									<a href="#" onclick="searchProductBySort('productListForm', 'bestRanking|desc'); return false;"> 베스트순</a>
-								</li>
-								<li >
-									<a href="#" onclick="searchProductBySort('productListForm', 'launchingDt|desc'); return false;"> 신상품순</a>
-								</li>
-								<li >
-									<a href="#" onclick="searchProductBySort('productListForm', 'productTitleSort|asc'); return false;"> 상품명순</a>
-								</li>
-								<li >
-									<a href="#" onclick="searchProductBySort('productListForm', 'price|asc'); return false;"> 낮은가격순</a>
-								</li>
-								<li >
-									<a href="#" onclick="searchProductBySort('productListForm', 'price|desc'); return false;"> 높은가격순</a>
-								</li>
+								<!-- 신상품 -->
+								<c:if test="${sort=='product_id' }">
+									<li class='on'>
+										<a href="${listUrl }"> 신상품순</a>
+									</li>
+								</c:if>
+								
+								<c:if test="${sort!='product_id' }">
+									<li>
+										<a href="${listUrl }"> 신상품순</a>
+									</li>
+								</c:if>
+								
+								<!-- 베스트 -->
+								<c:if test="${sort=='product_saleCount' }">
+									<li class='on'>
+										<a href="${listUrl }&sort=product_saleCount&direction=desc&page=${numPerPage}"> 베스트순</a>
+									</li>
+								</c:if>
+								
+								<c:if test="${sort!='product_saleCount' }">
+									<li>
+										<a href="${listUrl }&sort=product_saleCount&direction=desc&page=${numPerPage}"> 베스트순</a>
+									</li>
+								</c:if>
+								
+								<!-- 상품명 -->
+								<c:if test="${sort=='product_subject' }">
+									<li class='on'>
+										<a href="${listUrl }&sort=product_subject&direction=asc&page=${numPerPage}"> 상품명순</a>
+									</li>
+								</c:if>
+								
+								<c:if test="${sort!='product_subject' }">
+									<li>
+										<a href="${listUrl }&sort=product_subject&direction=asc&page=${numPerPage}"> 상품명순</a>
+									</li>
+								</c:if>
+								
+								<!-- 낮은 가격순 -->
+								<c:if test="${sort=='product_resultPrice' and direction=='asc'}">
+									<li class='on'>
+										<a href="${listUrl }&sort=product_resultPrice&direction=asc&page=${numPerPage}"> 낮은가격순</a>
+									</li>
+								</c:if>
+								
+								<c:if test="${sort=='product_resultPrice' and direction=='desc' or sort=='product_id' or sort=='product_saleCount' or sort=='product_subject'  }">
+									<li>
+										<a href="${listUrl }&sort=product_resultPrice&direction=asc&page=${numPerPage}"> 낮은가격순</a>
+									</li>
+								</c:if>
+				
+								<!-- 높은 가격순 -->
+								<c:if test="${sort=='product_resultPrice' and direction=='desc'}">
+									<li class='on'>
+										<a href="${listUrl }&sort=product_resultPrice&direction=desc&page=${numPerPage}"> 높은가격순</a>
+									</li>
+								</c:if>
+								
+								<c:if test="${sort=='product_resultPrice' and direction=='asc' or sort=='product_id' or sort=='product_saleCount' or sort=='product_subject' }">
+									<li>
+										<a href="${listUrl }&sort=product_resultPrice&direction=desc&page=${numPerPage}"> 높은가격순</a>
+									</li>
+								</c:if>
+								
 							</ul>
 							<span class="selectBoxWrap">
-								<label for="selectNumber">60개씩 보기</label>
-								<select id="selectNumber" onChange="changeRows(this.value, true); return false;">
-	                                <option value="20" >&nbsp;&nbsp;20개씩</option>
-	                                <option value="40" >&nbsp;&nbsp;40개씩</option>
-	                                <option value="60" selected='selected'>&nbsp;&nbsp;60개씩</option>
-	                                
+								<label for="selectNumber">${numPerPage }개씩 보기</label>
+								<select id="selectNumber" onchange="pageChange(this.value);">
+								<c:if test="${numPerPage==8 }">
+	                                <option value="8" selected='selected'>&nbsp;&nbsp;8개씩</option>
+	                                <option value="16" >&nbsp;&nbsp;16개씩</option>
+	                                <option value="24" >&nbsp;&nbsp;24개씩</option>
+	                            </c:if>
+	                            <c:if test="${numPerPage==16 }">
+	                                <option value="8" >&nbsp;&nbsp;8개씩</option>
+	                                <option value="16" selected='selected'>&nbsp;&nbsp;16개씩</option>
+	                                <option value="24" >&nbsp;&nbsp;24개씩</option>
+	                            </c:if>
+	                            <c:if test="${numPerPage==24 }">
+	                                <option value="8" >&nbsp;&nbsp;8개씩</option>
+	                                <option value="16" >&nbsp;&nbsp;16개씩</option>
+	                                <option value="24" selected='selected'>&nbsp;&nbsp;24개씩</option>
+	                            </c:if>
 	                            </select>
 							</span>
 						</div>
@@ -576,69 +400,39 @@
                     
 					<div class="prodList">
 						<ul>
-							
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-											
-										
-									
-									<!-- 상품 1set -->
-									<!--판매중지 클래스명 : stopSell / 신상품 : newSellTxt / 세일 : saleSellTxt / 세일+신상품 : saleNewSellTxt -->
-									
-										
-										
-										
-										
-										
-									
+
+								<c:forEach var="dto" items="${lists }">
 									<li class="saleSellTxt">
 										<div class="thum">
-											<a href="/product/detail/3239-4679?categoryId=2">
-												<img src="http://www.oasis.co.kr:8580/product/3239/thumb/thumb_3239286c28d5-d0c7-4dc3-9d72-c484e1951d01.jpg" alt="상품이미지">
+											<a href="/dailychan/product/article.action?product_id=${dto.product_id }&firstSelect=${dto.product_firstSelect}&secondSelect=${dto.product_secondSelect}&lastSelect=${dto.product_lastSelect}">
+												<img src="/dailychan/resources/images/product/${dto.product_mainSaveFileName}" alt="상품이미지">
 												
 	                    						<!-- ico : 할인률 -->
-	                    						<span class="saleSellTxt"><span>20<em>%</em></span></span>
-	                    						
-												
-												
-												
-												
-												
+	                    						<span class="saleSellTxt"><span>${dto.product_discount }<em>%</em></span></span>
+	    
 												<div class="pdLikeWrap">
 												    <img src="/dailychan/resources/images/shop/pd_like.png"/>
 												    <span>
                                                         
+                                                          <c:if test="${dto.product_like!=null }">
+                                                              ${dto.product_like }%
+                                                          </c:if>
                                                           
-                                                              99.5%
-                                                          
-                                                          
+                                                          <c:if test="${dto.product_like==null }">
+                                                              100%
+                                                          </c:if>
                                                         
                                                     </span>
 												</div>
 											</a>
 										</div>
-										<a href="/product/detail/3239-4679?categoryId=2" class="prodName">
-										유기농 용추쌀 현미 (4kg)
+										
+										<a href="/dailychan/product/article.action?product_id=${dto.product_id }&firstSelect=${dto.product_firstSelect}&secondSelect=${dto.product_secondSelect}&lastSelect=${dto.product_lastSelect}" class="prodName">
+										${dto.product_subject }
 										</a>
 										<div class="prodPrice">
-											<span class="prodPrice2">19,000<em>원</em><span></span></span>
-											<span class="prodPrice1">15,200<em>원</em></span>
+											<span class="prodPrice2">${dto.price }<em>원</em><span></span></span>
+											<span class="prodPrice1">${dto.result_price}<em>원</em></span>
 										</div>
 										<!-- 상품 오버시 노출 -->
 										<div class="pop_view">
@@ -646,24 +440,25 @@
 												<div class="icList">
 													<ul>
 														<li>
-															<a href="#" onclick="addWishList(3239, 4679); return false;">
+															<a href="#" onclick="addZzim('${dto.product_id}'); return false;">
 																<img src="/dailychan/resources/images/shop/shopIcon1.png" alt="찜하기">
 															</a>
 														</li>
 														<li>
-															<a href="#" onclick="addCart(3239, 4679); return false;">
+															<a href="#" onclick="addCart('${dto.product_id}'); return false;">
 																<img src="/dailychan/resources/images/shop/shopIcon2.png" alt="장바구니 넣기">
 															</a>
 														</li>
 														<li>
-															<a href="#" onclick="buyItNow(3239, 4679); return false;">
+															<a href="#" onclick="nowBuy('${dto.product_id}','${dto.product_resultPrice }'); return false;">
 																<img src="/dailychan/resources/images/shop/shopIcon3.png" alt="바로구매">
 															</a>
 														</li>
 													</ul>
 												</div>
 												<p>
-													<a href="/product/detail/3239-4679?categoryId=2">
+													<!-- 아티클 주소 -->
+													<a href="/dailychan/product/article.action?product_id=${dto.product_id }&firstSelect=${dto.product_firstSelect}&secondSelect=${dto.product_secondSelect}&lastSelect=${dto.product_lastSelect}">
 														<img src="/dailychan/resources/images/shop/pop_product_more.png" alt="" />
 													</a>
 												</p>
@@ -672,623 +467,24 @@
 										<!-- //상품 오버시 노출 -->
 									</li>
 									<!-- //상품 1set -->
-								
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-											
-										
-									
-									<!-- 상품 1set -->
-									<!--판매중지 클래스명 : stopSell / 신상품 : newSellTxt / 세일 : saleSellTxt / 세일+신상품 : saleNewSellTxt -->
-									
-										
-										
-										
-										
-										
-									
-									<li class="saleSellTxt">
-										<div class="thum">
-											<a href="/product/detail/2477-5361?categoryId=2">
-												<img src="http://www.oasis.co.kr:8580/product/2477/thumb/thumb_2477e0bdeebe-9568-4c25-90fb-291df3c6878b.jpg" alt="상품이미지">
-												
-	                    						<!-- ico : 할인률 -->
-	                    						<span class="saleSellTxt"><span>17<em>%</em></span></span>
-	                    						
-												
-												
-												
-												
-												
-												<div class="pdLikeWrap">
-												    <img src="/dailychan/resources/images/shop/pd_like.png"/>
-												    <span>
-                                                        
-                                                          
-                                                              97.3%
-                                                          
-                                                          
-                                                        
-                                                    </span>
-												</div>
-											</a>
-										</div>
-										<a href="/product/detail/2477-5361?categoryId=2" class="prodName">
-										무농약 밤 고구마 (800g)
-										</a>
-										<div class="prodPrice">
-											<span class="prodPrice2">5,900<em>원</em><span></span></span>
-											<span class="prodPrice1">4,840<em>원</em></span>
-										</div>
-										<!-- 상품 오버시 노출 -->
-										<div class="pop_view">
-											<div class="positionR">
-												<div class="icList">
-													<ul>
-														<li>
-															<a href="#" onclick="addWishList(2477, 5361); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon1.png" alt="찜하기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="addCart(2477, 5361); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon2.png" alt="장바구니 넣기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="buyItNow(2477, 5361); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon3.png" alt="바로구매">
-															</a>
-														</li>
-													</ul>
-												</div>
-												<p>
-													<a href="/product/detail/2477-5361?categoryId=2">
-														<img src="/dailychan/resources/images/shop/pop_product_more.png" alt="" />
-													</a>
-												</p>
-											</div>
-										</div>
-										<!-- //상품 오버시 노출 -->
-									</li>
-									<!-- //상품 1set -->
-								
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-											
-										
-									
-									<!-- 상품 1set -->
-									<!--판매중지 클래스명 : stopSell / 신상품 : newSellTxt / 세일 : saleSellTxt / 세일+신상품 : saleNewSellTxt -->
-									
-										
-										
-										
-										
-										
-									
-									<li class="saleSellTxt">
-										<div class="thum">
-											<a href="/product/detail/2455-2807?categoryId=2">
-												<img src="http://www.oasis.co.kr:8580/product/2455/thumb/thumb_2455ecf42213-abc7-4710-a265-d6daf75b1f04.jpg" alt="상품이미지">
-												
-	                    						<!-- ico : 할인률 -->
-	                    						<span class="saleSellTxt"><span>10<em>%</em></span></span>
-	                    						
-												
-												
-												
-												
-												
-												<div class="pdLikeWrap">
-												    <img src="/dailychan/resources/images/shop/pd_like.png"/>
-												    <span>
-                                                        
-                                                          
-                                                              99.2%
-                                                          
-                                                          
-                                                        
-                                                    </span>
-												</div>
-											</a>
-										</div>
-										<a href="/product/detail/2455-2807?categoryId=2" class="prodName">
-										무농약 당근(500g)
-										</a>
-										<div class="prodPrice">
-											<span class="prodPrice2">2,400<em>원</em><span></span></span>
-											<span class="prodPrice1">2,160<em>원</em></span>
-										</div>
-										<!-- 상품 오버시 노출 -->
-										<div class="pop_view">
-											<div class="positionR">
-												<div class="icList">
-													<ul>
-														<li>
-															<a href="#" onclick="addWishList(2455, 2807); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon1.png" alt="찜하기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="addCart(2455, 2807); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon2.png" alt="장바구니 넣기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="buyItNow(2455, 2807); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon3.png" alt="바로구매">
-															</a>
-														</li>
-													</ul>
-												</div>
-												<p>
-													<a href="/product/detail/2455-2807?categoryId=2">
-														<img src="/dailychan/resources/images/shop/pop_product_more.png" alt="" />
-													</a>
-												</p>
-											</div>
-										</div>
-										<!-- //상품 오버시 노출 -->
-									</li>
-									<!-- //상품 1set -->
-								
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-											
-										
-									
-									<!-- 상품 1set -->
-									<!--판매중지 클래스명 : stopSell / 신상품 : newSellTxt / 세일 : saleSellTxt / 세일+신상품 : saleNewSellTxt -->
-									
-										
-										
-										
-										
-										
-									
-									<li class="saleSellTxt">
-										<div class="thum">
-											<a href="/product/detail/2454-2806?categoryId=2">
-												<img src="http://www.oasis.co.kr:8580/product/2454/thumb/thumb_245424d016f0-f5e5-4632-9387-1cf32c39c188.jpg" alt="상품이미지">
-												
-	                    						<!-- ico : 할인률 -->
-	                    						<span class="saleSellTxt"><span>17<em>%</em></span></span>
-	                    						
-												
-												
-												
-												
-												
-												<div class="pdLikeWrap">
-												    <img src="/dailychan/resources/images/shop/pd_like.png"/>
-												    <span>
-                                                        
-                                                          
-                                                              97.2%
-                                                          
-                                                          
-                                                        
-                                                    </span>
-												</div>
-											</a>
-										</div>
-										<a href="/product/detail/2454-2806?categoryId=2" class="prodName">
-										무농약 감자 (800g)
-										</a>
-										<div class="prodPrice">
-											<span class="prodPrice2">5,900<em>원</em><span></span></span>
-											<span class="prodPrice1">4,840<em>원</em></span>
-										</div>
-										<!-- 상품 오버시 노출 -->
-										<div class="pop_view">
-											<div class="positionR">
-												<div class="icList">
-													<ul>
-														<li>
-															<a href="#" onclick="addWishList(2454, 2806); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon1.png" alt="찜하기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="addCart(2454, 2806); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon2.png" alt="장바구니 넣기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="buyItNow(2454, 2806); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon3.png" alt="바로구매">
-															</a>
-														</li>
-													</ul>
-												</div>
-												<p>
-													<a href="/product/detail/2454-2806?categoryId=2">
-														<img src="/dailychan/resources/images/shop/pop_product_more.png" alt="" />
-													</a>
-												</p>
-											</div>
-										</div>
-										<!-- //상품 오버시 노출 -->
-									</li>
-									<!-- //상품 1set -->
-								
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-											
-										
-									
-									<!-- 상품 1set -->
-									<!--판매중지 클래스명 : stopSell / 신상품 : newSellTxt / 세일 : saleSellTxt / 세일+신상품 : saleNewSellTxt -->
-									
-										
-										
-										
-										
-										
-									
-									<li class="saleSellTxt">
-										<div class="thum">
-											<a href="/product/detail/1266-5190?categoryId=2">
-												<img src="http://www.oasis.co.kr:8580/product/1266/thumb/thumb_1266cc5dc690-52d2-428f-9e4d-515c559aa283.png" alt="상품이미지">
-												
-	                    						<!-- ico : 할인률 -->
-	                    						<span class="saleSellTxt"><span>8<em>%</em></span></span>
-	                    						
-												
-												
-												
-												
-												
-												<div class="pdLikeWrap">
-												    <img src="/dailychan/resources/images/shop/pd_like.png"/>
-												    <span>
-                                                        
-                                                          
-                                                              98.5%
-                                                          
-                                                          
-                                                        
-                                                    </span>
-												</div>
-											</a>
-										</div>
-										<a href="/product/detail/1266-5190?categoryId=2" class="prodName">
-										무농약 브로컬리 (1통)
-										</a>
-										<div class="prodPrice">
-											<span class="prodPrice2">2,900<em>원</em><span></span></span>
-											<span class="prodPrice1">2,640<em>원</em></span>
-										</div>
-										<!-- 상품 오버시 노출 -->
-										<div class="pop_view">
-											<div class="positionR">
-												<div class="icList">
-													<ul>
-														<li>
-															<a href="#" onclick="addWishList(1266, 5190); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon1.png" alt="찜하기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="addCart(1266, 5190); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon2.png" alt="장바구니 넣기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="buyItNow(1266, 5190); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon3.png" alt="바로구매">
-															</a>
-														</li>
-													</ul>
-												</div>
-												<p>
-													<a href="/product/detail/1266-5190?categoryId=2">
-														<img src="/dailychan/resources/images/shop/pop_product_more.png" alt="" />
-													</a>
-												</p>
-											</div>
-										</div>
-										<!-- //상품 오버시 노출 -->
-									</li>
-									<!-- //상품 1set -->
-								
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-											
-										
-									
-									<!-- 상품 1set -->
-									<!--판매중지 클래스명 : stopSell / 신상품 : newSellTxt / 세일 : saleSellTxt / 세일+신상품 : saleNewSellTxt -->
-									
-										
-										
-										
-										
-										
-									
-									<li class="saleSellTxt">
-										<div class="thum">
-											<a href="/product/detail/1263-1125?categoryId=2">
-												<img src="http://www.oasis.co.kr:8580/product/1263/thumb/thumb_1263e8375ad5-010e-428a-a316-ec1ecb97a3f7.jpg" alt="상품이미지">
-												
-	                    						<!-- ico : 할인률 -->
-	                    						<span class="saleSellTxt"><span>10<em>%</em></span></span>
-	                    						
-												
-												
-												
-												
-												
-												<div class="pdLikeWrap">
-												    <img src="/dailychan/resources/images/shop/pd_like.png"/>
-												    <span>
-                                                        
-                                                          
-                                                              94.8%
-                                                          
-                                                          
-                                                        
-                                                    </span>
-												</div>
-											</a>
-										</div>
-										<a href="/product/detail/1263-1125?categoryId=2" class="prodName">
-										무농약 햇양파 (800g)
-										</a>
-										<div class="prodPrice">
-											<span class="prodPrice2">2,500<em>원</em><span></span></span>
-											<span class="prodPrice1">2,250<em>원</em></span>
-										</div>
-										<!-- 상품 오버시 노출 -->
-										<div class="pop_view">
-											<div class="positionR">
-												<div class="icList">
-													<ul>
-														<li>
-															<a href="#" onclick="addWishList(1263, 1125); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon1.png" alt="찜하기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="addCart(1263, 1125); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon2.png" alt="장바구니 넣기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="buyItNow(1263, 1125); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon3.png" alt="바로구매">
-															</a>
-														</li>
-													</ul>
-												</div>
-												<p>
-													<a href="/product/detail/1263-1125?categoryId=2">
-														<img src="/dailychan/resources/images/shop/pop_product_more.png" alt="" />
-													</a>
-												</p>
-											</div>
-										</div>
-										<!-- //상품 오버시 노출 -->
-									</li>
-									<!-- //상품 1set -->
-								
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-											
-										
-									
-									<!-- 상품 1set -->
-									<!--판매중지 클래스명 : stopSell / 신상품 : newSellTxt / 세일 : saleSellTxt / 세일+신상품 : saleNewSellTxt -->
-									
-										
-										
-										
-										
-										
-									
-									<li class="saleSellTxt">
-										<div class="thum">
-											<a href="/product/detail/1262-1124?categoryId=2">
-												<img src="http://www.oasis.co.kr:8580/product/1262/thumb/thumb_126236da5a60-587a-44d4-b1c6-fce45b3f1918.jpg" alt="상품이미지">
-												
-	                    						<!-- ico : 할인률 -->
-	                    						<span class="saleSellTxt"><span>20<em>%</em></span></span>
-	                    						
-												
-												
-												
-												
-												
-												<div class="pdLikeWrap">
-												    <img src="/dailychan/resources/images/shop/pd_like.png"/>
-												    <span>
-                                                        
-                                                          
-                                                              98%
-                                                          
-                                                          
-                                                        
-                                                    </span>
-												</div>
-											</a>
-										</div>
-										<a href="/product/detail/1262-1124?categoryId=2" class="prodName">
-										무농약 무 (850g)
-										</a>
-										<div class="prodPrice">
-											<span class="prodPrice2">1,800<em>원</em><span></span></span>
-											<span class="prodPrice1">1,440<em>원</em></span>
-										</div>
-										<!-- 상품 오버시 노출 -->
-										<div class="pop_view">
-											<div class="positionR">
-												<div class="icList">
-													<ul>
-														<li>
-															<a href="#" onclick="addWishList(1262, 1124); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon1.png" alt="찜하기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="addCart(1262, 1124); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon2.png" alt="장바구니 넣기">
-															</a>
-														</li>
-														<li>
-															<a href="#" onclick="buyItNow(1262, 1124); return false;">
-																<img src="/dailychan/resources/images/shop/shopIcon3.png" alt="바로구매">
-															</a>
-														</li>
-													</ul>
-												</div>
-												<p>
-													<a href="/product/detail/1262-1124?categoryId=2">
-														<img src="/dailychan/resources/images/shop/pop_product_more.png" alt="" />
-													</a>
-												</p>
-											</div>
-										</div>
-										<!-- //상품 오버시 노출 -->
-									</li>
-									<!-- //상품 1set -->
-								
-							
-								
-									
-									
-									
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-	                    			
-									
-										
-										
-											
-											
-												
-												
-										
-										
-										
-							
+								</c:forEach>
+														
 						</ul>
-						<div class="clear"></div>
+						
 					</div>
 					<!--// 상품리스트 -->
 					
-					<!--페이징-->
-					<div class="pagingWrap">
-						
-							
-							
-								<a href="javascript:page(1);" class='on' >1</a>
-							
-								
-							
-							
-						
-					</div>
-					<!--//페이징-->
+				<div class="pagingWrap">
+
+					<c:if test="${dataCount!=0 }">
+						${pageIndexList }
+					</c:if>
+
+					<c:if test="${dataCount==0 }">
+						등록된게시물이 없습니다.
+					</c:if>
+
+				</div>
 					
 				</div>
 				
@@ -1298,12 +494,10 @@
 		</div>
 	</div>
 	<!-- //컨텐츠 -->
-
-
-	
-
   
 </div>
+<jsp:include page="/WEB-INF/views/footer.jsp"/>
+
 </body>
 </html>
 

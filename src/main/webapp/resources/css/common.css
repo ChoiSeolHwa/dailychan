@@ -67,6 +67,7 @@ src: local('☺'), url("../font/NanumGothicBold.eot"), url('../font/NanumGothicB
 /********** 레이아웃 **********/
 .allWrap {position: relative; width:100%; min-width:1026px; height: 100%; min-height: 100%;}
 
+
 /*상단*/
 .gnbWrap{height:50px; background:#76715d; }
 .gnbWrap_in{position:relative; width:1026px; margin:0 auto}
@@ -107,6 +108,7 @@ src: local('☺'), url("../font/NanumGothicBold.eot"), url('../font/NanumGothicB
 .grCategoryWrap .grCategorySub > ul >li > a{color:#272423; font-size:15px; font-weight:400; line-height:37px}
 .grCategoryWrap .grCategorySub > ul >li > ul > li a{color:#666; font-size:14px; line-height:23px}
 
+
 /*푸터*/
 .footerArea{background:#fff;} /*20180221 수정*/
 .footerWrap{position:relative; width:1026px; padding-top:35px; margin:0 auto}
@@ -146,17 +148,17 @@ src: local('☺'), url("../font/NanumGothicBold.eot"), url('../font/NanumGothicB
 
 /*우측 퀵메뉴*/
 
-.quickMenu{position:absolute; top:260px; left:50%; margin-left:548px; width:96px; z-index:110;}
+.quickMenu{position:absolute; top:540px; left:50%; margin-left:548px; width:96px; z-index:110;}
 .mainConWrap .quickMenu{top:624px;}
 
-.quickMenu .quickList{background:#fff; border:1px solid #ddd}
+.quickMenu .quickList{background:#fff; border:1px solid #ddd; height: 373px;}
 
 .quickMenu .titBtnGray{display:inline-block; height:25px; line-height:25px; padding:5px 10px; color:#fff; background:#a2a2a2; text-align:center; font-size:13px; font-weight:400; text-decoration:none}
 
 .quickMenu .quickList .quickTit{display:block; height:28px; padding-top:4px; font-size:12px; color:#333333; font-weight:400; text-align:center;}
 .quickMenu .quickList .quickTxt{height:160px; padding-top:94px; text-align:center}
 
-.quickMenu .quickList ul{width:100%; min-height:230px;}
+.quickMenu .quickList ul{width:100%;}
 .quickMenu .quickList ul li{position:relative; width:74px; height:74px;  margin:0 auto; text-align:center; line-height:1;}
 .quickMenu .quickList ul li:first-child{border-top:none}
 
@@ -270,7 +272,7 @@ src: local('☺'), url("../font/NanumGothicBold.eot"), url('../font/NanumGothicB
 /*20180322 추가 : 끝*/
 
 /* main >> slider, 메인 오!감동 */
-.direct_area{position:relative; width:100%; height:540px; background-color:#f7f7f7;}/* 20180526 여백 삭제  margin-bottom:50px*/
+.direct_area{position:relative; width:100%; height:540px;}/* 20180526 여백 삭제  margin-bottom:50px*/
 
 #coverflow{overflow:hidden; position:absolute; top:0px; right:7px; width:760px; height:560px; text-align:right;}
 
@@ -284,7 +286,7 @@ src: local('☺'), url("../font/NanumGothicBold.eot"), url('../font/NanumGothicB
 
 /*20180526 산지직송더보기 추가 */
 
-.more_area { position: relative; width: 100%; height: 100px;  background-color: #f7f7f7; margin-bottom: 50px;}
+.more_area { position: relative; width: 100%; height: 100px; margin-bottom: 50px;}
 .more_area2 {position: relative; width: 1026px;  margin: 0 auto}
 
 
@@ -340,7 +342,7 @@ src: local('☺'), url("../font/NanumGothicBold.eot"), url('../font/NanumGothicB
 #ico_leaf{position:absolute; top:1450px; lefT:0; z-index:50;}
 
 .header_area{position:relative; height:120px;}
-.header_area .h1_logo{position:relative; top:-75px; left:35%; margin-left:-54px;}
+.header_area .h1_logo{position:relative; top:-75px; left:32%; margin-left:-54px; width: 300px;}
 
 .mypage_list{position:absolute; top:0px; right:0px;}
 .mypage_list ul{overflow:hidden; height:45px;}
@@ -382,28 +384,28 @@ src: local('☺'), url("../font/NanumGothicBold.eot"), url('../font/NanumGothicB
 .gnb_list .depth_1 li img {margin-top:15px}
 .gnb_list .depth_1 span{display:block;width: 140.2px;height:45px;line-height:45px;text-align:Center;border: rig;border-right: 1px solid #6ca435;}
 .gnb_list .depth_1 span a{display:inline-block; width:100%; height:100%; background-color:#6ca435; font-size:15px; font-weight:700; color:#fff; letter-spacing:-1px; text-decoration:none;}
-.gnb_list .depth_1 span a.ctrList0 {background:#6ca435 url(../images/common/gnb_menu_00.png) no-repeat}
-.gnb_list .depth_1 span a.ctrList1 {background:#6ca435 url(../images/common/gnb_menu_09.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList2 {background:#6ca435 url(../images/common/gnb_menu_02.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList3 {background:#6ca435 url(../images/common/gnb_menu_03new.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList4 {background:#6ca435 url(../images/common/gnb_menu_04.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList5 {background:#6ca435 url(../images/common/gnb_menu_05.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList6 {background:#6ca435 url(../images/common/gnb_menu_10.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList0 {background:#6ca435 url(/dailychan/resources/images/common/gnb_menu_00.png) no-repeat}
+.gnb_list .depth_1 span a.ctrList1 {background:#6ca435 url(/dailychan/resources/images/common/gnb_menu_09.png?dummy=0.12) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList2 {background:#6ca435 url(/dailychan/resources/images/common/gnb_menu_02.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList3 {background:#6ca435 url(/dailychan/resources/images/common/gnb_menu_03new.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList4 {background:#6ca435 url(/dailychan/resources/images/common/gnb_menu_04.png?dummy=0.01) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList5 {background:#6ca435 url(/dailychan/resources/images/common/gnb_menu_05.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList6 {background:#6ca435 url(/dailychan/resources/images/common/gnb_menu_10.png?dummy=0.02) no-repeat 50% 15px}
 
-.gnb_list .depth_1 span a.ctrList1:hover {background:#fff url(../images/common/gnb_menu_09_on.png?dummy=0.12) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList2:hover {background:#fff url(../images/common/gnb_menu_02_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList3:hover {background:#fff url(../images/common/gnb_menu_03new_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList4:hover {background:#fff url(../images/common/gnb_menu_04_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList5:hover {background:#fff url(../images/common/gnb_menu_05_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList6:hover {background:#fff url(../images/common/gnb_menu_10_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList4.on {background:#fff url(../images/common/gnb_menu_04_on.png) no-repeat 50% 15px;}
-.gnb_list .depth_1 span a.ctrList5.on {background:#fff url(../images/common/gnb_menu_05_on.png) no-repeat 50% 15px;}
-.gnb_list .depth_1 span a.ctrList1.fixed {background:#fff url(../images/common/gnb_menu_09_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList2.fixed {background:#fff url(../images/common/gnb_menu_02_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList3.fixed {background:#fff url(../images/common/gnb_menu_03new_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList4.fixed {background:#fff url(../images/common/gnb_menu_04_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList5.fixed {background:#fff url(../images/common/gnb_menu_05_on.png) no-repeat 50% 15px}
-.gnb_list .depth_1 span a.ctrList6.fixed {background:#fff url(../images/common/gnb_menu_10_on.png?dummy=0.02) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList1:hover {background:#fff url(/dailychan/resources/images/common/gnb_menu_09_on.png?dummy=0.12) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList2:hover {background:#fff url(/dailychan/resources/images/common/gnb_menu_02_on.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList3:hover {background:#fff url(/dailychan/resources/images/common/gnb_menu_03new_on.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList4:hover {background:#fff url(/dailychan/resources/images/common/gnb_menu_04_on.png?dummy=0.01) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList5:hover {background:#fff url(/dailychan/resources/images/common/gnb_menu_05_on.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList6:hover {background:#fff url(/dailychan/resources/images/common/gnb_menu_10_on.png?dummy=0.02) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList4.on {background:#fff url(/dailychan/resources/images/common/gnb_menu_04_on.png?dummy=0.01) no-repeat 50% 15px;}
+.gnb_list .depth_1 span a.ctrList5.on {background:#fff url(/dailychan/resources/images/common/gnb_menu_05_on.png) no-repeat 50% 15px;}
+.gnb_list .depth_1 span a.ctrList1.fixed {background:#fff url(/dailychan/resources/images/common/gnb_menu_09_on.png?dummy=0.12) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList2.fixed {background:#fff url(/dailychan/resources/images/common/gnb_menu_02_on.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList3.fixed {background:#fff url(/dailychan/resources/images/common/gnb_menu_03new_on.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList4.fixed {background:#fff url(/dailychan/resources/images/common/gnb_menu_04_on.png?dummy=0.01) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList5.fixed {background:#fff url(/dailychan/resources/images/common/gnb_menu_05_on.png) no-repeat 50% 15px}
+.gnb_list .depth_1 span a.ctrList6.fixed {background:#fff url(/dailychan/resources/images/common/gnb_menu_10_on.png?dummy=0.02) no-repeat 50% 15px}
 .gnb_list .depth_1 span a:last-child {width: 100%;}
 .gnb_list .depth_1 span.first{width:176px; border-right:none;}
 

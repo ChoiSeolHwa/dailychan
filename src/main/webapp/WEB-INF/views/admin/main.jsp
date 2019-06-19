@@ -1,15 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@	taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
 	<title>데일리찬::믿을 수 있는 먹거리</title>
+	
+<jsp:include page="/WEB-INF/views/top.jsp">
+	<jsp:param value="${sort }" name="sort"/>
+</jsp:include>
 
 <link rel="icon" href="/dailychan/resources/images/x-icon.ico" type="/dailychan/resources/images/x-icon.ico" />
 <link rel="apple-touch-icon-precomposed" href="/dailychan/resources/images/webicon/Icon-Small-72.png" />
@@ -24,64 +26,8 @@
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery.cookie.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery.bxslider.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery.form.min.js"></script>
-
-<script type="text/javascript">
-//<![CDATA[
-var contextPath = "";
-var imgUrl = "http://www.oasis.co.kr:8580";
-(function($) {
-	$.ajaxSetup({
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", "true");
-		},
-		error: function(xhr, status, err) {
-			if (xhr.status == 403) {
-				location.href = contextPath + "/login?redirect=true";
-			}
-			else {
-				console.log("error: " + xhr.status);
-			}
-		}
-	});
-	
-	$(document).ajaxStart(function() {
-		$("#isolationField").show();
-		
-	}).ajaxStop(function() {
-		$("#isolationField").hide();
-	});
-})(jQuery);
-//]]>
-</script>
-
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_shop.js?dummy=5.05"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_common.js?dummy=5.04"></script>
-
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PR5WGG3');</script>
-<!-- End Google Tag Manager -->
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119809802-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-119809802-1');
-</script>
- 
-<script type="text/javascript"> 
-if (!wcs_add) var wcs_add={};
-wcs_add["wa"] = "s_eb0d5275a00";
-if (!_nasa) var _nasa={};
-wcs.inflow();
-wcs_do(_nasa);
-</script>
 
 	<link rel="stylesheet" type="text/css" href="/dailychan/resources/css/oasis_mypage.css" />
 	
@@ -150,6 +96,7 @@ wcs_do(_nasa);
 				location.reload(true);
 		}
 	</script>
+
 </head>
 
 <body>
@@ -166,12 +113,9 @@ wcs_do(_nasa);
 					<div class="mypage-personal">
 						<div class="personal-info">
 							<div class="grade">
-								
-									
-									
-										<i class="icon-grade family">family</i>
-									
-								
+
+									<i class="icon-grade family">family</i>
+
 							</div>
 							<div class="name"><b>관리자</b><em>님</em></div>
 
@@ -180,174 +124,319 @@ wcs_do(_nasa);
 						<div class="personal-status">
 							<ul>
 								<li>
-									<a href="/dailychan/admin/orderList">
+									<a href="/dailychan/admin/orderList.action">
 										<i class="icon-mypage ps-order"></i>
 										<font size="15pt"><b>최근 주문내역</b></font>
-										<span><em>0건</em></span>
+										<span><em>${orderDataCount }건</em></span>
 									</a>
 								</li>
 								<li>
-									<a href="/dailychan/admin/productQnaList">
+									<a href="/dailychan/admin/productQna/productQuestion.action">
 										<i class="icon-mypage ps-chat"></i>
 										<b>상품 문의내역</b>
-										<span><em>0건</em></span>
+										<span><em>${productQnaDataCount }건</em></span>
 									</a>
 								</li>
 								<li>
-									<a href="/dailychan/admin/qnaList">
+									<a href="/dailychan/admin/qnaList.action">
 										<i class="icon-mypage ps-chat"></i>
 										<b>1:1 상담내역</b>
-										<span><em>0건</em></span>
+										<span><em>${qnaDataCount }건</em></span>
 									</a>
 								</li>
 								<li>
-									<a href="/dailychan/admin/refundProductList">
+									<a href="/dailychan/admin/refund/permitRefund.action">
 										<i class="icon-mypage ps-point"></i>
 										<b>환불 요청내역</b>
-										<span><em>0건</em></span>							
+										<span><em>${refundDataCount }건</em></span>							
 									</a>
 								</li>						
 							</ul>
 						</div>
 					</div>
 
-
 					<div class="mypage-contents-wrap">
-                    	
-                    	
-
-
 
 						<div class="mypage-lnb">
-							<a href="/dailychan/admin/main">
+							<a href="/dailychan/admin/main.action">
 								<h3>Admin</h3>
 							</a>
 							<ul>
 									<li>
-										<a href="/dailychan/admin/register">상품등록</a>
+										<a href="/dailychan/admin/productRegister.action">상품등록</a>
 										
 									</li>
 									
 									<li>
-										<a href="/dailychan/admin/recipeRegister">레시피등록</a>
+										<a href="/dailychan/admin/recipeRegister.action">레시피등록</a>
 										
 									</li>
 								
 									<li>
-										<a href="/dailychan/admin/orderList">주문관리</a>
-	
-										
-									</li>
-
-								
-									<li>
-										<a href="/dailychan/admin/addPoint">포인트 발급</a>
+										<a href="/dailychan/admin/orderList.action">주문관리</a>
 										
 									</li>
 								
 									<li>
-										<a href="/dailychan/admin/coupon">쿠폰 발급</a>
-
+										<a href="/dailychan/admin/coupon.action">쿠폰 발급</a>
+										
+									</li>
+									
+									<li>
+										<a href="/dailychan/admin/productRecommand.action">상품추천내역</a>									
+																			
+									</li>
+								
+									<li>
+										<a href="/dailychan/admin/productQna/productQuestion.action">상품문의내역</a>									
 										
 									</li>
 								
 									<li>
-										<a href="/dailychan/admin/commentList">구매후기</a>
-										
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/admin/productQnaList">상품문의내역</a>
+										<a href="/dailychan/admin/qnaList.action">1:1상담내역</a>
 										
 										
 									</li>
 								
 									<li>
-										<a href="/dailychan/admin/qnaList">1:1상담내역</a>
-										
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/admin/refundProductList">환불서비스</a>
+										<a href="/dailychan/admin/refund/permitRefund.action">환불서비스</a>
 										
 									</li>
 								
 									<li>
-										<a href="/dailychan/admin/info">회원정보 관리</a>
+										<a href="/dailychan/admin/info.action">회원정보 관리</a>
 
 										
 									</li>
 
 							</ul>
 						</div>
-
-						
+											
 						<div class="mypage-contents">
 						
-							<!-- 최신 최근 주문내역 -->
+							<!-- 최신 주문 문의내역 -->
 							<div class="mypage-cblock">
-								<div class="mypage-subtit">
-									<h4>최근 주문내역</h4>
-									<p></p>
-								</div>
-
-								<div class="mypage-orderinfo-wrap">
-										
-									<div class="empty-msg">여기가 본문</div>
-									
-								</div>
+								<div class="mypage-subtit"><h4>최근 주문내역</h4></div>
+								<div class="mypage-orderinfo-wrap"></div>
 							</div>
+								<table class="tableCom mgT10">
+									<colgroup>
+										<col width="90">
+										<col width="90">
+										<col width="*">
+										<col width="90">
+										<col width="115">
+									</colgroup>
+									<thead>
+										<tr>
+											<th>주문번호</th>
+											<th>배송상태</th>
+											<th>구매정보</th>
+											<th>구매자</th>
+											<th>구매날짜</th>
+										</tr>
+									</thead>
+
+									<tbody>
+
+										<c:if test="${orderDataCount==0 }">
+						
+											<tr>
+												<td colspan="5">
+					                                <div class="empty-msg">주문 내역이 없습니다.</div>
+												</td>
+											</tr>
+										
+										</c:if>
+										
+										<c:if test="${orderDataCount!=0 }">
+											<c:forEach var="dto" items="${orderLists }">
+											<tr>
+												<td>${dto.orderList_id }</td>
+												<td><span class="reply_end">
+													<c:if test="${dto.orderList_step==1 }">
+														[주문접수]
+													</c:if>
+													<c:if test="${dto.orderList_step==2 }">
+														[결제완료]
+													</c:if>
+													<c:if test="${dto.orderList_step==3 }">
+														[상품준비중]
+													</c:if>
+													<c:if test="${dto.orderList_step==4 }">
+														[배송중]
+													</c:if>
+													<c:if test="${dto.orderList_step==5 }">
+														[배송완료]
+													</c:if>
+												</span></td>
+												<td class="tL"><a href="#" onclick="return false;">
+														${dto.product_subject } 등 ${dto.orderList_productCount }개 </a></td>
+												<td>${dto.join_id }</td>
+												<td>${dto.orderList_created }</td>
+												
+											</tr>
+											</c:forEach>
+										</c:if>
+
+									</tbody>
+								</table><br/><br/>
 							
 							<!-- 최신 상품 문의내역 -->
 							<div class="mypage-cblock">
-
-								<div class="mypage-subtit">
-									<h4>상품 문의내역</h4>
-								</div>
-
-								<div class="mypage-goodslist">
-
-									<div class="empty-msg">여기가 본문</div>
-									
-								</div>
+								<div class="mypage-subtit"><h4>상품 문의내역</h4></div>
+								<div class="mypage-orderinfo-wrap"></div>
 							</div>
+
+								<table class="tableCom mgT10">
+									<colgroup>
+										<col width="90">
+										<col width="90">
+										<col width="*">
+										<col width="90">
+										<col width="115">
+									</colgroup>
+									<thead>
+										<tr>
+											<th>문의유형</th>
+											<th>답변상태</th>
+											<th>제목</th>
+											<th>문의자</th>
+											<th>등록일</th>
+										</tr>
+									</thead>
+
+									<tbody id="productAnswer">
+										<c:if test="${productQnaDataCount==0 }">						
+											<tr>
+												<td colspan="5">
+					                                <div class="empty-msg">상품 문의 내역이 없습니다.</div>
+												</td>
+											</tr>										
+										</c:if>
+
+										<c:if test="${productQnaDataCount!=0 }">
+											<c:forEach var="dto" items="${productQnaLists }">
+											<tr>
+												<td>${dto.productQuestion_type }</td>
+												<td><span class="reply_end">[${dto.productQuestion_state }]</span></td>
+												<td class="tL"><a href="#" onclick="return false;">
+														${dto.productQuestion_content } </a></td>
+												<td>${dto.join_id }</td>
+												<td>${dto.productQuestion_created }</td>
+												
+											</tr>
+											</c:forEach>
+										</c:if>
+
+									</tbody>
+								</table><br/><br/>
 							
 							<!-- 최신 1:1 문의내역 -->
 							<div class="mypage-cblock">
-								<div class="mypage-subtit">
-									<h4>1:1 문의내역</h4>
-								</div>
-
-								<div class="mypage-orderinfo-wrap">
-	
-									<div class="empty-msg">여기가 본문</div>
-
-								</div>
+								<div class="mypage-subtit"><h4>1:1 문의내역</h4></div>
+								<div class="mypage-orderinfo-wrap"></div>
 							</div>
+								<table class="tableCom mgT10">
+									<colgroup>
+										<col width="90">
+										<col width="90">
+										<col width="*">
+										<col width="90">
+										<col width="115">
+									</colgroup>
+									<thead>
+										<tr>
+											<th>문의유형</th>
+											<th>답변상태</th>
+											<th>제목</th>
+											<th>문의자</th>
+											<th>등록일</th>
+										</tr>
+									</thead>
+
+									<tbody id="productAnswer">
+										<c:if test="${qnaDataCount==0 }">						
+											<tr>
+												<td colspan="5">
+					                                <div class="empty-msg">상품 문의 내역이 없습니다.</div>
+												</td>
+											</tr>										
+										</c:if>
+
+										<c:if test="${qnaDataCount!=0 }">
+											<c:forEach var="dto" items="${qnaLists }">
+											<tr>
+												<td>${dto.qna_type }</td>
+												<td><span class="reply_end">[${dto.qna_state }]</span></td>
+												<td class="tL">
+													<a href="#" onclick="return false;">${dto.qna_subject }</a>
+												</td>
+												<td>${dto.join_id }</td>
+												<td>${dto.qna_created }</td>
+												
+											</tr>
+											</c:forEach>
+										</c:if>
+
+									</tbody>
+								</table><br/><br/>
 							
 							<!-- 최신 환불 요청내역 -->
 							<div class="mypage-cblock">
-
-								<div class="mypage-subtit">
-									<h4>환불 요청내역</h4>
-								</div>
-
-								<div class="mypage-goodslist">
-									
-										
-									<div class="empty-msg">여기가 본문</div>
-
-								</div>
+								<div class="mypage-subtit"><h4>환불 요청내역</h4></div>
+								<div class="mypage-orderinfo-wrap"></div>
 							</div>
-						
-							
-						</div>
+
+								<table class="tableCom mgT10">
+									<colgroup>
+										<col width="90">
+										<col width="90">
+										<col width="90">
+										<col width="*">
+										<col width="115">
+									</colgroup>
+									<thead>
+										<tr>
+											<th>요청일</th>
+											<th>ID</th>
+											<th>주문번호</th>
+											<th>제품명</th>
+											<th>구매가</th>
+										</tr>
+									</thead>
+
+									<tbody>
+
+										<c:if test="${refundDataCount==0 }">						
+											<tr>
+												<td colspan="5">
+					                                <div class="empty-msg">환풀 신청 내역이 없습니다.</div>
+												</td>
+											</tr>										
+										</c:if>
+
+										<c:if test="${refundDataCount!=0 }">
+											<c:forEach var="dto" items="${refundLists }">
+											<tr>
+												<td>${dto.refund_created }</td>
+												<td>[${dto.join_id }]</td>
+												<td>${dto.orderList_id }</td>
+												<td class="tL">
+													${dto.refund_subject }
+												</td>
+												<td>${dto.orderList_resultPrice }</td>
+											</tr>
+											</c:forEach>
+										</c:if>
+
+									</tbody>
+								</table>
+
+							</div>
 
 					</div>
 				</div>
-
 
 			</div>
 

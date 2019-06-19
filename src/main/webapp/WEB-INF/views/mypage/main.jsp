@@ -1,15 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@	taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
 	<title>데일리찬::믿을 수 있는 먹거리</title>
+	
+<jsp:include page="/WEB-INF/views/top.jsp">
+	<jsp:param value="${sort }" name="sort"/>
+</jsp:include>
 	
 <link rel="icon" href="/dailychan/resources/images/x-icon.ico" type="/dailychan/resources/images/x-icon.ico" />
 
@@ -22,131 +24,11 @@
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery.bxslider.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/jquery.form.min.js"></script>
 
-<script type="text/javascript">
-//<![CDATA[
-var contextPath = "";
-var imgUrl = "http://www.oasis.co.kr:8580";
-(function($) {
-	$.ajaxSetup({
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", "true");
-		},
-		error: function(xhr, status, err) {
-			if (xhr.status == 403) {
-				location.href = contextPath + "/login?redirect=true";
-			}
-			else {
-				console.log("error: " + xhr.status);
-			}
-		}
-	});
-	
-	$(document).ajaxStart(function() {
-		$("#isolationField").show();
-		
-	}).ajaxStop(function() {
-		$("#isolationField").hide();
-	});
-})(jQuery);
-//]]>
-</script>
-
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_shop.js?dummy=5.05"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_common.js?dummy=5.04"></script>
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PR5WGG3');</script>
-<!-- End Google Tag Manager -->
+<link rel="stylesheet" type="text/css" href="/dailychan/resources/css/oasis_mypage.css" />
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119809802-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-119809802-1');
-</script>
- 
-<script type="text/javascript"> 
-if (!wcs_add) var wcs_add={};
-wcs_add["wa"] = "s_eb0d5275a00";
-if (!_nasa) var _nasa={};
-wcs.inflow();
-wcs_do(_nasa);
-</script>
-
-	<link rel="stylesheet" type="text/css" href="/dailychan/resources/css/oasis_mypage.css" />
-	
-	<script type="text/javascript">
-		$(document).ready(function() {
-			
-		});
-		
-		function orderCancel(orderId,paymentType) {
-			var msg1 = "구매취소 신청이 완료되었습니다.\n\n 취소한 상품은 다시 장바구니에 등록하실수 있습니다.\n등록하시겠습니까?\n\n *결제수단에 따라 실제 환불까지 1일~2주정도 소요될 수 있습니다.\n 궁금하신 사항은 고객센터 1577-0098로 문의주세요";
-			var msg2 = "구매취소 하시겠습니까?\n\n *무통장입금 결제 후 구매취소시 환불 받으실 입금계좌 확인을\n 위해 별도로 연락을 드리도록 하겠습니다.\n궁금하신 사항은 고객센터 1577-0098로 문의주세요";
-			
-			var purl =  contextPath + "/myPage/orderCancel";
-			
-
-			if (paymentType == "SC0040") {
-				purl = contextPath + "/myPage/orderCancelAccount"
-			} else if (paymentType == "KAKAO") {
-				purl = contextPath + "/myPage/orderCancelKakao"
-			} else if (paymentType == "SMILE") {
-				purl = contextPath + "/myPage/orderCancelSmile"
-			} else if (paymentType == "NOPAY") {
-				purl = contextPath + "/myPage/orderCancelNoPay"
-			}
-
-			if (confirm(msg2)) {
-
-				$.ajax({
-					url : purl,
-					type : "POST",
-					dataType : "json",
-					data : {
-						orderId : orderId
-					},
-					success : function(response) {
-						//alert(JSON.stringify(response));
-						if (response.status == "OK") {
-							if (confirm(msg1)) {
-								$.ajax({
-									url : contextPath + "/myPage/recover",
-									type : "POST",
-									dataType : "json",
-									data : {
-										orderId : orderId
-									},
-									success : function(response) {
-										//alert(JSON.stringify(response));
-										if (response.status == "OK") {
-											alert("상품을 장바구니에 담았습니다.");
-											location.reload(true);
-										} else {
-											alert(response.message);
-											location.reload(true);
-										}
-									}
-								});
-							}
-						} else {
-							alert(response.message);
-							location.reload(true);
-						}
-					}
-				});
-			}
-			else
-				location.reload(true);
-		}
-	</script>
 </head>
 
 <body>
@@ -163,16 +45,13 @@ wcs_do(_nasa);
 					<div class="mypage-personal">
 						<div class="personal-info">
 							<div class="grade">
-								
-									
-									
-										<i class="icon-grade basic">member</i>
-									
-								
+
+								<i class="icon-grade basic">member</i>
+	
 							</div>
-							<div class="name"><b>황병열</b><em>님</em></div>
+							<div class="name"><b>${dto.join_name }</b><em>님</em></div>
 							<div class="edit">
-								<a href="/dailychan/myPage/info">
+								<a href="/dailychan/myPage/info.action?check=0">
 									<i class="icon-mypage tools"></i>회원정보관리
 								</a>
 							</div>
@@ -181,183 +60,171 @@ wcs_do(_nasa);
 						<div class="personal-status">
 							<ul>
 								<li>
-									<a href="/dailychan/myPage/orderList">
+									<a href="/dailychan/myPage/orderList.action">
 										<i class="icon-mypage ps-order"></i>
 										<b>주문/배송</b>
-										<span><em>0
-										</em><em class="blind">건</em></span>
+										<span><em>${orderDataCount}건</em></span>
 									</a>
 								</li>
 								<li>
-									<a href="/dailychan/myPage/pointList">
+									<a href="/dailychan/myPage/pointList.action?accGubun=M">
 										<i class="icon-mypage ps-point"></i>
 										<b>포인트</b>
-										<span><em>0P</em></span>
+										<span><em>${dto.join_point }P</em></span>
 									</a>
 								</li>
 								<li>
-									<a href="/dailychan/myPage/couponList">
+									<a href="/dailychan/myPage/couponList.action?couponGubun=USE">
 										<i class="icon-mypage ps-coupon"></i>
 										<b>쿠폰</b>
-										<span><em>1</em><em class="blind">장</em></span>
+										<span><em>${couponDataCount }장</em></span>
 									</a>
 								</li>
 								<li>
-									<a href="/dailychan/myPage/qnaList">
+									<a href="/dailychan/myPage/qnaList.action">
 										<i class="icon-mypage ps-chat"></i>
 										<b>1:1 상담</b>
-										<span><em>0</em><em class="blind">건</em></span>							
+										<span><em>${qnaDataCount }건</em></span>							
 									</a>
 								</li>						
 							</ul>
 						</div>
 					</div>
 
-
 					<div class="mypage-contents-wrap">
-                    	
-                    	
-
-
 
 						<div class="mypage-lnb">
-							<a href="/dailychan/myPage/main">
+							<a href="/dailychan/myPage/main.action">
 								<h3>MY 쇼핑</h3>
 							</a>
 							<ul>
+
+								<li>
+									<a href="/dailychan/myPage/orderList.action">주문관리</a>
+									
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/wishList.action">찜내역</a>
+									
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/frequencyList.action">자주구매상품</a>
+									
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/pointList.action?accGubun=M">포인트 내역</a>
+									
+								</li>
+							
+								<li>
 								
-									<li>
-										<a href="/dailychan/myPage/orderList">주문관리</a>
-										
-										
-											<ul>
-											
-												<li><a href="/dailychan/myPage/orderList">주문/배송내역</a></li>
-											
-												<li><a href="/dailychan/myPage/cancelList">주문취소 내역</a></li>
-											
-												<li><a href="/dailychan/myPage/refundList">교환/반품 내역</a></li>
-											
-											</ul>
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/wishList">찜내역</a>
-										
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/frequencyList">자주구매상품</a>
-										
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/pointList">포인트 내역</a>
-										
-										
-											<ul>
-											
-												<li><a href="/dailychan/myPage/pointList">포인트 내역</a></li>
-											
-												<li><a href="/dailychan/myPage/pointList?accGubun=A">적립 내역</a></li>
-											
-												<li><a href="/dailychan/myPage/pointList?accGubun=U">차감 내역</a></li>
-											
-											</ul>
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/couponList">쿠폰 내역</a>
-										
-										
-											<ul>
-											
-												<li><a href="/dailychan/myPage/couponList">사용 가능 쿠폰</a></li>
-											
-												<li><a href="/dailychan/myPage/couponList?couponGubun=COM">사용 완료 쿠폰</a></li>
-											
-												<li><a href="/dailychan/myPage/couponList?couponGubun=EXP">기간 만료 쿠폰</a></li>
-											
-											</ul>
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/commentList">구매후기</a>
-										
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/productQnaList">상품문의내역</a>
-										
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/qnaList">1:1상담내역</a>
-										
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/refundProductList">환불서비스</a>
-										
-										
-											<ul>
-											
-												<li><a href="/dailychan/myPage/refundProductList?refundGbn=R0">환불가능상품</a></li>
-											
-												<li><a href="/dailychan/myPage/refundProductList?refundGbn=R1">환불요청상품</a></li>
-											
-												<li><a href="/dailychan/myPage/refundProductList?refundGbn=R2">승인/반려상품</a></li>
-											
-											</ul>
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/info">회원정보 관리</a>
-										
-										
-											<ul>
-											
-												<li><a href="/dailychan/myPage/info">회원정보 수정</a></li>
-											
-												<li><a href="/dailychan/myPage/changePassword">비밀번호 변경</a></li>
-											
-											</ul>
-										
-									</li>
-								
-									<li>
-										<a href="/dailychan/myPage/invite">친구추천</a>
-										
-										
-									</li>
+									<a href="/dailychan/myPage/couponList.action?couponGubun=USE">쿠폰 내역</a>
+
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/commentList.action">구매후기</a>	
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/productQnaList.action">상품문의내역</a>
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/qnaList.action">1:1상담내역</a>
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/refundProductList.action?refundGbn=R0">환불서비스</a>
+									
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/info.action?check=0">회원정보 관리</a>
+									
+								</li>
+							
+								<li>
+									<a href="/dailychan/myPage/invite.action">친구추천</a>
+									
+									
+								</li>
 								
 							</ul>
 						</div>
-
-						
+	
 						<div class="mypage-contents">
 							<div class="mypage-cblock">
 								<div class="mypage-subtit">
 									<h4>최근 주문내역</h4>
-									<p>최근 주문하신 3개월 이내의 내역만 보여집니다.</p>
+									
+									<p>최근 주문하신 3개 내역만 보여집니다.</p>
+	
 								</div>
 
-								<div class="mypage-orderinfo-wrap">
+								<div class="mypage-orderinfo-wrap mypage-table mypage-goods-list row">
 									
-										
-											<div class="empty-msg">최근주문 내역이 없습니다.</div>
-										
-										
-									
+									<!-- 수정 필요한 부분!!!!!!!(3개월치 내역 조정용) -->
+									<c:if test="${orderDataCount==0 }">
+										<div class="empty-msg">최근주문 내역이 없습니다.</div>	
+									</c:if>
+
+									<!-- 구매한 리스트 띄울 것!! end paging 처리까지 해야됨 -->
+									<c:if test="${orderDataCount!=0 }">
+									<table>
+										<colgroup>
+											<col style="width:90px;">
+											<col style="width:100px;">
+											<col>
+											<col style="width:100px;">
+											<col style="width:100px;">
+										</colgroup>
+										<thead style="background: #f4f4f4;">
+											<tr>
+												<th scope="col">주문번호</th>
+												<th scope="col">구매날짜</th>
+												<th scope="col">구매정보</th>
+												<th scope="col">구매가</th>
+												<th scope="col">배송상태</th>
+											</tr>
+										</thead>
+										<tbody>
+										<c:forEach var="dto" items="${orderList }">
+													<tr>
+														<th>${dto.orderList_id }</th>
+														<th>${dto.orderList_created }</th>
+														<th>${dto.product_subject } 등 ${dto.orderList_productCount }개</th>
+														<th>${dto.result_price }원</th>
+														<th>
+															<font color="green">
+																<c:if test="${dto.orderList_step==1 }">
+																	[주문접수]
+																</c:if>
+																<c:if test="${dto.orderList_step==2 }">
+																	[결제완료]
+																</c:if>
+																<c:if test="${dto.orderList_step==3 }">
+																	[상품준비중]
+																</c:if>
+																<c:if test="${dto.orderList_step==4 }">
+																	[배송중]
+																</c:if>
+																<c:if test="${dto.orderList_step==5 }">
+																	[배송완료]
+																</c:if>
+																<c:if test="${dto.orderList_step==6 }">
+																	[주문완료]
+																</c:if>
+															</font>
+														</th>
+													</tr>									
+										</c:forEach>
+										</tbody>
+									</table>
+									</c:if>
 								</div>
 							</div>
 							
@@ -365,18 +232,57 @@ wcs_do(_nasa);
 
 								<div class="mypage-subtit">
 									<h4>찜내역</h4>
-									<a href="/dailychan/myPage/wishList" class="more">
+									<a href="/dailychan/myPage/wishList.action" class="more">
 										<i class="icon-mypage more">More</i>
 									</a>
 								</div>
 
-								<div class="mypage-goodslist">
-									
-										
-											<div class="empty-msg">찜내역이 없습니다.</div>
-										
-										
-									
+								<div class="mypage-table mypage-goods-list">
+								
+									<c:if test="${zzimDataCount == 0 }">
+										<div class="empty-msg">찜내역이 없습니다.</div>	
+									</c:if>
+
+									<c:if test="${zzimDataCount != 0 }">
+									<table>
+										<colgroup>
+											<col style="width:100px;">
+											<col style="width:200px;">
+											<col style="width:100px;">
+											<col style="width:140px;">
+											<col style="width:100px;">
+										</colgroup>
+										<thead style="background: #f4f4f4;">
+											<tr>
+												<th scope="col" colspan="2">상품정보</th>
+												<th scope="col">판매가</th>
+												<th scope="col">할인금액</th>
+												<th scope="col">구매가</th>
+											</tr>
+										</thead>
+										<tbody>
+												<c:forEach var="dto" items="${zzimList }">
+													<tr>
+														<th>
+															<img src="/dailychan/resources/images/product/${dto.product_mainSaveFileName}" alt="상품 섬네일" class="thum" style="width: 70px;height: 70px;vertical-align: middle;">
+														</th>
+														<th>
+															${dto.product_subject }
+														</th>
+														<th>${dto.price }원</th>
+														<th>
+															${dto.discount_price }원<br/>
+															<font color="red">[${dto.product_discount }%]</font>
+															<font color="gray">할인가</font>
+														</th>
+														<th>${dto.result_price }원</th>
+													</tr>
+												</c:forEach>
+											
+										</tbody>
+									</table>
+									</c:if>
+
 								</div>
 							</div>
 						
@@ -384,29 +290,65 @@ wcs_do(_nasa);
 
 								<div class="mypage-subtit">
 									<h4>자주구매상품</h4>
-									<a href="/dailychan/myPage/frequencyList" class="more"><i class="icon-mypage more">More</i></a>
+									<a href="/dailychan/myPage/frequencyList.action" class="more"><i class="icon-mypage more">More</i></a>
 								</div>
 
-								<div class="mypage-goodslist">
-									
-										
-											<div class="empty-msg">내역이 없습니다.</div>
-										
-										
-									
+								<div class="mypage-table mypage-goods-list">
+								
+									<c:if test="${frequencyDataCount==0 }">
+										<div class="empty-msg">자주구매 상품이 없습니다.</div>
+									</c:if>
+
+									<c:if test="${frequencyDataCount!=0 }">
+
+									<table>
+										<colgroup>
+											<col style="width:100px;">
+											<col style="width:200px;">
+											<col style="width:100px;">
+											<col style="width:140px;">
+											<col style="width:100px;">
+										</colgroup>
+										<thead style="background: #f4f4f4;">
+											<tr>
+												<th scope="col" colspan="2">상품정보</th>
+												<th scope="col">판매가</th>
+												<th scope="col">할인금액</th>
+												<th scope="col">구매가</th>
+											</tr>
+										</thead>
+										<tbody>
+												<c:forEach var="dto" items="${frequencyList }">
+													<tr>
+														<th>
+															<img src="/dailychan/resources/images/product/${dto.product_mainSaveFileName}" alt="상품 섬네일" class="thum" style="width: 70px;height: 70px;vertical-align: middle;">
+														</th>
+														<th>
+															${dto.product_subject }
+														</th>
+														<th>${dto.price }원</th>
+														<th>
+															${dto.discount_price }원<br/>
+															<font color="red">[${dto.product_discount }%]</font>
+															<font color="gray">할인가</font>
+														</th>
+														<th>${dto.result_price }원</th>
+													</tr>
+												</c:forEach>
+											
+										</tbody>
+									</table>
+
+									</c:if>
 								</div>
 							</div>
 						</div>
 
 					</div>
 				</div>
-
-
 			</div>
-
 		</div>
 	</div>
-	<!-- //컨텐츠 -->
 	
 </div>
 </body>

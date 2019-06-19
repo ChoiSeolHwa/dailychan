@@ -1,6 +1,8 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.security.SecureRandom" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
-	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
 %>
 
@@ -25,132 +27,96 @@
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/placeholders.js"></script>
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/clipboard.min.js"></script>
 <script type="text/javascript" src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
-
-
-<script type="text/javascript">
-//<![CDATA[
-var contextPath = "";
-var imgUrl = "http://www.oasis.co.kr:8580";
-(function($) {
-	$.ajaxSetup({
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", "true");
-		},
-		error: function(xhr, status, err) {
-			if (xhr.status == 403) {
-				location.href = contextPath + "/login?redirect=true";
-			}
-			else {
-				console.log("error: " + xhr.status);
-			}
-		}
-	});
-	
-	$(document).ajaxStart(function() {
-		$("#isolationField").show();
-		
-	}).ajaxStop(function() {
-		$("#isolationField").hide();
-	});
-})(jQuery);
-//]]>
-</script>
-
 <script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_shop.js?dummy=5.05"></script>
-<script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_common.js?dummy=5.12"></script>
+<script type="text/javascript" charset="utf-8" src="/dailychan/resources/js/oasis_comm.js?dummy=5.12"></script>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PR5WGG3');</script>
-<!-- End Google Tag Manager -->
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119809802-1"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-119809802-1');
-</script>
-
-<!-- 네이버 프리미엄 로그 적용 : 공통 --> 
-<script type="text/javascript" src="//wcs.naver.net/wcslog.js"> </script> 
-<script type="text/javascript"> 
-if (!wcs_add) var wcs_add={};
-wcs_add["wa"] = "s_eb0d5275a00";
-if (!_nasa) var _nasa={};
-wcs.inflow();
-wcs_do(_nasa);
-</script>
-
-
-<script type="text/javascript">
-		var $userId;
-		var $password;
+	window.onload = function () {
 		
-		$(document).ready(function() {
-			
-			
-			
-			$userId = $("#userId");
-			$password = $("#password");
-			
-			$userId.on("keydown", function(e) {
-				
-				if (e.keyCode == 13) {
-					if ($.trim($userId.val()) != "" && $.trim($password.val()) == "") {
-						$password.focus();
-					}
-					else if ($.trim($userId.val()) != "" && $.trim($password.val()) != "") {
-						doLogin();
-					}
-					else {
-						alert("아이디를 입력해주세요.");
-						$userId.focus();
-					}
-				}
-			});
-			
-			$password.on("keydown", function(e) {
-				if (e.keyCode == 13) {
-					doLogin();
-				}
-			});
-			
-			var userId = $.cookie("rememberUserId");
-			
-			if (userId) {
-				$("#rememberId").get(0).checked = true;
-				$userId.val(userId);
-			}
-			
-			$userId.focus();
-		});
+		var join_id = getCookie('Cookieid');
 		
-		function doLogin() {
-			if ($.trim($userId.val()) == "") {
-				alert("아이디를 입력해주세요.");
-				$userId.focus();
-				return;
-			} else if ($.trim($password.val()) == "") {
-				alert("비밀번호를 입력해주세요.");
-				$password.focus();
-				return;
-			} else {
-				if ( $("#rememberId").get(0).checked ) {
-					$.cookie("rememberUserId", $.trim($userId.val()), { expires: 7, path: "/" });
-				} else {
-					$.removeCookie("rememberUserId", { path: "/" });
-				}
-				
-				document.loginForm.submit();
-			}
+		if (join_id!="") {
+			$("#Cookieid").get(0).checked = true;
+			$("#join_id").val(join_id);
 		}
-	</script>
+		
+	}
+
+	function enterkey() {
+	    if (window.event.keyCode == 13) {
+
+	         // 엔터키가 눌렸을 때 실행할 내용
+	         doLogin();
+	    }
+	}
+	
+	
+	
+	function doLogin() {
+		
+		var f = document.loginForm;
+		var join_id = $('[name="join_id"]').val();
+		var join_password = $('[name="join_password"]').val();
+		
+		if ($.trim(join_id) == "") {
+			alert("아이디를 입력해주세요.");
+			$join_id.focus();
+			return;
+		} else if ($.trim(join_password) == "") {
+			alert("비밀번호를 입력해주세요.");
+			$join_password.focus();
+			return;
+		} else {
+			if ($("input:checkbox[id='Cookieid']").is(":checked") == true) {
+				setCookie('Cookieid',join_id,7);
+			} else {
+				deleteCookie('Cookieid');
+			} 
+	
+		}
+		
+		f.action = "/dailychan/join/loginCheck.action";
+		f.submit();
+		
+	}
+			
+	function setCookie(cookieName, value, exdays){
+		
+	    var exdate = new Date();
+	    exdate.setDate(exdate.getDate() + exdays);
+	    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+	    document.cookie = cookieName + "=" + cookieValue;
+	    
+	}
+	
+	function getCookie(cookieName) {
+	    cookieName = cookieName + '=';
+	    var cookieData = document.cookie;
+	    var start = cookieData.indexOf(cookieName);
+	    var cookieValue = '';
+	    if(start != -1){
+	        start += cookieName.length;
+	        var end = cookieData.indexOf(';', start);
+	        if(end == -1)end = cookieData.length;
+	        cookieValue = cookieData.substring(start, end);
+	    }
+	    return unescape(cookieValue);
+	}
+	
+	function deleteCookie(cookieName){
+	    var expireDate = new Date();
+	    expireDate.setDate(expireDate.getDate() - 1);
+	    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+	}
+		
+	function kout(){
+		Kakao.Auth.logout();
+	}
+
+</script>
+
 </head>
 
 <body>
@@ -158,13 +124,12 @@ wcs_do(_nasa);
 		<!-- header -->
 
 		<!-- 상단 헤더 영역 -->
-		
+		<jsp:include page="/WEB-INF/views/top.jsp">
+			<jsp:param value="${sort }" name="sort"/>
+		</jsp:include>
 		<!-- 상단 헤더 영역 -->
 	
 		<!-- gnb 영역 -->
-		
-	<!-- // header -->
-		<!-- // header -->
 
 		<!-- 컨텐츠 -->
 		<div class="contentsArea loginJoinBg" id="sec_login">
@@ -175,13 +140,13 @@ wcs_do(_nasa);
 				<div class="content oasisLoginHt">
 					<!-- 내용 입니다 -->
 					
-					<form name="loginForm" action="/doLogin"><!-- method="POST"  -->
+					<form name="loginForm" method="post" action="/dailychan/join/loginCheck.action" ><!-- method="POST"  -->
 						<div class="oasisLoginWrap">
-							<strong class="oasisLoginTit">오아시스 로그인</strong>
+							<strong class="oasisLoginTit">DailyChan 로그인</strong>
 
 							<ul class="oasisLoginInputLi">
-								<li><input type="text" placeholder="아이디" class="oasisLoginID" id="userId" name="userId" /></li>
-								<li><input type="password" placeholder="비밀번호" class="oasisLoginPW" id="password" name="password" /></li>
+								<li><input type="text" placeholder="아이디" class="oasisLoginID" id="join_id" name="join_id" /></li>
+								<li><input type="password" placeholder="비밀번호" class="oasisLoginPW" id="join_password" name="join_password" onkeyup="enterkey();" /></li>
 							</ul>
 
 							<div class="oasisLoginBtn2">
@@ -189,21 +154,26 @@ wcs_do(_nasa);
 							</div>
 
 							<div class="oasisLoginBtn">
-								<input type="checkbox" id="rememberId" /><label for="rememberId" style="cursor:pointer">아이디 저장</label>
+								<input type="checkbox" id="Cookieid" /><label for="Cookieid" style="cursor:pointer">아이디 저장</label>
 								<div class="olBtn">
-									<a href="/dailychan/join/findUserIdForm">아이디 찾기</a>
-									<a href="/dailychan/join/findPasswordForm">비밀번호 재발급</a>
-									<a href="/dailychan/join/list">가입하기</a>
+									<a href="/dailychan/join/findUserIdForm.action">아이디 찾기</a>
+									<a href="/dailychan/join/findPasswordForm.action">비밀번호 찾기</a>
+									<a href="/dailychan/join/list.action">가입하기</a>
 								</div>
 							</div>
 							<br/>
-							
+							<!-- 네이버아이디로로그인 버튼 노출 영역 -->
+  						
 							<div class="socialLoginWrap">
-								 <a href="/social/login/kakao">
-	                                <img src="/dailychan/resources/images/loginJoin/login_sns_kakao1.png">
-	                            </a>
-	                            <a href="/social/login/naver">
-	                                <img src="/dailychan/resources/images/loginJoin/login_sns_naver1.png">
+								<a href="${url }">
+									<img src="/dailychan/resources/images/loginJoin/login_sns_kakao1.png">
+								</a>
+								
+								<!-- <a href="http://developers.kakao.com/logout"><img src="/dailychan/resources/images/loginJoin/login_sns_kakao1.png"></a> -->
+	                         
+	                           	<a href="/dailychan/join/naverlogin.action">
+	                            	 <img src="/dailychan/resources/images/loginJoin/login_sns_naver1.png" >
+	                                
 	                            </a>
 	                            <a href="/social/login/google">
 	                                <img src="/dailychan/resources/images/loginJoin/login_sns_google1.png">
@@ -223,7 +193,9 @@ wcs_do(_nasa);
 		<!-- //컨텐츠 -->
 
 		<!-- footer -->
- 
+ 		<jsp:include page="/WEB-INF/views/footer.jsp">
+			<jsp:param value="${sort }" name="sort"/>
+		</jsp:include>
 		<!-- // footer -->
 	</div>
 </body>

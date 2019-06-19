@@ -4,7 +4,7 @@
 	String cp = request.getContextPath();
 %>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
-    <title>오아시스마켓::믿을 수 있는 먹거리</title>
+    <title>데일리찬</title>
 <!--     <script src="https://connect.facebook.net/signals/config/291411411372810?v=2.8.47&amp;r=stable" async=""></script>
     <script src="https://connect.facebook.net/signals/config/361005804747507?v=2.8.47&amp;r=stable" async=""></script>
     <script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script>
